@@ -1,0 +1,36 @@
+{
+  "name": "cold-crypto-web",
+  "version": "0.0.1",
+  "main": "fuse.js",
+  "repository": "git@github.com:zlumer/cold-crypto-web.git",
+  "author": "MaxSvargal <maxsvargal@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "node fuse.js"
+  },
+  "dependencies": {
+    "emotion": "^9.2.12",
+    "express": "^4.16.3",
+    "fetch-hoc": "^0.4.0",
+    "fuse-box": "^3.5.0",
+    "fuse-react": "^1.0.21",
+    "react": "^16.5.2",
+    "react-adopt": "^0.6.0",
+    "react-dom": "^16.5.2",
+    "react-emotion": "^9.2.12",
+    "react-powerplug": "^1.0.0-rc.1",
+    "react-qr-reader": "^2.1.1",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "recompact": "^3.4.0",
+    "typescript": "^3.1.1",
+    "uglify-js": "^3.4.9"
+  },
+  "devDependencies": {
+    "@types/react": "^16.4.15",
+    "@types/react-dom": "^16.0.8",
+    "@types/react-router-dom": "^4.3.1",
+    "prop-types": "^15.6.2"
+  }
+}
