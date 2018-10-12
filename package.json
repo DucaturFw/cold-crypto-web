@@ -12,10 +12,10 @@
   "dependencies": {
     "emotion": "^9.2.12",
     "express": "^4.16.3",
-    "fetch-hoc": "https://github.com/MaxSvargal/fetch-hoc.git",
+    "fetch-hoc": "MaxSvargal/fetch-hoc",
     "fuse-box": "^3.5.0",
     "fuse-react": "^1.0.21",
-    "inherits": "https://github.com/MaxSvargal/inherits.git",
+    "inherits": "MaxSvargal/inherits",
     "react": "^16.5.2",
     "react-adopt": "^0.6.0",
     "react-dom": "^16.5.2",
