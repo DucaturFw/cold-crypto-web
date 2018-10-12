@@ -1,17 +1,30 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import { connect as withRouter } from 'fuse-react'
 import QrReqder from 'react-qr-reader'
 
+import { RTCHelper } from '../services/webrtc'
 import { Container } from './layout'
 
 interface Props {
   history: any
 }
 
+const mobileClient = async () => {
+  const p2 = new RTCHelper('mobile')
+  await p2.waitConnection()
+}
+
 class Login extends Component<Props> {
 
+  async componentWillMount() {
+    const p1 = new RTCHelper('host')
+    const offer = await p1.createOffer()
+    await p1.waitConnection()
+    console.log(`connected (definitely, maybe)`)
+    p1.dataChannel!.send("hello")
+  }
+
   onScan = (result: string) => {
-    console.log({result})
     if (result) {
       localStorage.setItem('lastScannedAddress', result)
       this.props.history.push(`/wallet/${result}`)

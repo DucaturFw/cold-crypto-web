@@ -13,7 +13,7 @@ export const Centered = styled('div')({
   justifyContent: 'center'
 })
 
-export const FlowRow = styled('div')({
+export const Row = styled('div')({
   display: 'flex',
   justifyContent: 'space-around'
 })

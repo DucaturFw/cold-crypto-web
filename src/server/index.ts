@@ -69,9 +69,7 @@ app.get('/:blockchain/:address/txs', (req, res) =>
 })
 app.get('/market/price/eth', (req, res) =>
 {
-    res.json({
-        ETHUSD: '2221.7905'
-    })
+    res.json('2221.7905')
 })
 app.all('/eth/pushTx', (req, res) =>
 {

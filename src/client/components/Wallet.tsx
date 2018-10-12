@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'fuse-react'
 
-import { Container, Centered, FlowRow } from './layout'
+import { Container, Centered } from './layout'
 
 interface Props {
   match: {

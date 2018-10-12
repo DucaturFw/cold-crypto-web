@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { injectGlobal } from 'emotion'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { Switch, Route } from 'fuse-react'
 
 import Home from './components/Home'
 import Login from './components/Login'
@@ -18,15 +18,13 @@ injectGlobal({
 class Root extends Component {
 	public render() {
 		return (
-      <BrowserRouter>
-        <Switch>
-          <Route path='/' exact component={Home} />
-          <Route path='/login' component={Login} />
-          <Route path='/wallets' component={WalletList} />
-          <Route path='/wallet/:symbol/:address' component={Wallet} />
-          <Route path='/txCreation/:blockchain/:address' component={TxCreation} />
-        </Switch>
-      </BrowserRouter>
+      <Switch>
+        <Route path='/' exact component={Home} />
+        <Route path='/login' component={Login} />
+        <Route path='/wallets' component={WalletList} />
+        <Route path='/wallet/:symbol/:address' component={Wallet} />
+        <Route path='/txCreation/:blockchain/:address' component={TxCreation} />
+      </Switch>
 		)
 	}
 }

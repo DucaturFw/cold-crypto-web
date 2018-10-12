@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'fuse-react'
 
-import { Container, Centered, FlowRow } from './layout'
+import { Container, Centered, Row } from './layout'
 import fetch from 'fetch-hoc'
 
 const SupportedCurrenciesList = fetch('http://localhost:4443/blockchains')(
@@ -21,12 +21,12 @@ const Home = () => (
       <br />
       or
       <br />
-      <FlowRow>
+      <Row>
         <div>Login with public key:</div>
         <SupportedCurrenciesList />
         <input type='text' placeholder='Address' />
         <button>Add</button>
-      </FlowRow>
+      </Row>
       <br/>
       <Link to='/wallets'><button>To wallets list</button></Link>
     </Centered>

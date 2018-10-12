@@ -12,9 +12,10 @@
   "dependencies": {
     "emotion": "^9.2.12",
     "express": "^4.16.3",
-    "fetch-hoc": "^0.4.0",
+    "fetch-hoc": "https://github.com/MaxSvargal/fetch-hoc.git",
     "fuse-box": "^3.5.0",
     "fuse-react": "^1.0.21",
+    "inherits": "https://github.com/MaxSvargal/inherits.git",
     "react": "^16.5.2",
     "react-adopt": "^0.6.0",
     "react-dom": "^16.5.2",
@@ -25,12 +26,17 @@
     "react-router-dom": "^4.3.1",
     "recompact": "^3.4.0",
     "typescript": "^3.1.1",
-    "uglify-js": "^3.4.9"
+    "uglify-js": "^3.4.9",
+    "web3": "^1.0.0-beta.36"
   },
   "devDependencies": {
     "@types/react": "^16.4.15",
     "@types/react-dom": "^16.0.8",
     "@types/react-router-dom": "^4.3.1",
+    "@types/web3": "^1.0.10",
     "prop-types": "^15.6.2"
+  },
+  "resolutions": {
+    "inherits": "https://github.com/MaxSvargal/inherits.git"
   }
 }
