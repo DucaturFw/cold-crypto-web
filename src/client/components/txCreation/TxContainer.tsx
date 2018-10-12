@@ -1,10 +1,11 @@
 import React from 'react'
-import { Form } from 'react-powerplug'
+import { Value } from 'react-powerplug'
 import { Switch, Route } from 'fuse-react'
 
 import { Container, Centered } from '../layout'
 import TxSigned from './TxSigned'
 import TxForm from './TxForm'
+import TxHeader from './TxHeader'
 
 export interface Props {
   match: {
@@ -20,30 +21,41 @@ export interface Props {
   blockChainPrice: string
 }
 
+
 const TxContainer = ({ match, blockChainData, blockChainPrice }: Props) => (
   <Container>
     <Centered>
-      <h2>{ match.params.blockchain }</h2>
-      <h1>New Tx { match.params.address }</h1>
-      <Form initial={{ to: '', amount: '1', gasPrice: '1' }} >
-        {({ input, values }) => (
+      <TxHeader params={match.params}>New Tx</TxHeader>
+      <Value initial={{ to: '', amount: '1', gasPrice: '1' }} >
+        {({ set, value }) => (
           <Switch>
             <Route
               path='/txCreation/:blockchain/sign'
               component={() =>
-                <TxSigned { ...{ match, blockChainPrice, blockChainData, values } } />
+                <TxSigned {...{
+                  address: match.params.address,
+                  blockChainPrice,
+                  blockChainData,
+                  value
+                }} />
               }
             />
             <Route
               exact
               path='/txCreation/:blockchain/:address'
               component={() =>
-                <TxForm { ...{ match, blockChainPrice, blockChainData, values, input } } />
+                <TxForm {...{
+                  address: match.params.address,
+                  blockChainPrice,
+                  blockChainData,
+                  value,
+                  set
+                }} />
               }
             />
           </Switch>
         )}
-      </Form>
+      </Value>
     </Centered>
   </Container>
 )

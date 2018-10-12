@@ -1,6 +1,6 @@
 import { EventEmitter } from "events"
 
-export class RTCHelper extends EventEmitter
+export default class RTCHelper extends EventEmitter
 {
 	rpc = new RTCPeerConnection()
 	candidates: RTCIceCandidate[] = []
