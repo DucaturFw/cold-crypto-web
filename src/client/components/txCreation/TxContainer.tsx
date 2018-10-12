@@ -4,7 +4,7 @@ import { Switch, Route } from 'fuse-react'
 
 import { Container, Centered } from '../layout'
 import TxSigned from './TxSigned'
-import TxForm from './TxSigned'
+import TxForm from './TxForm'
 
 export interface Props {
   match: {
@@ -18,7 +18,6 @@ export interface Props {
     avgWait: string
   }
   blockChainPrice: string
-  withSignPush: () => Function
 }
 
 const TxContainer = ({ match, blockChainData, blockChainPrice }: Props) => (

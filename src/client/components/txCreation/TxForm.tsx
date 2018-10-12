@@ -1,6 +1,5 @@
 import React from 'react'
 import { navigate } from 'fuse-react'
-import { FormRender } from 'react-powerplug'
 
 import { Column, Row } from '../layout'
 import { Props } from './TxContainer'
