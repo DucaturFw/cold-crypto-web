@@ -7,7 +7,7 @@ import Home from './components/Home'
 import Login from './components/Login'
 import WalletList from './components/WalletList'
 import Wallet from './components/Wallet'
-import TxCreation from './components/TxCreation'
+import TxCreation from './components/txCreation'
 
 injectGlobal({
   'html,body': {
