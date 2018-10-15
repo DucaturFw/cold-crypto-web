@@ -1,18 +1,28 @@
 import React, { Fragment } from "react";
 import fetch from "fetch-hoc";
 import { Value } from "react-powerplug";
+import QRCode = require("qrcode.react");
 import Web3 from "web3";
+import QrReqder from "react-qr-reader";
+
 import { mapProps, lifecycle } from "recompact";
+
+const handleOnScan = result => {
+  try {
+    console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const QrImg = lifecycle({
   componentWillMount: () => console.log("will mount")
 })(({ data }: { data: string }) => (
   <Value initial="">
     {({ value, set }) => {
-      // return qrcode.toDataURL(data).then((v) => <img src={v} alt='' />)
       return (
         <Fragment>
-          <img src={value} alt="" />
+          <QRCode value={value} renderAs="svg" size={310} />
         </Fragment>
       );
     }}
@@ -20,12 +30,17 @@ const QrImg = lifecycle({
 ));
 
 const TxSigned = ({ value }) => {
-  // connect()
   return (
     <div>
       <span>Signed {JSON.stringify(value)}</span>
       test
-      <QrImg data={'{"FOO": "bAR"}'} />
+      <QrImg data={JSON.stringify(value)} />
+      <QrReqder
+        delay={300}
+        onScan={result => result && handleOnScan(result)}
+        onError={error => {}}
+        style={{ width: "50%" }}
+      />
     </div>
   );
 };

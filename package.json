@@ -17,6 +17,7 @@
     "fuse-react": "^1.0.21",
     "inherits": "MaxSvargal/inherits",
     "qrcode": "^1.3.0",
+    "qrcode.react": "^0.8.0",
     "react": "^16.5.2",
     "react-adopt": "^0.6.0",
     "react-dom": "^16.5.2",
