@@ -12,6 +12,7 @@ const handleOnScan = result => {
     console.log(result);
   } catch (error) {
     console.log(error);
+    console.log("test");
   }
 };
 
@@ -22,7 +23,7 @@ const QrImg = lifecycle({
     {({ value, set }) => {
       return (
         <Fragment>
-          <QRCode value={value} renderAs="svg" size={310} />
+          <QRCode value={data} renderAs="svg" size={310} />
         </Fragment>
       );
     }}
