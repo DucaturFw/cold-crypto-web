@@ -9,7 +9,7 @@ const fuse = FuseBox.init({
     JSONPlugin(),
     WebIndexPlugin({
       template: "src/client/index.html",
-			bundles: [ 'public/vendor', 'public/client' ]
+      bundles: [ 'public/vendor', 'public/client' ],
     }),
     this.isProduction &&
       QuantumPlugin({
@@ -19,7 +19,9 @@ const fuse = FuseBox.init({
   ],
 })
 
-fuse.dev()
+fuse.dev({
+  fallback: 'index.html'
+})
 
 fuse
   .bundle('public/vendor')
