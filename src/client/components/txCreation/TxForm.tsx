@@ -8,7 +8,7 @@ import { Column, Row } from '../layout'
 interface TxFormProps {
   blockChainPrice?: string
   blockChainData?: {
-    avgWait: string
+    avgWait: string,
   }
   address: string
   value: any
@@ -18,7 +18,7 @@ interface TxFormProps {
 const TxForm = ({ address, blockChainPrice, blockChainData, value, set }: TxFormProps) => (
   <Form initial={value} >
     {({ input, values }) => (
-      <form onSubmit={e => e.preventDefault() || set(values) || navigate('/txCreation/eth/sign')}>
+      <form onSubmit={(e) => e.preventDefault() || set(values) || navigate('/txCreation/eth/sign')}>
         <Column>
           <input placeholder={address} {...input('to').bind} />
           <Row>

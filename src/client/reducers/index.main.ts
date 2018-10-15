@@ -1,11 +1,11 @@
-import { combineReducers } from "redux";
-import { IWallet } from "../model";
-import * as walletReducder from "./Wallet";
+import { combineReducers } from 'redux'
+import { IWallet } from '../model'
+import * as walletReducder from './Wallet'
 
 export interface IRootState {
-  WalletList: IWallet[];
+  WalletList: IWallet[]
 }
 
 export default combineReducers<IRootState>({
-  ...walletReducder
-});
+  ...walletReducder,
+})

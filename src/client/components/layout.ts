@@ -1,24 +1,24 @@
 import styled from 'react-emotion'
 
 export const Container = styled('main')({
-  display: 'flex',
   alignItems: 'center',
+  display: 'flex',
+  height: '100vh',
   justifyContent: 'center',
   width: '100vw',
-  height: '100vh'
 })
 
 export const Centered = styled('div')({
+  justifyContent: 'center',
   textAlign: 'center',
-  justifyContent: 'center'
 })
 
 export const Row = styled('div')({
   display: 'flex',
-  justifyContent: 'space-around'
+  justifyContent: 'space-around',
 })
 
 export const Column = styled('div')({
   display: 'flex',
-  flexFlow: 'column nowrap'
+  flexFlow: 'column nowrap',
 })

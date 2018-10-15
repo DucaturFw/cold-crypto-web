@@ -7,36 +7,35 @@ interface Props {
   match: {
     params: {
       symbol: string
-      address: string
-    }
+      address: string,
+    },
   }
 }
 
 interface State {
   address: string
   blockchain: string
-  txs: {
+  txs: Array<{
     hash: string
-    value: string
-  }[]
+    value: string,
+  }>
 }
 
 export default class Wallet extends Component<Props, State> {
-  state = {
+  public state = {
     address: null,
     blockchain: null,
-    txs: []
+    txs: [],
   } as State
 
-  componentWillMount = () => {
-    const { match: { params: { symbol, address } } } = this.props    
+  public componentWillMount = () => {
+    const { match: { params: { symbol, address } } } = this.props
     fetch(`http://localhost:4443/${symbol}/${address}/txs`)
-      .then(res => res.json())
-      .then(json => this.setState(json))
+      .then((res) => res.json())
+      .then((json) => this.setState(json))
   }
 
-  render() {
-    console.log(this.state)
+  public render() {
     return (
       <Container>
         <Centered>
@@ -53,7 +52,7 @@ export default class Wallet extends Component<Props, State> {
               </tr>
             </thead>
             <tbody>
-              { this.state.txs.map(v => (
+              { this.state.txs.map((v) => (
                 <tr key={v.hash}>
                   <td>date</td>
                   <td>{v.hash}</td>

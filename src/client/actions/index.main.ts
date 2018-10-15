@@ -1,3 +1,3 @@
-import * as WalletActions from "./wallet";
+import * as WalletActions from './wallet'
 
-export const ActionCreators = Object.assign({}, WalletActions);
+export const ActionCreators = {...WalletActions}

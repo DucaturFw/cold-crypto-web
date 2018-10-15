@@ -11,12 +11,12 @@ export interface Props {
   match: {
     params: {
       blockchain: string
-      address: string
-    }
+      address: string,
+    },
   }
   blockChainData: {
     average: string
-    avgWait: string
+    avgWait: string,
   }
   blockChainPrice: string
 }
@@ -36,7 +36,7 @@ const TxContainer = ({ match, blockChainData, blockChainPrice }: Props) => (
                   address: match.params.address,
                   blockChainPrice,
                   blockChainData,
-                  value
+                  value,
                 }} />
               }
             />
@@ -49,7 +49,7 @@ const TxContainer = ({ match, blockChainData, blockChainPrice }: Props) => (
                   blockChainPrice,
                   blockChainData,
                   value,
-                  set
+                  set,
                 }} />
               }
             />
