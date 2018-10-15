@@ -1,7 +1,8 @@
-const jsonRequest = async (path: string, sub: string) => {
+const jsonRequest = (path: string, nested?: string) => async () => {
   const res = await fetch(`http://localhost:4443/${path}`)
   const json = await res.json()
-  return sub ? json[sub] : json
+  return nested ? json[nested] : json
 }
 
-export const fetchAvaliableCurrencies = jsonRequest('blockchains', 'supported')
+// export const fetchAvaliableCurrencies = jsonRequest('blockchains', 'supported')
+export const fetchWallet = jsonRequest('addresses')

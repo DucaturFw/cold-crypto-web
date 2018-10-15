@@ -3,8 +3,9 @@ import { all, call, fork, put, take } from 'redux-saga/effects'
 
 import qrcode from 'qrcode'
 import RTCHelper from '../services/webrtc'
+import { fetchWallet } from '../services/api'
 
-import { generateQr, setQr, setQrScanned } from '../actions'
+import { generateQr, setQr, setQrScanned, addWallets } from '../actions'
 
 function* rtcConnect() {
   const mobileClient = async () => {
@@ -41,9 +42,15 @@ function* genQr() {
   yield put(setQr({ key, value: qr }))
 }
 
+function* fetchWalletSaga() {
+  const wallets = yield call(fetchWallet)
+  yield put(addWallets(wallets))
+}
+
 export default function* rootSaga() {
   yield all([
     fork(genQr),
     fork(watchForQRScan),
+    fork(fetchWalletSaga),
   ])
 }

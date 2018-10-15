@@ -1,8 +1,29 @@
-import { ActionType, IAction, IWallet } from "../model";
-import createReducer from "./createReducer";
+import { createReducer } from 'redux-act'
+import { addWallets } from '../actions'
 
-export const WalletList = createReducer([], {
-  [ActionType.ADD_Wallet](state: IWallet[], action: IAction<IWallet>) {
-    return action.payload;
+export interface IWallet {
+  blockchain: string
+  address: string
+}
+
+export interface IWalletDefaultState {
+  error: any
+  wallets: IWallet[] | Error
+}
+
+const walletDefaultState: IWalletDefaultState = {
+  error: null,
+  wallets: [],
+}
+
+const walletReducer = createReducer<typeof walletDefaultState>({}, walletDefaultState)
+
+walletReducer.on(addWallets, (_, payload) => {
+  const isErr = payload instanceof Error
+  return {
+    error: isErr ? (payload as Error).message : null,
+    wallets: isErr ? null : payload,
   }
-});
+})
+
+export default walletReducer

@@ -1,50 +1,29 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'fuse-react'
+import { compose } from 'recompact'
+import fetch from 'fetch-hoc'
 
 import { Container, Column } from './layout'
 import { connect } from 'react-redux'
-import { IRootState } from '../reducers/index.main'
+import { IWalletDefaultState, IWallet } from '../reducers/wallet'
 
-class WalletList extends Component<any, any> {
-  public state = {
-    list: [],
-  }
+const WalletList = ({ wallets }: { wallets: IWallet[] }) =>
+  <Container>
+    <Column>
+      {wallets.map((v) => (
+        <Link
+          to={`/wallet/${v.blockchain}/${v.address}`}
+          key={v.address}
+        >{`${v.blockchain}: ${v.address}`}</Link>
+      ))}
+    </Column>
+  </Container>
 
-  public componentWillMount() {
-    const list = [
-      { symbol: 'eth', address: '0x00', balance: 1500 },
-      { symbol: 'eth', address: '0x01', balance: 12500 },
-    ]
-
-    localStorage.setItem('walletsList', JSON.stringify(list))
-    this.setState({ list })
-  }
-
-  public render() {
-    const { walletList } = this.props
-    console.log(this.props)
-    return (
-      <Container>
-        <Column>
-          {walletList.map((v) => (
-            <Link
-              to={`/wallet/${v.blockchain}/${v.address}`}
-              key={v.address}
-            >{`${v.blockchain}: ${v.address}`}</Link>
-          ))}
-        </Column>
-      </Container>
-    )
-  }
+interface IProps {
+  wallet: IWalletDefaultState
 }
 
-function mapStateToProps(state: IRootState) {
-  return {
-    walletList: state.WalletList,
-  }
-}
+const withFetch = fetch('http://localhost:4443/addresses')
+const withConnect = connect(({ wallet: { wallets } }: IProps) => ({ wallets }))
 
-export default connect(
-  mapStateToProps,
-  null,
-)(WalletList)
+export default compose(withFetch, withConnect)(WalletList)

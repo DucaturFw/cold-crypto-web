@@ -5,7 +5,7 @@ import { navigate } from 'fuse-react'
 
 import { Column, Row } from '../layout'
 
-interface TxFormProps {
+interface ITxFormProps {
   blockChainPrice?: string
   blockChainData?: {
     avgWait: string,
@@ -15,10 +15,14 @@ interface TxFormProps {
   set: (data: any) => void
 }
 
-const TxForm = ({ address, blockChainPrice, blockChainData, value, set }: TxFormProps) => (
+const TxForm = ({ address, blockChainPrice, blockChainData, value, set }: ITxFormProps) => (
   <Form initial={value} >
     {({ input, values }) => (
-      <form onSubmit={(e) => e.preventDefault() || set(values) || navigate('/txCreation/eth/sign')}>
+      <form onSubmit={(e) => {
+        e.preventDefault()
+        set(values)
+        navigate('/txCreation/eth/sign')
+      }}>
         <Column>
           <input placeholder={address} {...input('to').bind} />
           <Row>

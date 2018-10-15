@@ -7,7 +7,7 @@ import TxSigned from './TxSigned'
 import TxForm from './TxForm'
 import TxHeader from './TxHeader'
 
-export interface Props {
+export interface IProps {
   match: {
     params: {
       blockchain: string
@@ -22,7 +22,7 @@ export interface Props {
 }
 
 
-const TxContainer = ({ match, blockChainData, blockChainPrice }: Props) => (
+const TxContainer = ({ match, blockChainData, blockChainPrice }: IProps) => (
   <Container>
     <Centered>
       <TxHeader params={match.params}>New Tx</TxHeader>
@@ -34,8 +34,8 @@ const TxContainer = ({ match, blockChainData, blockChainPrice }: Props) => (
               component={() =>
                 <TxSigned {...{
                   address: match.params.address,
-                  blockChainPrice,
                   blockChainData,
+                  blockChainPrice,
                   value,
                 }} />
               }
@@ -46,10 +46,10 @@ const TxContainer = ({ match, blockChainData, blockChainPrice }: Props) => (
               component={() =>
                 <TxForm {...{
                   address: match.params.address,
-                  blockChainPrice,
                   blockChainData,
-                  value,
+                  blockChainPrice,
                   set,
+                  value,
                 }} />
               }
             />
