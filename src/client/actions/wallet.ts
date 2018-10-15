@@ -13,7 +13,7 @@ export function addWallet(wallet: IWallet[]) {
 
   return (dispatch: Function, getState: Function) => {
     dispatch({ type: ActionType.ADD_Wallet, payload: wallet });
-    console.log("wallet", wallet);
+    console.log("Action add wallet ", typeof wallet);
     if (wallet.length > 0) {
       navigate("/");
     }

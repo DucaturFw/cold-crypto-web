@@ -7,14 +7,25 @@ import * as WalletActions from "../actions/wallet";
 
 import { Container } from "./layout";
 
+const handleOnScan = (result, action) => {
+  try {
+    console.log(result);
+    const data = JSON.parse(result);
+    action(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const Login = props => {
-  console.log(props);
   return (
     <Container>
       <h1>Scan QR Code</h1>
       <QrReqder
         delay={300}
-        onScan={result => result && props.actions.addWallet(result)}
+        onScan={result =>
+          result && handleOnScan(result, props.actions.addWallet)
+        }
         onError={error => {}}
         style={{ width: "100%" }}
       />

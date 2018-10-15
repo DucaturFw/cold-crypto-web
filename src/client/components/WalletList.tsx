@@ -3,8 +3,9 @@ import { Link } from "fuse-react";
 
 import { Container, Column } from "./layout";
 import { connect } from "react-redux";
+import { IRootState } from "../reducers/index.main";
 
-class WalletList extends Component {
+class WalletList extends Component<any, any> {
   state = {
     list: []
   };
@@ -20,14 +21,16 @@ class WalletList extends Component {
   }
 
   render() {
-    console.log(this.props, "111111");
+    const { walletList } = this.props;
+    console.log(this.props);
     return (
       <Container>
         <Column>
-          {this.state.list.map(v => (
-            <Link to={`/wallet/${v.symbol}/${v.address}`} key={v.address}>{`${
-              v.symbol
-            }: ${v.address} | ${v.balance}`}</Link>
+          {walletList.map(v => (
+            <Link
+              to={`/wallet/${v.blockchain}/${v.address}`}
+              key={v.address}
+            >{`${v.blockchain}: ${v.address}`}</Link>
           ))}
         </Column>
       </Container>
@@ -35,9 +38,13 @@ class WalletList extends Component {
   }
 }
 
+function mapStateToProps(state: IRootState) {
+  return {
+    walletList: state.WalletList
+  };
+}
+
 export default connect(
-  state => ({
-    state: state
-  }),
+  mapStateToProps,
   null
 )(WalletList);

@@ -1,5 +1,6 @@
 export interface IWallet {
-  id: number;
+  blockchain: string;
+  address: string;
 }
 
 export enum ActionType {
