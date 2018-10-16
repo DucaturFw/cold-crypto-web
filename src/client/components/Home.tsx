@@ -3,9 +3,10 @@ import { Link } from 'fuse-react'
 import { connect } from 'react-redux'
 
 import { IWalletDefaultState, IWallet } from '../reducers/wallet'
-import { Container, Centered, Row } from './layout'
 import SupportedCurrenciesList from './SupportedCurrenciesList'
-import { ButtonBase, ButtonSecondary } from './shared/buttons'
+
+import { Container, Centered, Row } from './shared/layout'
+import { ButtonBase, ButtonSecondary, ButtonWarning } from './shared/buttons'
 import { TextInput } from './shared/inputs'
 
 const Home = ({ wallets }: { wallets: IWallet[] }) => (
@@ -14,19 +15,19 @@ const Home = ({ wallets }: { wallets: IWallet[] }) => (
       <Link to='/login'>
         <ButtonBase>Connect Mobile Wallet</ButtonBase>
       </Link>
-      <br />
-      or
-      <br />
       <Row>
-        <div>Login with public key:</div>
+        or
+      </Row>
+      <Row>
+        <TextInput type='text' placeholder='Type your wallet address here' />
         <SupportedCurrenciesList />
-        <TextInput type='text' placeholder='Address' />
+      </Row>
+      <Row>
         <ButtonSecondary>Add new</ButtonSecondary>
       </Row>
-      <br />
       {/* { wallets && ( */}
         <Link to='/wallets'>
-          <ButtonSecondary>To wallets list</ButtonSecondary>
+          <ButtonWarning>To wallets list</ButtonWarning>
         </Link>
       {/* ) } */}
     </Centered>

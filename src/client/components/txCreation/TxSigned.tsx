@@ -1,13 +1,14 @@
-import React, { Fragment } from 'react'
+/* TODO: Rewrite it to sagas */
+import React from 'react'
 import fetch from 'fetch-hoc'
-import { Value } from 'react-powerplug'
 
 import Web3 from 'web3'
 import QrReader from 'react-qr-reader'
-
 import QRCode from 'qrcode.react'
-
 import { mapProps } from 'recompact'
+
+import { Column, Row } from '../shared/layout'
+import { H2 } from '../shared/typography'
 
 const handleOnScan = (result) => {
   try {
@@ -18,23 +19,26 @@ const handleOnScan = (result) => {
   }
 }
 
-const QrImg = ({ data }: { data: string }) =>
-  <QRCode value={data} renderAs='svg' size={310} />
-
-const TxSigned = ({ value }) => {
-  return (
-    <div>
-      <span>Signed {JSON.stringify(value)}</span>
-      <QrImg data={JSON.stringify(value)} />
+const TxSigned = ({ value }) =>
+  <Row style={{ minWidth: '80vw' }}>
+    <Column style={{ width: '45%', marginRight: '5%' }}>
+      <H2>1. Scan this request</H2>
+      <QRCode
+        value={JSON.stringify(value)}
+        renderAs='svg'
+        size='100%'
+      />
+    </Column>
+    <Column style={{ width: '45%', marginLeft: '5%' }}>
+      <H2>2. Show response here</H2>
       <QrReader
         delay={300}
         onScan={(result) => result && handleOnScan(result)}
         onError={(error) => console.log(error)}
-        style={{ width: '50%' }}
+        style={{ width: '100%' }}
       />
-    </div>
-  )
-}
+    </Column>
+  </Row>
 
 const withSignPush = mapProps((props) => ({
   ...props,

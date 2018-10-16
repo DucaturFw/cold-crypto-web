@@ -3,7 +3,9 @@ import { defaultProps } from 'recompact'
 import { Form } from 'react-powerplug'
 import { navigate } from 'fuse-react'
 
-import { Column, Row } from '../layout'
+import { Column, Row, Centered } from '../shared/layout'
+import { TextInput } from '../shared/inputs'
+import { ButtonBase } from '../shared/buttons'
 
 interface ITxFormProps {
   blockChainPrice?: string
@@ -24,17 +26,19 @@ const TxForm = ({ address, blockChainPrice, blockChainData, value, set }: ITxFor
         navigate('/txCreation/eth/sign')
       }}>
         <Column>
-          <input placeholder={address} {...input('to').bind} />
+          <TextInput placeholder={address || 'Address'} {...input('to').bind} />
           <Row>
-            <input required={true} placeholder='Amount' {...input('amount').bind} />
-            <span>~{(Number(values.amount) * Number(blockChainPrice)).toFixed(2)}$</span>
+            <TextInput required={true} placeholder='Amount' {...input('amount').bind} />
+            <Centered style={{display: 'flex'}}>
+              <span>~{(Number(values.amount) * Number(blockChainPrice)).toFixed(2)}$</span>
+            </Centered>
           </Row>
           <Row>
             <span>Gas price</span>
-            <input type='range' {...input('gasPrice').bind} min='1' max='100' />
+            <TextInput type='range' {...input('gasPrice').bind} min='1' max='100' />
             <span> {`< ${(Number(blockChainData.avgWait) * Number(values.gasPrice)).toFixed(2)} min`}</span>
           </Row>
-          <button type='submit'>Sign</button>
+          <ButtonBase type='submit'>Sign</ButtonBase>
         </Column>
       </form>
     )}

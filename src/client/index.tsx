@@ -16,9 +16,10 @@ import Wallet from './components/Wallet'
 import WalletList from './components/WalletList'
 
 injectGlobal({
-  'html,body': {
+  'html,body,button,input,select': {
+    fontFamily: '"Lato", Arial, sans-serif',
     margin: 0,
-  },
+  }
 })
 
 class Root extends Component {
@@ -30,10 +31,7 @@ class Root extends Component {
           <Route path='/login' component={Login} />
           <Route path='/wallets' component={WalletList} />
           <Route path='/wallet/:symbol/:address' component={Wallet} />
-          <Route
-            path='/txCreation'
-            component={TxCreation}
-          />
+          <Route path='/txCreation' component={TxCreation} />
         </Switch>
       </Provider>
     )

@@ -2,10 +2,10 @@ import React from 'react'
 import { Value } from 'react-powerplug'
 import { Switch, Route } from 'fuse-react'
 
-import { Container, Centered } from '../layout'
 import TxSigned from './TxSigned'
 import TxForm from './TxForm'
 import TxHeader from './TxHeader'
+import { Container, Centered } from '../shared/layout'
 
 export interface IProps {
   match: {

@@ -1,3 +1,4 @@
+/* tslint no-var-requires: false */
 const express = require('express')
 
 const app = express()

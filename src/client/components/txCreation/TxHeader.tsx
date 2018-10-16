@@ -1,8 +1,10 @@
 import React, { Fragment } from 'react'
 
+import { H1, H2 } from '../shared/typography'
+
 export default ({ params, children }) => (
   <Fragment>
-    <h2>{ params.blockchain }</h2>
-    <h1>{ children } { params.address }</h1>
+    <H2>{ params.blockchain }</H2>
+    <H1>{ children } { params.address }</H1>
   </Fragment>
 )
