@@ -31,7 +31,7 @@ class Root extends Component {
           <Route path='/wallets' component={WalletList} />
           <Route path='/wallet/:symbol/:address' component={Wallet} />
           <Route
-            path='/txCreation'
+            path='/txCreation/:blockchain/'
             component={TxCreation}
           />
         </Switch>
