@@ -6,6 +6,7 @@ export const Container = styled('main')({
   height: '100vh',
   justifyContent: 'center',
   width: '100vw',
+  background: '#f1faee',
 })
 
 export const Centered = styled('div')({

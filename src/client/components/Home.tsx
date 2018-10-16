@@ -5,12 +5,14 @@ import { connect } from 'react-redux'
 import { IWalletDefaultState, IWallet } from '../reducers/wallet'
 import { Container, Centered, Row } from './layout'
 import SupportedCurrenciesList from './SupportedCurrenciesList'
+import { ButtonBase, ButtonSecondary } from './shared/buttons'
+import { TextInput } from './shared/inputs'
 
 const Home = ({ wallets }: { wallets: IWallet[] }) => (
   <Container>
     <Centered>
       <Link to='/login'>
-        <button>Login with Cold Crypto Mobile App</button>
+        <ButtonBase>Connect Mobile Wallet</ButtonBase>
       </Link>
       <br />
       or
@@ -18,13 +20,13 @@ const Home = ({ wallets }: { wallets: IWallet[] }) => (
       <Row>
         <div>Login with public key:</div>
         <SupportedCurrenciesList />
-        <input type='text' placeholder='Address' />
-        <button>Add</button>
+        <TextInput type='text' placeholder='Address' />
+        <ButtonSecondary>Add new</ButtonSecondary>
       </Row>
       <br />
       {/* { wallets && ( */}
         <Link to='/wallets'>
-          <button>To wallets list</button>
+          <ButtonSecondary>To wallets list</ButtonSecondary>
         </Link>
       {/* ) } */}
     </Centered>
