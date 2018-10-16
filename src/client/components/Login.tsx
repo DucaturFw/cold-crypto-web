@@ -1,16 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import QrReqder from 'react-qr-reader'
-import {addWallets} from '../actions'
+import {scanWallets} from '../actions'
 import { Container } from './layout'
 
 const Login = (props) => {
   const parseScanResult = (result: string) => {
     try {
       const parseResult = JSON.parse(result);
-      props.addWallets(parseResult)
+      props.scanWallets(parseResult)
     } catch (error) {
-      props.addWallets(Error(error))
+      props.scanWallets(Error(error))
     }
   }
   return (
@@ -19,12 +19,12 @@ const Login = (props) => {
       <QrReqder
         delay={300}
         onScan={(result) => result && parseScanResult(result)}
-        onError={(error) => props.addWallets(Error(error))}
+        onError={(error) => props.scanWallets(Error(error))}
         style={{ width: '100%' }}
       />
     </Container>
   )
 }
 
-export default connect( null, { addWallets })(Login)
+export default connect( null, { scanWallets })(Login)
 

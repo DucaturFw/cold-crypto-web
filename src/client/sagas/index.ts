@@ -1,11 +1,11 @@
 import { navigate } from 'fuse-react'
-import { all, call, fork, put, take } from 'redux-saga/effects'
-
+import { all, call, fork, put, take, takeEvery } from 'redux-saga/effects'
+import {getNonce} from '../services/ethHelper'
 import qrcode from 'qrcode'
 import RTCHelper from '../services/webrtc'
 import { fetchWallet } from '../services/api'
 
-import { generateQr, setQr, setQrScanned, addWallets } from '../actions'
+import { generateQr, setQr, setQrScanned, addWallets, scanWallets } from '../actions'
 
 function* rtcConnect() {
   const mobileClient = async () => {
@@ -42,15 +42,25 @@ function* genQr() {
   yield put(setQr({ key, value: qr }))
 }
 
-function* fetchWalletSaga() {
-  const wallets = yield call(fetchWallet)
+function* complementWallets(action) {
+  const wallets = yield action.payload.map(item => {
+    return getNonce(item.address).then(resolve => {
+      return { ...item, nonce: resolve }
+    })
+  });
+
   yield put(addWallets(wallets))
+  navigate('/wallets')
+}
+
+function* scanWalletsData() {
+  yield takeEvery(scanWallets, complementWallets)
 }
 
 export default function* rootSaga() {
   yield all([
     fork(genQr),
     fork(watchForQRScan),
-    fork(fetchWalletSaga),
+    fork(scanWalletsData),
   ])
 }

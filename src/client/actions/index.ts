@@ -7,3 +7,5 @@ export const generateQr = createAction<{ key: string; value: string }>('generate
 export const setQrScanned = createAction<string | Error>('set qr scanned')
 export const setQrCode = createAction<string>('set qr code')
 export const addWallets = createAction<IWallet[] | Error>('add wallets')
+export const scanWallets = createAction<IWallet[] | Error>('scan wallets')
+
