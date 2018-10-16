@@ -1,18 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import QrReqder from 'react-qr-reader'
-
-import { addWallets } from '../actions'
-
+import {addWallets} from '../actions'
 import { Container } from './layout'
 
-const Login = (props: { addWallets: typeof addWallets }) => {
+const Login = (props) => {
   const parseScanResult = (result: string) => {
     try {
       const parseResult = JSON.parse(result);
-      addWallets(parseResult)
+      props.addWallets(parseResult)
     } catch (error) {
-      addWallets(Error(error))
+      props.addWallets(Error(error))
     }
   }
   return (
@@ -28,4 +26,5 @@ const Login = (props: { addWallets: typeof addWallets }) => {
   )
 }
 
-export default connect(null, { addWallets })(Login)
+export default connect( null, { addWallets })(Login)
+
