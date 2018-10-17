@@ -22,7 +22,7 @@ const TxSigned = ({ value, handleScan, wallet }) => {
     <Column style={{ width: '45%', marginRight: '5%' }}>
       <H2>1. Scan this request</H2>
       <QRCode
-        value={JSON.stringify(value)}
+        value={JSON.stringify(tx)}
         renderAs='svg'
         size='100%'
       />
