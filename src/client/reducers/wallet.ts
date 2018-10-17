@@ -6,6 +6,14 @@ export interface IWallet {
   address: string
 }
 
+//TODO: Move to types
+export interface ITransaction {
+  nonce: string
+  gasPrice: string
+  to: number
+  value: string
+}
+
 export interface IWalletDefaultState {
   error: any
   wallets: IWallet[] | Error

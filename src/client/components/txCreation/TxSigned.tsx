@@ -1,23 +1,25 @@
 import React from 'react'
 import Web3 from 'web3'
 import QrReader from 'react-qr-reader'
-
 import QRCode from 'qrcode.react'
+import {connect } from 'react-redux'
+import { scanTransaction as handleScan } from '../../actions'
+import { ITransaction } from '../../reducers/Wallet';
 
 const QrImg = ({ data }: { data: string }) =>
   <QRCode value={data} renderAs='svg' size={310} />
 
-const TxSigned = ({value, wallet}) => {
+const TxSigned = ({ handleScan, value, wallet = {nonce: 0} }) => {
   const handleOnScan = (result) => {
     try {
       const parseResult = JSON.parse(result)
-      console.info(parseResult)
+      handleScan(parseResult)
     } catch (error) {
-      console.info(error)
+      handleScan(error)
     }
   }
 
-  const tx = {
+  const tx: ITransaction = {
       nonce: Web3.utils.toHex(wallet.nonce),
       gasPrice: Web3.utils.toWei(value.gasPrice.toString(), 'gwei'),
       to: value.to,
@@ -38,4 +40,4 @@ const TxSigned = ({value, wallet}) => {
   )
 }
 
-export default  TxSigned
+export default  connect( null, { handleScan })(TxSigned)
