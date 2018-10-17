@@ -1,9 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Link } from 'fuse-react'
 
-import { Container, Centered } from './layout'
+import { Container, Column, Row, Centered } from './shared/layout'
+import { ButtonBase } from './shared/buttons'
+import { H1, H2 } from './shared/typography'
+import { Table } from './shared/table'
 
-interface Props {
+interface IProps {
   match: {
     params: {
       symbol: string
@@ -12,7 +15,7 @@ interface Props {
   }
 }
 
-interface State {
+interface IState {
   address: string
   blockchain: string
   txs: Array<{
@@ -21,12 +24,12 @@ interface State {
   }>
 }
 
-export default class Wallet extends Component<Props, State> {
+export default class Wallet extends Component<IProps, IState> {
   public state = {
     address: null,
     blockchain: null,
     txs: [],
-  } as State
+  } as IState
 
   public componentWillMount = () => {
     const { match: { params: { symbol, address } } } = this.props
@@ -38,11 +41,19 @@ export default class Wallet extends Component<Props, State> {
   public render() {
     return (
       <Container>
-        <Centered>
-          <h2>{this.state.blockchain}</h2>
-          <h1>{this.state.address}</h1>
-          <Link to={`/txCreation/${this.state.blockchain}/${this.state.address}`}><button>Create New Tx</button></Link>
-          <table>
+        <Column>
+          <Row>
+            <Column>
+              <Centered>
+                <H2>{this.state.blockchain}</H2>
+                <H1>{this.state.address}</H1>
+              </Centered>
+            </Column>
+            <Link to={`/txCreation/${this.state.blockchain}/${this.state.address}`}>
+              <ButtonBase>Create New Tx</ButtonBase>
+            </Link>
+          </Row>
+          <Table>
             <thead>
               <tr>
                 <th>Date</th>
@@ -61,8 +72,8 @@ export default class Wallet extends Component<Props, State> {
                 </tr>
               )) }
             </tbody>
-          </table>
-        </Centered>
+          </Table>
+        </Column>
       </Container>
     )
   }

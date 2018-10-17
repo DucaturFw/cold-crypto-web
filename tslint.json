@@ -4,6 +4,7 @@
     "arrow-return-shorthand": true,
     "ban-comma-operator": true,
     "curly": [true, "as-needed"],
+    "object-literal-key-quotes": [true, "as-needed"],
     "eofline": true,
     "indent": [true, "spaces", 2],
     "linebreak-style": [true, "LF"],

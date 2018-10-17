@@ -2,11 +2,11 @@ import styled from 'react-emotion'
 
 export const Container = styled('main')({
   alignItems: 'center',
-  display: 'flex',
-  height: '100vh',
-  justifyContent: 'center',
-  width: '100vw',
   background: '#f1faee',
+  display: 'flex',
+  justifyContent: 'center',
+  minHeight: '100vh',
+  width: '100vw',
 })
 
 export const Centered = styled('div')({
@@ -17,6 +17,7 @@ export const Centered = styled('div')({
 export const Row = styled('div')({
   display: 'flex',
   justifyContent: 'space-around',
+  margin: '1rem 0',
 })
 
 export const Column = styled('div')({

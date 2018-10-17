@@ -42,11 +42,21 @@ function* genQr() {
 }
 
 function* scanTx(action) {
+  if(action.payload instanceof Error) {
+    return
+  }
+
  yield sendTx(action.payload)
  navigate('/wallets')
 }
 
 function* complementWallets(action) {
+  console.log(action)
+  //TODO: make notification about not valid qrcode
+  if(!action.payload.length) {
+    return
+  }
+
   const wallets = yield action.payload.map(item => {
     return getNonce(item.address).then(resolve => {
       return { ...item, nonce: resolve }

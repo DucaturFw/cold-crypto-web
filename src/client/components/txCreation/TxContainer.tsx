@@ -2,11 +2,12 @@ import React from 'react'
 import { Value } from 'react-powerplug'
 import { Switch, Route } from 'fuse-react'
 import { connect } from 'react-redux'
-import { Container, Centered } from '../layout'
+import { IWallet } from '../../reducers/Wallet';
+
 import TxSigned from './TxSigned'
 import TxForm from './TxForm'
 import TxHeader from './TxHeader'
-import { IWallet } from '../../reducers/Wallet';
+import { Container, Centered } from '../shared/layout'
 
 export interface IProps {
   match: {

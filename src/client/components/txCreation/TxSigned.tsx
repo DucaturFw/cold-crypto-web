@@ -4,39 +4,39 @@ import QrReader from 'react-qr-reader'
 import QRCode from 'qrcode.react'
 import {connect } from 'react-redux'
 import { scanTransaction as handleScan } from '../../actions'
+import { parseJsonString } from '../../helpers/json'
 import { ITransaction } from '../../reducers/Wallet';
+import { Column, Row } from '../shared/layout'
+import { H2 } from '../shared/typography'
 
-const QrImg = ({ data }: { data: string }) =>
-  <QRCode value={data} renderAs='svg' size={310} />
-
-const TxSigned = ({ handleScan, value, wallet = {nonce: 0} }) => {
-  const handleOnScan = (result) => {
-    try {
-      const parseResult = JSON.parse(result)
-      handleScan(parseResult)
-    } catch (error) {
-      handleScan(error)
-    }
+const TxSigned = ({ value, handleScan, wallet }) => {
+  const tx: ITransaction = {
+    nonce: Web3.utils.toHex(wallet.nonce),
+    gasPrice: Web3.utils.toWei(value.gasPrice.toString(), 'gwei'),
+    to: value.to,
+    value: Web3.utils.toWei(value.amount.toString()),
   }
 
-  const tx: ITransaction = {
-      nonce: Web3.utils.toHex(wallet.nonce),
-      gasPrice: Web3.utils.toWei(value.gasPrice.toString(), 'gwei'),
-      to: value.to,
-      value: Web3.utils.toWei(value.amount.toString()),
-    }
-
   return (
-    <div>
-      <span>Signed {JSON.stringify(tx)}</span>
-      <QrImg data={JSON.stringify(tx)} />
+  <Row style={{ minWidth: '80vw' }}>
+    <Column style={{ width: '45%', marginRight: '5%' }}>
+      <H2>1. Scan this request</H2>
+      <QRCode
+        value={JSON.stringify(value)}
+        renderAs='svg'
+        size='100%'
+      />
+    </Column>
+    <Column style={{ width: '45%', marginLeft: '5%' }}>
+      <H2>2. Show response here</H2>
       <QrReader
         delay={300}
-        onScan={(result) => result && handleOnScan(result)}
+        onScan={(result) => result && handleScan(parseJsonString(result))}
         onError={(error) => console.log(error)}
-        style={{ width: '50%' }}
+        style={{ width: '100%' }}
       />
-    </div>
+    </Column>
+  </Row>
   )
 }
 

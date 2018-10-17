@@ -16,9 +16,10 @@ import Wallet from './components/Wallet'
 import WalletList from './components/WalletList'
 
 injectGlobal({
-  'html,body': {
+  'html,body,button,input,select': {
+    fontFamily: '"Lato", Arial, sans-serif',
     margin: 0,
-  },
+  }
 })
 
 class Root extends Component {

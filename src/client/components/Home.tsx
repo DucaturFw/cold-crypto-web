@@ -3,28 +3,31 @@ import { Link } from 'fuse-react'
 import { connect } from 'react-redux'
 
 import { IWalletDefaultState, IWallet } from '../reducers/wallet'
-import { Container, Centered, Row } from './layout'
 import SupportedCurrenciesList from './SupportedCurrenciesList'
+
+import { Container, Centered, Row } from './shared/layout'
+import { ButtonBase, ButtonSecondary, ButtonWarning } from './shared/buttons'
+import { TextInput } from './shared/inputs'
 
 const Home = ({ wallets }: { wallets: IWallet[] }) => (
   <Container>
     <Centered>
       <Link to='/login'>
-        <button>Login with Cold Crypto Mobile App</button>
+        <ButtonBase>Connect Mobile Wallet</ButtonBase>
       </Link>
-      <br />
-      or
-      <br />
       <Row>
-        <div>Login with public key:</div>
-        <SupportedCurrenciesList />
-        <input type='text' placeholder='Address' />
-        <button>Add</button>
+        or
       </Row>
-      <br />
+      <Row>
+        <TextInput type='text' placeholder='Type your wallet address here' />
+        <SupportedCurrenciesList />
+      </Row>
+      <Row>
+        <ButtonSecondary>Add new</ButtonSecondary>
+      </Row>
       {/* { wallets && ( */}
         <Link to='/wallets'>
-          <button>To wallets list</button>
+          <ButtonWarning>To wallets list</ButtonWarning>
         </Link>
       {/* ) } */}
     </Centered>
