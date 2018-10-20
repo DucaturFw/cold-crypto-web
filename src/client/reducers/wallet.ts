@@ -4,7 +4,8 @@ import { addWallets } from '../actions'
 export interface IWallet {
   blockchain: string
   address: string
-  balance: string
+  nonce: number
+  chainId: string | number
 }
 
 //TODO: Move to types
