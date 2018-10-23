@@ -13,7 +13,7 @@ const Home = ({ wallets }: { wallets: IWallet[] }) => (
   <Container>
     <Centered>
       <Link to='/login'>
-        <ButtonBase>Connect Mobile Wallet</ButtonBase>
+        <ButtonBase>Login using QR code</ButtonBase>
       </Link>
       <Row>
         or
@@ -23,10 +23,10 @@ const Home = ({ wallets }: { wallets: IWallet[] }) => (
         <SupportedCurrenciesList />
       </Row>
       <Row>
-        <ButtonSecondary>Add new</ButtonSecondary>
+        <ButtonSecondary>Login with address</ButtonSecondary>
       </Row>
         <Link to='/webrtc'>
-            <ButtonWarning>Webrtc qrcode</ButtonWarning>
+            <ButtonWarning>Webrtc login</ButtonWarning>
         </Link>
     </Centered>
   </Container>
