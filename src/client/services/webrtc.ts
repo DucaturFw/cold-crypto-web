@@ -19,6 +19,8 @@ export class RTCHelper extends EventEmitter {
     console.log(`${this.tag}onIceCandidate: ${JSON.stringify(ev.candidate)}`)
     if (ev.candidate)
       this.candidates.push(ev.candidate)
+    
+    this.emit('ice', ev.candidate)
   }
   public onDataChannel = (ev: RTCDataChannelEvent) => {
     console.log(`${this.tag}onDataChannel: ${JSON.stringify(ev.channel)}`)
