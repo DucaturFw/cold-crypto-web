@@ -25,11 +25,9 @@ const Home = ({ wallets }: { wallets: IWallet[] }) => (
       <Row>
         <ButtonSecondary>Add new</ButtonSecondary>
       </Row>
-      {/* { wallets && ( */}
-        <Link to='/wallets'>
-          <ButtonWarning>To wallets list</ButtonWarning>
+        <Link to='/webrtc'>
+            <ButtonWarning>Webrtc qrcode</ButtonWarning>
         </Link>
-      {/* ) } */}
     </Centered>
   </Container>
 )

@@ -10,3 +10,6 @@ export const addWallets = createAction<IWallet[] | Error>('add wallets')
 export const scanWallets = createAction<IWallet[] | Error>('scan wallets')
 export const scanTransaction = createAction<ITransaction | Error>('scan transaction')
 
+
+export const scanAnswer = createAction<RTCSessionDescriptionInit | Error>('scan answer') 
+ 

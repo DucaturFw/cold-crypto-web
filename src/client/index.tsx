@@ -14,6 +14,8 @@ import Login from './components/Login'
 import TxCreation from './components/txCreation'
 import Wallet from './components/Wallet'
 import WalletList from './components/WalletList'
+import Webrtc from './components/Webrtc/Webrtc'
+import Success from './components/Success'
 
 injectGlobal({
   'html,body,button,input,select': {
@@ -35,6 +37,8 @@ class Root extends Component {
             path='/txCreation/:blockchain/:address'
             component={TxCreation}
           />
+          <Route path='/webrtc' component={Webrtc}/>
+          <Route path='/hash/:id' component={Success}/>
         </Switch>
       </Provider>
     )

@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 
-export default class RTCHelper extends EventEmitter {
+export class RTCHelper extends EventEmitter {
   public rpc = new RTCPeerConnection()
   public candidates: RTCIceCandidate[] = []
   public dataChannel?: RTCDataChannel
@@ -68,3 +68,11 @@ export default class RTCHelper extends EventEmitter {
     await this.rpc.addIceCandidate(candidate)
   }
 }
+
+
+const WebrtcService = (function(){
+  var _webrtc = new RTCHelper();
+  return _webrtc;
+}());
+
+export default WebrtcService;
