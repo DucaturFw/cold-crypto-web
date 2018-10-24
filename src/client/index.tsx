@@ -14,7 +14,7 @@ import Login from './components/Login'
 import TxCreation from './components/txCreation'
 import Wallet from './components/Wallet'
 import WalletList from './components/WalletList'
-import Webrtc from './components/Webrtc/Webrtc'
+import Webrtc from './components/Webrtc/TestWebrtc'
 import Success from './components/Success'
 
 injectGlobal({

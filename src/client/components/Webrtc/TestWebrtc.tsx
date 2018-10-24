@@ -1,13 +1,16 @@
 import React from 'react';
 import RTCHelper from '../../services/webrtc'
-import { parseJsonString } from '../../helpers/json';
+import QRCode from 'qrcode.react'
+import { Container, Column, Row } from '../shared/layout'
+import { H1 } from '../shared/typography'
 
 class Webrtc extends React.Component {
   state = {
     offer: '',
     rpc: RTCHelper,
     connected: false,
-    answer: null
+    answer: null,
+    sessionId: null
   }
 
   componentDidMount = async () => {
@@ -17,13 +20,15 @@ class Webrtc extends React.Component {
     ws.addEventListener('open', () =>
     {
       console.log('opened!')
-      // ws.send(JSON.stringify({ jsonrpc: "2.0", id: 1, method: "offer", params: { offer: offer } }))
       ws.send(JSON.stringify({ jsonrpc: "2.0", id: 1, method: "offer", params: { offer: offer.sdp } }))
     })
     ws.addEventListener('message', async (data) =>
     {
       console.log(`message: ${data.data}`)
       let json = JSON.parse(data.data.toString())
+      if(json.id == 1) {
+        this.setState({sessionId: json.result.sid})
+      }
 
       if (json.method == 'ice') {
         rpc.pushIceCandidate(json.params.ice)
@@ -46,9 +51,22 @@ class Webrtc extends React.Component {
     })
   }
 
-
   render() {
-    return null
+    const { sessionId } = this.state
+    return (
+      <Container>
+         <Row>
+          {sessionId && <Column>
+            <H1>Scan session id</H1>
+            <QRCode
+              value={ JSON.stringify(sessionId) }
+              renderAs='svg'
+              size='100%'
+            />
+            </Column>}
+        </Row>
+      </Container>
+    )
   }
 }
 
