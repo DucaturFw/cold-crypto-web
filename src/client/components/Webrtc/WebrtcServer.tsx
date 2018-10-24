@@ -1,8 +1,10 @@
 import React from 'react';
+import {connect} from 'react-redux'
 import RTCHelper from '../../services/webrtc'
 import QRCode from 'qrcode.react'
 import { Container, Column, Row } from '../shared/layout'
 import { H1 } from '../shared/typography'
+import { initWebrtcConnaction } from '../../actions'
 
 class Webrtc extends React.Component {
   state = {
@@ -15,6 +17,7 @@ class Webrtc extends React.Component {
 
   componentDidMount = async () => {
     const { rpc } = this.state;
+    const { initWebrtcConnaction } = this.props
     const offer = await  rpc.createOffer()
     let ws = new WebSocket('ws://localhost:3077')
     ws.addEventListener('open', () =>
@@ -44,7 +47,8 @@ class Webrtc extends React.Component {
         console.log('wait connection')
 
         await rpc.waitConnection()
-
+        initWebrtcConnaction()
+        rpc.dataChannel.send(`getWalletList|1|[ ["eth"] ]`)
         ws.close()
       }
       
@@ -70,4 +74,4 @@ class Webrtc extends React.Component {
   }
 }
 
-export default Webrtc;
+export default connect(null, { initWebrtcConnaction } )(Webrtc)

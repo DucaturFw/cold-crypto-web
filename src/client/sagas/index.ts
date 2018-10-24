@@ -1,62 +1,33 @@
 import { navigate } from 'fuse-react'
-import { call, put, take, takeEvery } from 'redux-saga/effects'
+import { eventChannel } from 'redux-saga'
+import { call, put, take, takeEvery, all } from 'redux-saga/effects'
 import { getNonce, sendTx } from '../services/ethHelper'
-import qrcode from 'qrcode'
-import RTCHelper from '../services/webrtc'
-import { generateQr, setQr, setQrScanned, addWallets, scanWallets, scanTransaction } from '../actions'
+import Rtc from '../services/webrtc'
+import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcMessageReceived } from '../actions'
 
-// function* rtcConnect() {
-//   const mobileClient = async () => {
-//     const p2 = new RTCHelper('mobile')
-//     await p2.waitConnection()
-//   }
+function* createEventChannel(rtc) {
+  return eventChannel(emit => {
+    rtc.dataChannel.onmessage = ((message) => {
+      return emit(message.data)
+    });
 
-//   const connect = async () => {
-//     const p1 = new RTCHelper('host')
-//     const offer = await p1.createOffer()
-//     console.log(offer)
-//     await p1.waitConnection()
-//     console.log(`connected (definitely, maybe)`)
-//     p1.dataChannel!.send('hello')
-//   }
-// }
-
-// function* watchForQRScan() {
-//   while (true)
-//     try {
-//       const { payload } = yield take(setQrScanned)
-//       if (!Array.isArray(JSON.parse(payload)))
-//         throw Error('Scanned data is not an Array')
-//       else
-//         navigate('/wallets')
-//     } catch (err) {
-//       yield put(setQrScanned(err))
-//     }
-// }
-
-// function* genQr() {
-//   const { payload: { key, value } } = yield take(generateQr)
-//   const qr = yield call(qrcode.toDataURL, value)
-//   yield put(setQr({ key, value: qr }))
-// }
-
-function* scanTx(action) {
-  if(action.payload instanceof Error) {
-    return
-  }
-
-yield sendTx(action.payload)
-  navigate('/wallets')
+    return () => {
+      rtc.close();
+    };
+  });
 }
 
-function* complementWallets(action) {
-  console.log(action)
-  //TODO: make notification about not valid qrcode
-  if(!action.payload.length) {
-    return
+function* initializeWebrtcChannel() {
+  const channel = yield call(createEventChannel, Rtc);
+  while (true) {
+    const message = yield take(channel);
+    console.log(message);
+    yield put(webrtcMessageReceived(message));
   }
+}
 
-  const wallets = yield action.payload.map(item => {
+function* setWallet(wallet) {
+  const wallets = yield wallet.map(item => {
     return getNonce(item.address).then(resolve => {
       return { ...item, nonce: resolve }
     })
@@ -66,7 +37,42 @@ function* complementWallets(action) {
   navigate('/wallets')
 }
 
+function* webrtcListener(action) {
+  const parts =  action.payload.split('|').filter(Boolean)
+
+  switch (parts[0]) {
+    case "1":
+      yield setWallet(JSON.parse(parts[1]))
+      break;
+
+    default:
+      break;
+  }
+}
+
+function* scanTx(action) {
+  if(action.payload instanceof Error) {
+    return
+  }
+
+  yield sendTx(action.payload)
+  navigate('/wallets')
+}
+
+function* complementWallets(action) {
+  //TODO: make notification about not valid qrcode
+  if(!action.payload.length) {
+    return
+  }
+
+  yield setWallet(action.payload)
+}
+
 export default function* rootSaga() {
-  yield takeEvery(scanTransaction, scanTx)
-  yield takeEvery(scanWallets, complementWallets)
+  yield all([
+    takeEvery(scanTransaction, scanTx),
+    takeEvery(scanWallets, complementWallets),
+    takeEvery(initWebrtcConnaction, initializeWebrtcChannel),
+    takeEvery(webrtcMessageReceived, webrtcListener)
+  ])
 }
