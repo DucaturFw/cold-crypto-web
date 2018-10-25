@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react'
 import { Link } from 'fuse-react'
-
 import { Container, Column, Row, Centered } from './shared/layout'
 import { ButtonBase } from './shared/buttons'
 import { H1, H2 } from './shared/typography'
@@ -21,6 +20,8 @@ interface IState {
   txs: Array<{
     hash: string
     value: string,
+    timeStamp: number,
+    from: string,
   }>
 }
 
@@ -33,12 +34,13 @@ export default class Wallet extends Component<IProps, IState> {
 
   public componentWillMount = () => {
     const { match: { params: { symbol, address } } } = this.props
-    fetch(`http://localhost:4443/${symbol}/${address}/txs`)
+    fetch(`http://api-rinkeby.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken`)
       .then((res) => res.json())
-      .then((json) => this.setState(json))
+      .then((json) => this.setState({txs: json.result}))
   }
 
   public render() {
+    console.log(this.state.txs)
     return (
       <Container>
         <Column>
@@ -65,9 +67,13 @@ export default class Wallet extends Component<IProps, IState> {
             <tbody>
               { this.state.txs.map((v) => (
                 <tr key={v.hash}>
-                  <td>date</td>
-                  <td>{v.hash}</td>
-                  <td>address</td>
+                  <td>{new Date(v.timeStamp * 1000).toLocaleString()}</td>
+                  <td>
+                    <a target="_blank" href={`https://rinkeby.etherscan.io/tx/${v.hash}`}>
+                      {v.hash}
+                    </a>
+                  </td>
+                  <td>{v.from}</td>
                   <td>{v.value}</td>
                 </tr>
               )) }
