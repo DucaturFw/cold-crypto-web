@@ -14,7 +14,7 @@ export interface ITransaction {
   nonce: number
   gasPrice: string
   to: number
-  value: number
+  value: string
 }
 
 export interface IWalletDefaultState {

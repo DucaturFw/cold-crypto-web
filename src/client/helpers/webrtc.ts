@@ -11,7 +11,7 @@ export const signTransferTx = (value: any, wallet: IWallet) => {
     nonce: wallet.nonce,
     gasPrice: Web3.utils.toWei(value.gasPrice.toString(), 'wei'),
     to: value.to,
-    value: parseInt(Web3.utils.toWei(value.amount)),
+    value: Web3.utils.toWei(value.amount),
   }
   return `signTransferTx|3|${JSON.stringify([tx, wallet])}`
 }
