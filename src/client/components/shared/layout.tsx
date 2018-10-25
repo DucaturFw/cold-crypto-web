@@ -18,7 +18,6 @@ export const Row = styled('div')({
   display: 'flex',
   justifyContent: 'space-around',
   margin: '1rem 0',
-  alignItems: 'center'
 })
 
 export const Column = styled('div')({

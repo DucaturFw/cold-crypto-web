@@ -3,7 +3,7 @@ import Web3 from 'web3'
 import { handshakeServerUrl } from '../constants'
 
 //TODO: add supported blockchain enum
-export const webrtcLogin = (sid: string) => `webrtcLogin|1|{"sid":${sid},"url":${handshakeServerUrl}}`
+export const webrtcLogin = (sid: string) => `webrtcLogin|1|{"sid":${sid},"url":"${handshakeServerUrl}"}`
 export const getWalletList = () => `getWalletList|2|[ ["eth"] ]`
 
 export const signTransferTx = (value: any, wallet: IWallet) => {
