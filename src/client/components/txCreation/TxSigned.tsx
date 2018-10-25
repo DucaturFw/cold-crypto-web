@@ -4,20 +4,19 @@ import QrReader from 'react-qr-reader'
 import QRCode from 'qrcode.react'
 import {connect } from 'react-redux'
 import { scanTransaction as handleScan } from '../../actions'
-import { parseJsonString } from '../../helpers/json'
 import { ITransaction } from '../../reducers/Wallet';
 import { Column, Row } from '../shared/layout'
 import { H2 } from '../shared/typography'
 
 const TxSigned = ({ value, handleScan, wallet }) => {
   const tx: ITransaction = {
-    nonce: Web3.utils.toHex(wallet.nonce),
-    gasPrice: Web3.utils.toWei(value.gasPrice.toString(), 'gwei'),
+    nonce: wallet.nonce,
+    gasPrice: Web3.utils.toWei(value.gasPrice.toString(), 'wei'),
     to: value.to,
-    value: Web3.utils.toWei(value.amount.toString()),
+    value: parseInt(Web3.utils.toWei(value.amount)),
   }
 
-  const sendData = `signTransferTx||${JSON.stringify([tx, wallet])}`
+  const sendData = `signTransferTx|2|${JSON.stringify([tx, wallet])}`
 
   return (
   <Row style={{ minWidth: '80vw' }}>
@@ -42,4 +41,4 @@ const TxSigned = ({ value, handleScan, wallet }) => {
   )
 }
 
-export default  connect( null, { handleScan })(TxSigned)
+export default connect( null, { handleScan })(TxSigned)

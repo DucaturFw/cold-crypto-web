@@ -10,10 +10,10 @@ export interface IWallet {
 
 //TODO: Move to types
 export interface ITransaction {
-  nonce: string
+  nonce: number
   gasPrice: string
   to: number
-  value: string
+  value: number
 }
 
 export interface IWalletDefaultState {

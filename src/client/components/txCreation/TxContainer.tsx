@@ -8,6 +8,7 @@ import TxSigned from './TxSigned'
 import TxForm from './TxForm'
 import TxHeader from './TxHeader'
 import { Container, Centered } from '../shared/layout'
+import { RTCHelper } from '../../services/webrtc';
 
 export interface IProps {
   match: {
@@ -21,11 +22,12 @@ export interface IProps {
     avgWait: string,
   }
   blockChainPrice: string,
-  wallets: IWallet[]
+  wallets: IWallet[],
+  webrtc: RTCHelper
 }
 
 
-const TxContainer = ({ match, blockChainData, blockChainPrice, wallets }: IProps) => {
+const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc }: IProps) => {
   const wallet = wallets.find(item => item.address === match.params.address)
 
   return (
@@ -57,6 +59,8 @@ const TxContainer = ({ match, blockChainData, blockChainPrice, wallets }: IProps
                     blockChainPrice,
                     set,
                     value,
+                    webrtc,
+                    wallet
                   }} />
                 }
               />
@@ -68,4 +72,4 @@ const TxContainer = ({ match, blockChainData, blockChainPrice, wallets }: IProps
   )
 }
 
-export default connect((state: any) => { return { wallets: state.wallet.wallets } }, null)(TxContainer)
+export default connect((state: any) => { return { wallets: state.wallet.wallets, webrtc: state.webrtc } }, null)(TxContainer)
