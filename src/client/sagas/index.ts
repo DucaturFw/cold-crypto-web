@@ -3,6 +3,7 @@ import { eventChannel } from 'redux-saga'
 import { call, put, take, takeEvery, all, select } from 'redux-saga/effects'
 import { getNonce, sendTx } from '../services/ethHelper'
 import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcMessageReceived } from '../actions'
+import { RTCCommands } from '../constants' 
 
 function* createEventChannel(rtc) {
   return eventChannel(emit => {
@@ -44,10 +45,10 @@ function* webrtcListener(action) {
   const data = JSON.parse(parts[1])
 
   switch (commandId) {
-    case "2":
+    case RTCCommands.getWalletList:
       yield setWallet(data)
       break
-    case "3": 
+    case RTCCommands.signTransferTx: 
       yield sendTx(data)
       break
     default:

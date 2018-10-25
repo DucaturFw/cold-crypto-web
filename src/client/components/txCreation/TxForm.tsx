@@ -2,14 +2,13 @@ import React from 'react'
 import { defaultProps } from 'recompact'
 import { Form } from 'react-powerplug'
 import { navigate } from 'fuse-react'
-import Web3 from 'web3'
 
 import { Column, Row, Centered } from '../shared/layout'
 import { TextInput } from '../shared/inputs'
 import { ButtonBase } from '../shared/buttons'
 import { RTCHelper } from '../../services/webrtc';
 import { IWallet } from '../../model';
-import { ITransaction } from '../../reducers/Wallet';
+import { signTransferTx } from '../../helpers/webrtc'
 
 interface ITxFormProps {
   blockChainPrice?: string
@@ -28,17 +27,9 @@ const TxForm = ({ address, blockChainPrice, blockChainData, value, set, webrtc, 
     {({ input, values }) => (
       <form onSubmit={(e) => {
         e.preventDefault()
-        const tx: ITransaction = {
-          nonce: wallet.nonce,
-          gasPrice: Web3.utils.toWei(values.gasPrice.toString(), 'wei'),
-          to: values.to,
-          value: parseInt(Web3.utils.toWei(values.amount)),
-        }
-      
-        const sendData = `signTransferTx|3|${JSON.stringify([tx, wallet])}`
 
         if(webrtc.connected) {
-          webrtc.dataChannel.send(sendData)
+          webrtc.dataChannel.send(signTransferTx(values, wallet))
           return
         }
 

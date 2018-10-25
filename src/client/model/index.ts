@@ -1,7 +1,8 @@
 export interface IWallet {
   blockchain: string
   address: string
-  nonce: number
+  nonce: number,
+  chainId: number,
 }
 
 export enum ActionType {

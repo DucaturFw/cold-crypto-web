@@ -5,10 +5,9 @@ import QrReqder from 'react-qr-reader'
 import { scanWallets } from '../actions'
 import { parseJsonString } from '../helpers/json'
 import QRCode from 'qrcode.react'
-import { Container, Centered, Column, Row } from './shared/layout'
-import { H1, H2 } from './shared/typography'
-
-const qrcodeData =  `getWalletList|2|[ ["eth"] ]`
+import { Container, Column, Row } from './shared/layout'
+import { H1 } from './shared/typography'
+import { getWalletList } from './../helpers/webrtc'
 
 const Login = (props: { scanWallets: typeof scanWallets }) => 
   <Container>
@@ -16,7 +15,7 @@ const Login = (props: { scanWallets: typeof scanWallets }) =>
         <Column style={{ width: '45%', marginRight: '5%' }}>
           <H1>Scan QR Code</H1>
           <QRCode
-            value={ qrcodeData }
+            value={ getWalletList() }
             renderAs='svg'
             size='100%'
           />

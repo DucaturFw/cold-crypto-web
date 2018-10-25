@@ -4,17 +4,19 @@ import QRCode from 'qrcode.react'
 import { Container, Column, Row } from '../shared/layout'
 import { H1 } from '../shared/typography'
 import { initWebrtcConnaction } from '../../actions'
-const hostUrl = "ws://localhost:3077"
+import { handshakeServerUrl } from '../../constants'
+import { getWalletList, webrtcLogin } from '../../helpers/webrtc'
 
 class WebrtcServer extends React.Component {
   state = {
-    sessionId: null
+    sid: null
   }
 
   componentDidMount = async () => {
     const { initWebrtcConnaction, webrtc } = this.props
     const offer = await  webrtc.createOffer()
-    let ws = new WebSocket(hostUrl)
+    let ws = new WebSocket(handshakeServerUrl)
+
     ws.addEventListener('open', () =>
     {
       console.log('opened!')
@@ -25,7 +27,7 @@ class WebrtcServer extends React.Component {
       console.log(`message: ${data.data}`)
       let json = JSON.parse(data.data.toString())
       if(json.id == 1) {
-        this.setState({sessionId: json.result.sid})
+        this.setState({sid: json.result.sid})
       }
 
       if (json.method == 'ice') {
@@ -43,7 +45,7 @@ class WebrtcServer extends React.Component {
 
         await webrtc.waitConnection()
         initWebrtcConnaction()
-        webrtc.dataChannel.send(`getWalletList|2|[ ["eth"] ]`)
+        webrtc.dataChannel.send(getWalletList())
         ws.close()
       }
       
@@ -51,16 +53,15 @@ class WebrtcServer extends React.Component {
   }
 
   render() {
-    const { sessionId } = this.state
-    const qrcodeDate = `webrtcLogin|1|{"sid":${sessionId},"url":${hostUrl}}`
+    const { sid } = this.state
 
     return (
       <Container>
          <Row>
-          {sessionId && <Column>
+          {sid && <Column>
             <H1>Scan session id</H1>
             <QRCode
-              value={ JSON.stringify(qrcodeDate) }
+              value={ webrtcLogin(sid) }
               renderAs='svg'
               size='100%'
             />
