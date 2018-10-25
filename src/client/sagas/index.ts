@@ -44,10 +44,10 @@ function* webrtcListener(action) {
   const data = JSON.parse(parts[1])
 
   switch (commandId) {
-    case "1":
+    case "2":
       yield setWallet(data)
       break
-    case "2": 
+    case "3": 
       yield sendTx(data)
       break
     default:

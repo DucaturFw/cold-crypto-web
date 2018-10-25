@@ -35,7 +35,7 @@ const TxForm = ({ address, blockChainPrice, blockChainData, value, set, webrtc, 
           value: parseInt(Web3.utils.toWei(values.amount)),
         }
       
-        const sendData = `signTransferTx|2|${JSON.stringify([tx, wallet])}`
+        const sendData = `signTransferTx|3|${JSON.stringify([tx, wallet])}`
 
         if(webrtc.connected) {
           webrtc.dataChannel.send(sendData)

@@ -1,25 +1,20 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import RTCHelper from '../../services/webrtc'
 import QRCode from 'qrcode.react'
 import { Container, Column, Row } from '../shared/layout'
 import { H1 } from '../shared/typography'
 import { initWebrtcConnaction } from '../../actions'
+const hostUrl = "ws://localhost:3077"
 
-class Webrtc extends React.Component {
+class WebrtcServer extends React.Component {
   state = {
-    offer: '',
-    rpc: RTCHelper,
-    connected: false,
-    answer: null,
     sessionId: null
   }
 
   componentDidMount = async () => {
-    const { rpc } = this.state;
-    const { initWebrtcConnaction } = this.props
-    const offer = await  rpc.createOffer()
-    let ws = new WebSocket('ws://localhost:3077')
+    const { initWebrtcConnaction, webrtc } = this.props
+    const offer = await  webrtc.createOffer()
+    let ws = new WebSocket(hostUrl)
     ws.addEventListener('open', () =>
     {
       console.log('opened!')
@@ -34,21 +29,21 @@ class Webrtc extends React.Component {
       }
 
       if (json.method == 'ice') {
-        rpc.pushIceCandidate(json.params.ice)
+        webrtc.pushIceCandidate(json.params.ice)
       }
 
       if(json.method === 'answer') {
-        rpc.on('ice', ice => {
+        webrtc.on('ice', ice => {
           ws.send(JSON.stringify({ jsonrpc: "2.0", id: 2, method: "ice", params: { ice: ice } }))
         })
 
-        await rpc.pushAnswer({ type: "answer", sdp: json.params.answer })
+        await webrtc.pushAnswer({ type: "answer", sdp: json.params.answer })
         
         console.log('wait connection')
 
-        await rpc.waitConnection()
+        await webrtc.waitConnection()
         initWebrtcConnaction()
-        rpc.dataChannel.send(`getWalletList|1|[ ["eth"] ]`)
+        webrtc.dataChannel.send(`getWalletList|2|[ ["eth"] ]`)
         ws.close()
       }
       
@@ -57,13 +52,15 @@ class Webrtc extends React.Component {
 
   render() {
     const { sessionId } = this.state
+    const qrcodeDate = `webrtcLogin|1|{"sid":${sessionId},"url":${hostUrl}}`
+
     return (
       <Container>
          <Row>
           {sessionId && <Column>
             <H1>Scan session id</H1>
             <QRCode
-              value={ JSON.stringify(sessionId) }
+              value={ JSON.stringify(qrcodeDate) }
               renderAs='svg'
               size='100%'
             />
@@ -74,4 +71,4 @@ class Webrtc extends React.Component {
   }
 }
 
-export default connect(null, { initWebrtcConnaction } )(Webrtc)
+export default connect( state => ({ webrtc: state.webrtc }), { initWebrtcConnaction } )(WebrtcServer)

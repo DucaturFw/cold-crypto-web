@@ -8,7 +8,7 @@ import QRCode from 'qrcode.react'
 import { Container, Centered, Column, Row } from './shared/layout'
 import { H1, H2 } from './shared/typography'
 
-const qrcodeData =  `getWalletList|1|[ ["eth"] ]`
+const qrcodeData =  `getWalletList|2|[ ["eth"] ]`
 
 const Login = (props: { scanWallets: typeof scanWallets }) => 
   <Container>

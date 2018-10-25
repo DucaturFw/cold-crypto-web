@@ -16,7 +16,7 @@ const TxSigned = ({ value, handleScan, wallet }) => {
     value: parseInt(Web3.utils.toWei(value.amount)),
   }
 
-  const sendData = `signTransferTx|2|${JSON.stringify([tx, wallet])}`
+  const sendData = `signTransferTx|3|${JSON.stringify([tx, wallet])}`
 
   return (
   <Row style={{ minWidth: '80vw' }}>
