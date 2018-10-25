@@ -1,8 +1,7 @@
 import { navigate } from 'fuse-react'
 import { eventChannel } from 'redux-saga'
-import { call, put, take, takeEvery, all } from 'redux-saga/effects'
+import { call, put, take, takeEvery, all, select } from 'redux-saga/effects'
 import { getNonce, sendTx } from '../services/ethHelper'
-import Rtc from '../services/webrtc'
 import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcMessageReceived } from '../actions'
 
 function* createEventChannel(rtc) {
@@ -18,7 +17,8 @@ function* createEventChannel(rtc) {
 }
 
 function* initializeWebrtcChannel() {
-  const channel = yield call(createEventChannel, Rtc);
+  const { webrtc } = yield select(state => state)
+  const channel = yield call(createEventChannel, webrtc);
   while (true) {
     const message = yield take(channel);
     console.log(message);
@@ -39,14 +39,19 @@ function* setWallet(wallet) {
 
 function* webrtcListener(action) {
   const parts =  action.payload.split('|').filter(Boolean)
+  
+  const commandId = parts[0]
+  const data = JSON.parse(parts[1])
 
-  switch (parts[0]) {
+  switch (commandId) {
     case "1":
-      yield setWallet(JSON.parse(parts[1]))
-      break;
-
+      yield setWallet(data)
+      break
+    case "2": 
+      yield sendTx(data)
+      break
     default:
-      break;
+      break
   }
 }
 

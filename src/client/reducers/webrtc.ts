@@ -1,20 +1,11 @@
 import { createReducer } from 'redux-act'
-import { initWebrtcConnaction } from '../actions'
+import RTC from '../services/webrtc'
 
 export interface IWebrtcDefaultState {
-  connected: boolean
 }
 
-const walletDefaultState: IWebrtcDefaultState = {
-  connected: false,
-}
+const webrtcDefaultState: IWebrtcDefaultState = RTC
 
-const webrtcReducer = createReducer<typeof walletDefaultState>({}, walletDefaultState)
-
-webrtcReducer.on(initWebrtcConnaction, () => {
-  return {
-    connected: true,
-  }
-})
+const webrtcReducer = createReducer<typeof webrtcDefaultState>({}, webrtcDefaultState)
 
 export default webrtcReducer
