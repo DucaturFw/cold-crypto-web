@@ -10,6 +10,7 @@ export  async function getNonce (address: string): Promise<number> {
 
 export function sendTx(tx) {
   return web3.eth.sendSignedTransaction(tx, function(err, transactionHash) {
+    console.log('transactionHash: ', transactionHash)
     if (!err)
       return transactionHash;
 
