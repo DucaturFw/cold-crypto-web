@@ -9,7 +9,10 @@ export const webrtcLogin = (sid: string) => {
 
   return `webrtcLogin|1|${JSON.stringify(params)}`
 }
-export const getWalletList = () => `getWalletList|2|[ ["eth"] ]`
+export const getWalletList = () => {
+ const params = { blockchains: ["eth"]} 
+ return `getWalletList|2|${JSON.stringify(params)}`
+}
 
 export const signTransferTx = (value: any, wallet: IWallet) => {
   const tx: ITransaction = {
