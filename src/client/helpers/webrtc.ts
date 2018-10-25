@@ -4,8 +4,7 @@ import { handshakeServerUrl } from '../constants'
 
 //TODO: add supported blockchain enum
 export const webrtcLogin = (sid: string) => {
-  const  currentLocation = window.location
-  const params = { sid: sid, url: `ws://${currentLocation.host}${currentLocation.pathname}`}
+  const params = { sid: sid, url: handshakeServerUrl}
 
   return `webrtcLogin|1|${JSON.stringify(params)}`
 }
