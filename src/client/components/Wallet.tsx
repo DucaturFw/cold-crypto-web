@@ -40,18 +40,18 @@ export default class Wallet extends Component<IProps, IState> {
   }
 
   public render() {
-    console.log(this.state.txs)
+    const { match: { params: { symbol, address } } } = this.props
     return (
       <Container>
         <Column>
           <Row>
             <Column>
               <Centered>
-                <H2>{this.state.blockchain}</H2>
-                <H1>{this.state.address}</H1>
+                <H2>{symbol}</H2>
+                <H1>{address}</H1>
               </Centered>
             </Column>
-            <Link to={`/txCreation/${this.state.blockchain}/${this.state.address}`}>
+            <Link to={`/txCreation/${symbol}/${address}`}>
               <ButtonBase>Create New Tx</ButtonBase>
             </Link>
           </Row>
