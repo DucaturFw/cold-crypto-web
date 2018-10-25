@@ -21,5 +21,5 @@ export const signTransferTx = (value: any, wallet: IWallet) => {
     to: value.to,
     value: Web3.utils.toWei(value.amount),
   }
-  return `signTransferTx|3|${JSON.stringify([tx, wallet])}`
+  return `signTransferTx|3|${JSON.stringify({wallet, tx})}`
 }
