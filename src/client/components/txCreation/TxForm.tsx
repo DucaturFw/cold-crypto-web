@@ -2,7 +2,7 @@ import React from 'react'
 import { defaultProps } from 'recompact'
 import { Form } from 'react-powerplug'
 import { navigate } from 'fuse-react'
-
+import web3 from 'web3'
 import { Column, Row, Centered } from '../shared/layout'
 import { TextInput } from '../shared/inputs'
 import { ButtonBase } from '../shared/buttons'
@@ -39,14 +39,15 @@ const TxForm = ({ address, blockChainPrice, blockChainData, value, set, webrtc, 
         <Column>
           <TextInput placeholder={address || 'Address'} {...input('to').bind} />
           <Row>
-            <TextInput required={true} placeholder='Amount' {...input('amount').bind} />
+            <TextInput type="number" min="0" required={true} placeholder='Amount' {...input('amount').bind} />
             <Centered style={{display: 'flex'}}>
               <span>~{(Number(values.amount) * Number(blockChainPrice)).toFixed(2)}$</span>
             </Centered>
           </Row>
           <Row>
-            <span>Gas price</span>
+            <span>Gas price {values.gasPrice} GWEI</span>
             <TextInput type='range' {...input('gasPrice').bind} min='1' max='100' />
+            <span> {(Number(web3.utils.fromWei(values.gasPrice, "gwei")) * 21000 * Number(blockChainPrice)).toFixed(3)} USD</span>
             <span> {`< ${(Number(blockChainData.avgWait) * Number(values.gasPrice)).toFixed(2)} min`}</span>
           </Row>
           <ButtonBase type='submit'>Sign</ButtonBase>
