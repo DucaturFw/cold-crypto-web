@@ -17,7 +17,7 @@ export const getWalletList = () => {
 export const signTransferTx = (value: any, wallet: IWallet) => {
   const tx: ITransaction = {
     nonce: wallet.nonce,
-    gasPrice: Web3.utils.toWei(value.gasPrice.toString(), 'wei'),
+    gasPrice: Web3.utils.toWei(value.gasPrice, 'gwei'),
     to: value.to,
     value: Web3.utils.toWei(value.amount),
   }
