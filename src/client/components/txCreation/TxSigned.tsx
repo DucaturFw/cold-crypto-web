@@ -10,7 +10,10 @@ import { signTransferTx } from '../../helpers/webrtc'
 
 const TxSigned = ({ value, handleScan, wallet }) => {
   const sendData = signTransferTx(value, wallet)
-
+  const onScan = (result) => {
+    console.log('Mobile response: ',result)
+    handleScan(parseJsonString(result.substr(3)))
+  }
   return (
   <Row style={{ minWidth: '80vw' }}>
     <Column style={{ width: '45%', marginRight: '5%' }}>
@@ -25,7 +28,7 @@ const TxSigned = ({ value, handleScan, wallet }) => {
       <H2>2. Show response here</H2>
       <QrReader
         delay={300}
-        onScan={(result) => result && handleScan(parseJsonString(result.substr(3)))}
+        onScan={(result) => result && onScan(result)}
         onError={(error) => console.log(error)}
         style={{ width: '100%' }}
       />
