@@ -7,33 +7,33 @@ import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcM
 import { RTCCommands } from '../constants' 
 
 function* createEventChannel(rtc) {
-  return eventChannel(emit => {
+  return eventChannel((emit) => {
     rtc.dataChannel.onmessage = ((message) => {
       return emit(message.data)
-    });
+    })
 
     return () => {
-      rtc.close();
-    };
-  });
+      rtc.close()
+    }
+  })
 }
 
 function* initializeWebrtcChannel() {
   const { webrtc } = yield select((state: any) => state.webrtc)
   const channel = yield call(createEventChannel, webrtc);
   while (true) {
-    const message = yield take(channel);
-    console.log(message);
-    yield put(webrtcMessageReceived(message));
+    const message = yield take(channel)
+    console.log(message)
+    yield put(webrtcMessageReceived(message))
   }
 }
 
 function* setWallet(wallet) {
-  const wallets = yield wallet.map(item => {
-    return getNonce(item.address).then(resolve => {
+  const wallets = yield wallet.map((item) => {
+    return getNonce(item.address).then((resolve) => {
       return { ...item, nonce: resolve }
     })
-  });
+  })
 
   yield put(addWallets(wallets))
   navigate('/wallets')
@@ -55,14 +55,13 @@ function* webrtcListener(action) {
 }
 
 function* scanTx(action) {
-  if(action.payload instanceof Error) {
-    return
-  }
+  if (action.payload instanceof Error) return
+
 
   try {
     yield put(startSendingTx(true))
     const transactionHash = yield sendTx(action.payload)
-    
+
     yield put(setLastTransaction(transactionHash))
   } catch (error) {
     yield put(setLastTransaction(error))
@@ -72,10 +71,8 @@ function* scanTx(action) {
 }
 
 function* complementWallets(action) {
-  //TODO: make notification about not valid qrcode
-  if(!action.payload.length) {
-    return
-  }
+  // TODO: make notification about not valid qrcode
+  if (!action.payload.length) return
 
   yield setWallet(action.payload)
 }
@@ -85,6 +82,6 @@ export default function* rootSaga() {
     takeEvery(scanTransaction, scanTx),
     takeEvery(scanWallets, complementWallets),
     takeEvery(initWebrtcConnaction, initializeWebrtcChannel),
-    takeEvery(webrtcMessageReceived, webrtcListener)
+    takeEvery(webrtcMessageReceived, webrtcListener),
   ])
 }

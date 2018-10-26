@@ -9,13 +9,13 @@ import { H2 } from '../shared/typography'
 import { signTransferTx } from '../../helpers/webrtc'
 
 class TxSigned extends React.Component<any> {
-  state = {
-    isScaned: false
+  public state = {
+    isScaned: false,
   }
-  onScan = (result) => {
-    const { handleScan } = this.props
+  public onScan = (result) => {
+    const { handleScan: handle } = this.props
     this.setState({isScaned: true})
-    handleScan(parseJsonString(result.substr(3)))
+    handle(parseJsonString(result.substr(3)))
   }
 
   render() {
@@ -24,13 +24,11 @@ class TxSigned extends React.Component<any> {
 
     const sendData = signTransferTx(value, wallet)
 
-    if(isSending) {
-      return (
-        <Row style={{ minWidth: '80vw' }}>
-          <H2>Sending...</H2>
-        </Row>
-      )
-    }
+    if(isSending) return (
+      <Row style={{ minWidth: '80vw' }}>
+        <H2>Sending...</H2>
+      </Row>
+    )
 
     return (
       <Row style={{ minWidth: '80vw' }}>
@@ -47,7 +45,7 @@ class TxSigned extends React.Component<any> {
           <QrReader
             delay={300}
             onScan={(result) => result && !isScaned && this.onScan(result)}
-            onError={(error) => console.log(error)}
+            onError={(error) => this.onScan(Error(error))}
             style={{ width: '100%' }}
           />
         </Column>

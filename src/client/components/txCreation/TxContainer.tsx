@@ -30,11 +30,11 @@ export interface IProps {
 
 
 const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc, isSending }: IProps) => {
-  const wallet = wallets.find(item => item.address === match.params.address)
+  const wallet = wallets.find((item) => item.address === match.params.address)
 
   return (
     <>
-      <Header />
+      <Header to='/' />
       <Container>
         <Centered style={{ maxWidth: '80vw' }}>
           <TxHeader params={match.params}>New Tx</TxHeader>
@@ -51,7 +51,7 @@ const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc, 
                       blockChainPrice,
                       value,
                       wallet,
-                      isSending
+                      isSending,
                     }} />
                   }
                 />
@@ -65,9 +65,9 @@ const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc, 
                       blockChainPrice,
                       set,
                       value,
-                      webrtc,
                       wallet,
-                      isSending
+                      webrtc,
+                      isSending,
                     }} />
                   }
                 />

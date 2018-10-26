@@ -12,7 +12,7 @@ import { TextInput } from './shared/inputs'
 
 const Home = ({ wallets }: { wallets: IWallet[] }) => (
   <>
-    <Header />
+    <Header to='/' />
     <Container>
       <Centered>
         <Link to='/login'>

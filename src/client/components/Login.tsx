@@ -1,5 +1,5 @@
 import React from 'react'
-import QrReqder from 'react-qr-reader'
+import QrReader from 'react-qr-reader'
 import { connect } from 'react-redux'
 
 import { Header, Centered, Container, Column, Row } from './shared/layout'
@@ -12,31 +12,35 @@ import { getWalletList } from './../helpers/webrtc'
 
 const Login = (props: { scanWallets: typeof scanWallets }) =>
   <>
-    <Header />
+    <Header to='/' />
     <Container>
-      <Row style={{ minWidth: '80vw' }}>
-          <Column style={{ width: '45%', marginRight: '5%' }}>
-            <Centered>
-              <H2>Scan QR Code</H2>
-            </Centered>
+      <Row style={{ width: '100vw' }}>
+        <Column style={{ width: '40%', margin: '0 5%' }}>
+          <Centered>
+            <H2>Scan QR Code</H2>
+          </Centered>
+          <Centered style={{display: 'flex'}}>
             <QRCode
               value={ getWalletList() }
               renderAs='svg'
-              style={{width: '100%', height: '100%'}}
+              style={{width: '40vh', height: '40vh'}}
             />
-          </Column>
-          <Column style={{ width: '45%', marginLeft: '5%' }}>
-            <Centered>
-              <H2>Show qrcode</H2>
-            </Centered>
-            <QrReqder
+          </Centered>
+        </Column>
+        <Column style={{ width: '40%', margin: '0 5%' }}>
+          <Centered>
+            <H2>Show qrcode</H2>
+          </Centered>
+          <Centered style={{display: 'flex'}}>
+            <QrReader
               delay={300}
               onScan={(result) => result && props.scanWallets(parseJsonString(result.substr(3)))}
               onError={(error) => props.scanWallets(Error(error))}
-              style={{ minWidth: '30vw', maxWidth: '40vw' }}
+              style={{ width: '40vh' }}
             />
-          </Column>
-        </Row>
+          </Centered>
+        </Column>
+      </Row>
     </Container>
   </>
 

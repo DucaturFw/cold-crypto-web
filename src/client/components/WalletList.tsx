@@ -12,9 +12,9 @@ import { IWalletDefaultState, IWallet } from '../reducers/wallet'
 
 const WalletList = ({ wallets }: { wallets: IWallet[] }) =>
   <>
-    <Header />
+    <Header to='/' />
     <Container>
-      <Column>
+      <Column style={{ maxWidth: '32rem' }}>
         <Row>
           <H1>Choose a wallet</H1>
         </Row>

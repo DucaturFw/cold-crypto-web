@@ -1,4 +1,5 @@
 import styled from 'react-emotion'
+import { Link } from 'fuse-react'
 import logo from '../../public/logo.png'
 
 export const Container = styled('main')({
@@ -6,13 +7,13 @@ export const Container = styled('main')({
   background: '#f1faee',
   display: 'flex',
   justifyContent: 'center',
-  minHeight: 'calc(100vh - 12rem)',
+  minHeight: 'calc(100vh - 8rem - 4vh)',
   width: '100vw',
 })
 
 export const Centered = styled('div')({
-  justifyContent: 'center',
   alignItems: 'center',
+  justifyContent: 'center',
   textAlign: 'center',
 })
 
@@ -29,7 +30,7 @@ export const Column = styled('div')({
   width: '100%',
 })
 
-export const Header = styled('div')({
+export const Header = styled(Link)({
   ':after': {
     background: `url(${logo}) center center no-repeat`,
     content: '""',
@@ -38,5 +39,6 @@ export const Header = styled('div')({
     width: '100vw',
   },
   background: 'linear-gradient(60deg, #abcedb 0%, #abcedb 49%, #c5dee7 49%, #c5dee7 54%, #d7e9ef 54%, #d7e9ef 100%)',
-  padding: '2rem 0',
+  display: 'block',
+  padding: '2vh 0',
 })
