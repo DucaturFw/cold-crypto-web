@@ -10,7 +10,7 @@ import { parseJsonString } from '../helpers/json'
 import QRCode from 'qrcode.react'
 import { getWalletList } from './../helpers/webrtc'
 
-const Login = (props: { scanWallets: typeof scanWallets, match: { params: { address } } }) => {
+const Login = (props: { scanWallets: typeof scanWallets }) => {
   return (
     <>
       <Header to='/' />

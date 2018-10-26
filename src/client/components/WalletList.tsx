@@ -10,7 +10,7 @@ import { H1 } from './shared/typography'
 
 import { IWalletDefaultState, IWallet } from '../reducers/wallet'
 
-const WalletList = ({ wallets }: { wallets: IWallet[] }) =>
+const WalletList = ({ wallets, payData }: { wallets: IWallet[], payData: any }) =>
   <>
     <Header to='/' />
     <Container>
@@ -20,7 +20,7 @@ const WalletList = ({ wallets }: { wallets: IWallet[] }) =>
         </Row>
         {wallets.map((v) => (
           <LinkUndecorated
-            to={`/wallet/${v.blockchain}/${v.address}`}
+            to={ Object.keys(payData).length ? `/txCreation/${v.blockchain}/${v.address}` :`/wallet/${v.blockchain}/${v.address}` }
             key={v.address} >
             <WalletLinkContainer>
               <strong>{v.blockchain}</strong>
@@ -83,6 +83,6 @@ interface IProps {
 }
 
 const withFetch = fetch('http://localhost:4443/addresses')
-const withConnect = connect(({ wallet: { wallets } }: IProps) => ({ wallets }))
+const withConnect = connect(({ wallet: { wallets, payData } }: IProps) => ({ wallets, payData }))
 
 export default compose(withFetch, withConnect)(WalletList)

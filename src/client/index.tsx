@@ -40,7 +40,7 @@ class Root extends Component {
           />
           <Route path='/webrtc' component={Webrtc}/>
           <Route path='/tx' component={TxView}/>
-          <Route path='/pay/:address' component={Pay}/>
+          <Route exact path='/pay/:address' component={Pay}/>
         </Switch>
       </Provider>
     )

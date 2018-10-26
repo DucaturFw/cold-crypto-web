@@ -3,7 +3,7 @@ import { eventChannel } from 'redux-saga'
 import { call, put, take, takeEvery, all, select } from 'redux-saga/effects'
 import { parseMessage } from '../helpers/json'
 import { getNonce, sendTx } from '../services/ethHelper'
-import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcMessageReceived, setLastTransaction, startSendingTx } from '../actions'
+import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcMessageReceived, setLastTransaction, startSendingTx, setPayData } from '../actions'
 import { RTCCommands } from '../constants' 
 
 function* createEventChannel(rtc) {
@@ -36,6 +36,14 @@ function* setWallet(wallet) {
   })
 
   yield put(addWallets(wallets))
+
+  if(wallets.length === 1) {
+    const payData = yield select((state: any) => state.wallet.payData)
+
+    navigate(`/${Object.keys(payData).length ? 'txCreation': 'wallet'}/${wallet[0].blockchain}/${wallet[0].address}`)
+    return
+  }
+
   navigate('/wallets')
 }
 
@@ -67,6 +75,7 @@ function* scanTx(action) {
     yield put(setLastTransaction(error))
   }
   yield put(startSendingTx(false))
+  yield put(setPayData({}))
   navigate(`/tx`)
 }
 

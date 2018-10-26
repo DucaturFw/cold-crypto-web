@@ -15,7 +15,7 @@ const withBlockchainPrice = compose(
 )
 
 const withConnect = connect(
-  (state: any) => ({ wallets: state.wallet.wallets, webrtc: state.webrtc.webrtc, isSending: state.webrtc.isSending }),
+  (state: any) => ({ wallets: state.wallet.wallets, webrtc: state.webrtc.webrtc, isSending: state.webrtc.isSending, initialValues: state.wallet.payData }),
 )
 
 const wrap = compose(

@@ -7,7 +7,11 @@ import {setPayData} from '../actions'
 import { connect} from 'react-redux'
 
 const Pay = ({ match: { params: { address } }, setPayData }) => {
-  setPayData({address, amount: 0})
+  //TODO: rewrite it
+  const urlParams = new URLSearchParams(window.location.search);
+  const amount = urlParams.get('amount');
+
+  setPayData({to: address, amount: amount})
   return (
     <>
       <Header to='/' />
@@ -16,6 +20,7 @@ const Pay = ({ match: { params: { address } }, setPayData }) => {
           <Column>
             <H1>Tx sent data</H1>
             <H2>Address: {address}</H2>
+            <H2>Ammount: {amount}</H2>
           </Column>
           <Link to='/login'>
             <ButtonBase>Login and pay</ButtonBase>
