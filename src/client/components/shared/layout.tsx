@@ -12,6 +12,7 @@ export const Container = styled('main')({
 
 export const Centered = styled('div')({
   justifyContent: 'center',
+  alignItems: 'center',
   textAlign: 'center',
 })
 
@@ -19,6 +20,7 @@ export const Row = styled('div')({
   display: 'flex',
   justifyContent: 'space-around',
   margin: '1rem 0',
+  width: '100%',
 })
 
 export const Column = styled('div')({

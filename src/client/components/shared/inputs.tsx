@@ -6,6 +6,7 @@ export const TextInput = styled('input')({
   },
   background: '#eff9f9',
   border: '1px solid #457b9d',
+  boxSizing: 'border-box',
   color: '#457b9d',
   fontSize: '.9rem',
   outline: 'none',
@@ -27,5 +28,6 @@ export const Select = styled('select')(({ flipToRight }: { flipToRight: boolean 
   color: '#f1faee',
   margin: flipToRight ? '0 0 0 -.2rem' : 0,
   padding: '0 1rem',
+  boxSizing: 'border-box',
   position: 'relative',
 }))

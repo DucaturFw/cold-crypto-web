@@ -39,8 +39,8 @@ const TxForm = ({ address, blockChainPrice, blockChainData, value, set, webrtc, 
         <Column>
           <TextInput placeholder={address || 'Address'} {...input('to').bind} />
           <Row>
-            <TextInput type="number" min="0" step="0.1" placeholder='Amount' {...input('amount').bind} />
-            <Centered style={{display: 'flex'}}>
+            <TextInput type="number" min="0" step={1e-18.toFixed(20)} placeholder='Amount' {...input('amount').bind} />
+            <Centered style={{display: 'flex', marginLeft: '.5rem'}}>
               <span>~{(Number(values.amount) * Number(blockChainPrice)).toFixed(2)}$</span>
             </Centered>
           </Row>
@@ -48,7 +48,7 @@ const TxForm = ({ address, blockChainPrice, blockChainData, value, set, webrtc, 
             <span>Gas price {values.gasPrice} GWEI</span>
             <TextInput type='range' {...input('gasPrice').bind} min='1' max='100' />
             <span> {(Number(web3.utils.fromWei(values.gasPrice, "gwei")) * 21000 * Number(blockChainPrice)).toFixed(3)} USD</span>
-            <span> {`< ${(Number(blockChainData.avgWait) * Number(values.gasPrice)).toFixed(2)} min`}</span>
+            <span style={{minWidth: '5rem', marginLeft: '.5rem'}}> {`< ${(Number(blockChainData.avgWait) * Number(values.gasPrice)).toFixed(2)} min`}</span>
           </Row>
           <ButtonBase type='submit'>Sign</ButtonBase>
         </Column>
