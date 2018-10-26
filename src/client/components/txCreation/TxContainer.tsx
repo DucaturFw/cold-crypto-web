@@ -42,7 +42,7 @@ const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc }
             {({ set, value }) => (
               <Switch>
                 <Route
-                  path='/txCreation/:blockchain/sign'
+                  path='/txCreation/:blockchain/:address/sign'
                   component={() =>
                     <TxSigned {...{
                       address: match.params.address,

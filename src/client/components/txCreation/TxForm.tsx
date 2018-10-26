@@ -34,7 +34,7 @@ const TxForm = ({ address, blockChainPrice, blockChainData, value, set, webrtc, 
         }
 
         set(values)
-        navigate('/txCreation/eth/sign')
+        navigate(`/txCreation/eth/${address}/sign`)
       }}>
         <Column>
           <TextInput placeholder={`To address`} {...input('to').bind} />
