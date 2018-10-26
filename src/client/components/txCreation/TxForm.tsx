@@ -39,7 +39,7 @@ const TxForm = ({ address, blockChainPrice, blockChainData, value, set, webrtc, 
         <Column>
           <TextInput placeholder={address || 'Address'} {...input('to').bind} />
           <Row>
-            <TextInput type="number" min="0" required={true} step="0.1" placeholder='Amount' {...input('amount').bind} />
+            <TextInput type="number" min="0" step="0.1" placeholder='Amount' {...input('amount').bind} />
             <Centered style={{display: 'flex'}}>
               <span>~{(Number(values.amount) * Number(blockChainPrice)).toFixed(2)}$</span>
             </Centered>
