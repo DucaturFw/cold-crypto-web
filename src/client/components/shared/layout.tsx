@@ -26,6 +26,7 @@ export const Row = styled('div')({
 export const Column = styled('div')({
   display: 'flex',
   flexFlow: 'column nowrap',
+  width: '100%',
 })
 
 export const Header = styled('div')({

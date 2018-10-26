@@ -1,7 +1,6 @@
 import React from 'react'
 import { Value } from 'react-powerplug'
 import { Switch, Route } from 'fuse-react'
-import { connect } from 'react-redux'
 
 import { IWallet } from '../../reducers/Wallet'
 import { RTCHelper } from '../../services/webrtc'
@@ -36,8 +35,9 @@ const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc }
     <>
       <Header />
       <Container>
-        <Centered>
+        <Centered style={{ maxWidth: '80vw' }}>
           <TxHeader params={match.params}>New Tx</TxHeader>
+          <br />
           <Value initial={{ to: '', amount: '1', gasPrice: '1' }} >
             {({ set, value }) => (
               <Switch>
@@ -77,6 +77,4 @@ const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc }
   )
 }
 
-const withConnect = connect((state: any) => { return { wallets: state.wallet.wallets, webrtc: state.webrtc.webrtc } }, null)
-
-export default withConnect(TxContainer)
+export default TxContainer

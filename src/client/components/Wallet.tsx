@@ -1,6 +1,7 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
+import styled from 'react-emotion'
 import { Link } from 'fuse-react'
-import { Container, Column, Row, Centered } from './shared/layout'
+import { Container, Column, Row, Centered, Header } from './shared/layout'
 import { ButtonBase } from './shared/buttons'
 import { H1, H2 } from './shared/typography'
 import { Table } from './shared/table'
@@ -25,6 +26,12 @@ interface IState {
   }>
 }
 
+const OverflowTd = styled('td')({
+  maxWidth: '20vw',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+})
+
 export default class Wallet extends Component<IProps, IState> {
   public state = {
     address: null,
@@ -42,45 +49,50 @@ export default class Wallet extends Component<IProps, IState> {
   public render() {
     const { match: { params: { symbol, address } } } = this.props
     return (
-      <Container>
-        <Column>
-          <Row>
-            <Column>
-              <Centered>
-                <H2>{symbol}</H2>
-                <H1>{address}</H1>
-              </Centered>
-            </Column>
-            <Link to={`/txCreation/${symbol}/${address}`}>
-              <ButtonBase>Create New Tx</ButtonBase>
-            </Link>
-          </Row>
-          <Table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>TxHash</th>
-                <th>Address</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              { this.state.txs.map((v, index) => (
-                <tr key={index}>
-                  <td>{new Date(v.timeStamp * 1000).toLocaleString()}</td>
-                  <td>
-                    <a target="_blank" href={`https://rinkeby.etherscan.io/tx/${v.hash}`}>
-                      {v.hash}
-                    </a>
-                  </td>
-                  <td>{v.from}</td>
-                  <td>{v.value}</td>
+      <>
+        <Header />
+        <Container>
+          <Column style={{ width: 'inherit' }}>
+            <Row>
+              <Column style={{ flexGrow: 1 }}>
+                <Centered>
+                  <H1>{symbol}</H1>
+                  <H2>{address}</H2>
+                </Centered>
+              </Column>
+              <Row style={{ flexBasis: '50%' }}>
+                <Link to={`/txCreation/${symbol}/${address}`}>
+                  <ButtonBase>Create New Tx</ButtonBase>
+                </Link>
+              </Row>
+            </Row>
+            <Table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>TxHash</th>
+                  <th>Address</th>
+                  <th>Value</th>
                 </tr>
-              )) }
-            </tbody>
-          </Table>
-        </Column>
-      </Container>
+              </thead>
+              <tbody>
+                { this.state.txs.map((v, index) => (
+                  <tr key={index}>
+                    <td>{new Date(v.timeStamp * 1000).toLocaleString()}</td>
+                    <OverflowTd>
+                      <a target="_blank" href={`https://rinkeby.etherscan.io/tx/${v.hash}`}>
+                        {v.hash}
+                      </a>
+                    </OverflowTd>
+                    <OverflowTd>{v.from}</OverflowTd>
+                    <td>{v.value}</td>
+                  </tr>
+                )) }
+              </tbody>
+            </Table>
+          </Column>
+        </Container>
+      </>
     )
   }
 }

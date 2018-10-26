@@ -4,7 +4,7 @@ import { H1, H2 } from '../shared/typography'
 
 export default ({ params, children }) => (
   <Fragment>
-    <H2>{ params.blockchain }</H2>
-    <H1>{ children } { params.address }</H1>
+    <H1>{ children } <strong>{ params.blockchain.toUpperCase() }</strong></H1>
+    <H2>{ params.address }</H2>
   </Fragment>
 )

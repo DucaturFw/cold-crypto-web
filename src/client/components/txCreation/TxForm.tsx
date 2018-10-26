@@ -37,7 +37,7 @@ const TxForm = ({ address, blockChainPrice, blockChainData, value, set, webrtc, 
         navigate('/txCreation/eth/sign')
       }}>
         <Column>
-          <TextInput placeholder={address || 'Address'} {...input('to').bind} />
+          <TextInput placeholder={`To address`} {...input('to').bind} />
           <Row>
             <TextInput type="number" min="0" step={1e-18.toFixed(20)} placeholder='Amount' {...input('amount').bind} />
             <Centered style={{display: 'flex', marginLeft: '.5rem'}}>

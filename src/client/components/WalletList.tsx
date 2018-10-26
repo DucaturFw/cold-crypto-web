@@ -5,29 +5,32 @@ import { Link } from 'fuse-react'
 import { compose } from 'recompact'
 import fetch from 'fetch-hoc'
 
-import { Container, Column, Row } from './shared/layout'
+import { Container, Column, Row, Header } from './shared/layout'
 import { H1 } from './shared/typography'
 
 import { IWalletDefaultState, IWallet } from '../reducers/wallet'
 
 const WalletList = ({ wallets }: { wallets: IWallet[] }) =>
-  <Container>
-    <Column>
-      <Row>
-        <H1>Choose a wallet</H1>
-      </Row>
-      {wallets.map((v) => (
-        <LinkUndecorated
-          to={`/wallet/${v.blockchain}/${v.address}`}
-          key={v.address} >
-          <WalletLinkContainer>
-            <strong>{v.blockchain}</strong>
-            <span>{v.address} <mark>{v.balance}</mark></span>
-          </WalletLinkContainer>
-        </LinkUndecorated>
-      ))}
-    </Column>
-  </Container>
+  <>
+    <Header />
+    <Container>
+      <Column>
+        <Row>
+          <H1>Choose a wallet</H1>
+        </Row>
+        {wallets.map((v) => (
+          <LinkUndecorated
+            to={`/wallet/${v.blockchain}/${v.address}`}
+            key={v.address} >
+            <WalletLinkContainer>
+              <strong>{v.blockchain}</strong>
+              <span>{v.address} <mark>{v.balance}</mark></span>
+            </WalletLinkContainer>
+          </LinkUndecorated>
+        ))}
+      </Column>
+    </Container>
+  </>
 
 const LinkUndecorated = styled(Link)({
   color: '#457b9d',
@@ -58,7 +61,7 @@ const WalletLinkContainer = styled(Row)({
     },
     padding: '1rem 1rem 1rem 3rem',
     position: 'relative',
-    width: '20rem',
+    width: '100%',
     zIndex: 1,
   },
   strong: {
@@ -67,7 +70,7 @@ const WalletLinkContainer = styled(Row)({
     borderRadius: '100%',
     color: '#f1faee',
     display: 'flex',
-    height: '4rem',
+    height: '3.3rem',
     justifyContent: 'center',
     textTransform: 'uppercase',
     width: '4rem',

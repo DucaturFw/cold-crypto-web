@@ -7,9 +7,10 @@ export const H1 = styled('h1')({
   margin: '.25rem 0',
 })
 
-export const H2 = styled(H1)({
+export const H2 = styled('h2')({
   color: '#469ea6',
   fontSize: '1.2em',
+  fontWeight: 'normal',
   margin: '.5rem 0',
 })
 
