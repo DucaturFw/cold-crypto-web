@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import QRCode from 'qrcode.react'
-import { Container, Column, Row } from '../shared/layout'
+import { Container, Centered, Column, Row, Header } from '../shared/layout'
 import { H1 } from '../shared/typography'
 import { initWebrtcConnaction } from '../../actions'
 import { handshakeServerUrl } from '../../constants'
@@ -56,18 +56,23 @@ class WebrtcServer extends React.Component {
     const { sid } = this.state
 
     return (
-      <Container>
-         <Row>
-          {sid && <Column>
-            <H1>Scan session id</H1>
-            <QRCode
-              value={ webrtcLogin(sid) }
-              renderAs='svg'
-              style={{width: '100%', height: '100%'}}
-            />
-            </Column>}
-        </Row>
-      </Container>
+      <>
+        <Header />
+        <Container>
+          <Centered>
+            <Row>
+              {sid && <Column>
+                <H1>Scan session id</H1>
+                <QRCode
+                  value={ webrtcLogin(sid) }
+                  renderAs='svg'
+                  style={{width: '100%', height: '100%'}}
+                />
+                </Column>}
+            </Row>
+          </Centered>
+        </Container>
+      </>
     )
   }
 }

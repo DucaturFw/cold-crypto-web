@@ -14,7 +14,7 @@ const WalletList = ({ wallets }: { wallets: IWallet[] }) =>
   <>
     <Header />
     <Container>
-      <Column>
+      <Column style={{ maxWidth: '32rem' }}>
         <Row>
           <H1>Choose a wallet</H1>
         </Row>

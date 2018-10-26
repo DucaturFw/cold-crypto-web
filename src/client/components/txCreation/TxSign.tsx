@@ -23,7 +23,7 @@ interface IProps {
 
 const TxSign = (props: IProps) =>
   <Row style={{ minWidth: '80vw' }}>
-    <Column style={{ width: '45%', marginRight: '5%' }}>
+    <Column style={{ width: '40%', marginRight: '0 5%' }}>
       <H2>1. Scan this request</H2>
       <QRCode
         value={JSON.stringify(props.value)}
@@ -31,7 +31,7 @@ const TxSign = (props: IProps) =>
         size='100%'
       />
     </Column>
-    <Column style={{ width: '45%', marginLeft: '5%' }}>
+    <Column style={{ width: '40%', margin: '0 5%' }}>
       <H2>2. Show response here</H2>
       <QrReader
         delay={300}

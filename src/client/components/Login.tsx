@@ -15,7 +15,7 @@ const Login = (props: { scanWallets: typeof scanWallets }) =>
     <Header />
     <Container>
       <Row style={{ minWidth: '80vw' }}>
-          <Column style={{ width: '45%', marginRight: '5%' }}>
+          <Column style={{ width: '40%', margin: '0 5%' }}>
             <Centered>
               <H2>Scan QR Code</H2>
             </Centered>
@@ -25,7 +25,7 @@ const Login = (props: { scanWallets: typeof scanWallets }) =>
               style={{width: '100%', height: '100%'}}
             />
           </Column>
-          <Column style={{ width: '45%', marginLeft: '5%' }}>
+          <Column style={{ width: '40%', margin: '0 5%' }}>
             <Centered>
               <H2>Show qrcode</H2>
             </Centered>
