@@ -65,8 +65,8 @@ export default class Wallet extends Component<IProps, IState> {
               </tr>
             </thead>
             <tbody>
-              { this.state.txs.map((v) => (
-                <tr key={v.hash}>
+              { this.state.txs.map((v, index) => (
+                <tr key={index}>
                   <td>{new Date(v.timeStamp * 1000).toLocaleString()}</td>
                   <td>
                     <a target="_blank" href={`https://rinkeby.etherscan.io/tx/${v.hash}`}>
