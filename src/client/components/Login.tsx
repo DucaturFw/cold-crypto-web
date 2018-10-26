@@ -17,7 +17,7 @@ const Login = (props: { scanWallets: typeof scanWallets }) =>
           <QRCode
             value={ getWalletList() }
             renderAs='svg'
-            size='100%'
+            style={{width: '100%', height: '100%'}}
           />
         </Column>
         <Column style={{ width: '45%', marginLeft: '5%' }}>

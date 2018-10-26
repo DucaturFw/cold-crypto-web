@@ -18,7 +18,7 @@ const TxSigned = ({ value, handleScan, wallet }) => {
       <QRCode
         value={sendData}
         renderAs='svg'
-        size='100%'
+        style={{width: '100%', height: '100%'}}
       />
     </Column>
     <Column style={{ width: '45%', marginLeft: '5%' }}>
