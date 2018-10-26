@@ -1,9 +1,11 @@
 import { navigate } from 'fuse-react'
 import { eventChannel } from 'redux-saga'
 import { call, put, take, takeEvery, all, select } from 'redux-saga/effects'
+const EthereumTx = require('ethereumjs-tx')
 import { getNonce, sendTx } from '../services/ethHelper'
-import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcMessageReceived } from '../actions'
+import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcMessageReceived, setLastTransaction } from '../actions'
 import { RTCCommands } from '../constants' 
+import { log } from 'util';
 
 function* createEventChannel(rtc) {
   return eventChannel(emit => {
@@ -49,7 +51,7 @@ function* webrtcListener(action) {
       yield setWallet(data)
       break
     case RTCCommands.signTransferTx: 
-      yield sendTx(data)
+      yield scanTx(data)
       break
     default:
       break
@@ -61,8 +63,18 @@ function* scanTx(action) {
     return
   }
 
-  yield sendTx(action.payload)
-  navigate('/wallets')
+  let tx = new EthereumTx(action.payload)
+  let transactionHash
+
+  try {
+    transactionHash = yield sendTx(action.payload)
+    tx.hash = transactionHash
+    yield put(setLastTransaction(tx))
+  } catch (error) {
+    yield put(setLastTransaction(error))
+  }
+
+  navigate(`/hash`)
 }
 
 function* complementWallets(action) {

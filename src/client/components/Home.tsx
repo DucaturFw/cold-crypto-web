@@ -9,7 +9,8 @@ import { Container, Centered, Row } from './shared/layout'
 import { ButtonBase, ButtonSecondary, ButtonWarning } from './shared/buttons'
 import { TextInput } from './shared/inputs'
 
-const Home = ({ wallets }: { wallets: IWallet[] }) => (
+const Home = ({ wallets }: { wallets: IWallet[] }) =>  { 
+  return (
   <Container>
     <Centered>
       <Link to='/login'>
@@ -30,7 +31,7 @@ const Home = ({ wallets }: { wallets: IWallet[] }) => (
         </Link>
     </Centered>
   </Container>
-)
+) }
 
 interface IProps {
   wallet: IWalletDefaultState

@@ -9,14 +9,6 @@ export interface IWallet {
   chainId: string | number
 }
 
-//TODO: Move to types
-export interface ITransaction {
-  nonce: number
-  gasPrice: string
-  to: number
-  value: string
-}
-
 export interface IWalletDefaultState {
   error: any
   wallets: IWallet[] | Error

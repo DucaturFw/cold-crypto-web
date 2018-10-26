@@ -72,4 +72,4 @@ const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc }
   )
 }
 
-export default connect((state: any) => { return { wallets: state.wallet.wallets, webrtc: state.webrtc } }, null)(TxContainer)
+export default connect((state: any) => { return { wallets: state.wallet.wallets, webrtc: state.webrtc.webrtc } }, null)(TxContainer)

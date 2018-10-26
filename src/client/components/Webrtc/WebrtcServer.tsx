@@ -72,4 +72,4 @@ class WebrtcServer extends React.Component {
   }
 }
 
-export default connect( state => ({ webrtc: state.webrtc }), { initWebrtcConnaction } )(WebrtcServer)
+export default connect( (state: any) => ({ webrtc: state.webrtc.webrtc }), { initWebrtcConnaction } )(WebrtcServer)
