@@ -57,7 +57,7 @@ class WebrtcServer extends React.Component {
 
     return (
       <>
-        <Header />
+        <Header to='/' />
         <Container>
           <Centered>
             <Row>

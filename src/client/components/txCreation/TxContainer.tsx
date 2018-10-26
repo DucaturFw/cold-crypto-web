@@ -33,7 +33,7 @@ const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc }
 
   return (
     <>
-      <Header />
+      <Header to='/' />
       <Container>
         <Centered style={{ maxWidth: '80vw' }}>
           <TxHeader params={match.params}>New Tx</TxHeader>

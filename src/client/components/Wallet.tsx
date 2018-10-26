@@ -50,7 +50,7 @@ export default class Wallet extends Component<IProps, IState> {
     const { match: { params: { symbol, address } } } = this.props
     return (
       <>
-        <Header />
+        <Header to='/wallets' />
         <Container>
           <Column style={{ width: 'inherit' }}>
             <Row>

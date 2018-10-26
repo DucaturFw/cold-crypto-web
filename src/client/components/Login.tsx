@@ -12,7 +12,7 @@ import { getWalletList } from './../helpers/webrtc'
 
 const Login = (props: { scanWallets: typeof scanWallets }) =>
   <>
-    <Header />
+    <Header to='/' />
     <Container>
       <Row style={{ minWidth: '80vw' }}>
           <Column style={{ width: '40%', margin: '0 5%' }}>
