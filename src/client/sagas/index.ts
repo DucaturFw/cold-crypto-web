@@ -62,13 +62,11 @@ function* scanTx(action) {
     return
   }
 
-  let tx = new unsign(action.payload)
-  let transactionHash
-
+  
   try {
-    transactionHash = yield sendTx(action.payload)
-    tx.hash = transactionHash
-    yield put(setLastTransaction(tx))
+    const transactionHash = yield sendTx(action.payload)
+    
+    yield put(setLastTransaction(transactionHash))
   } catch (error) {
     yield put(setLastTransaction(error))
   }

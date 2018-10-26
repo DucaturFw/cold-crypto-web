@@ -8,8 +8,8 @@ export  async function getNonce (address: string): Promise<number> {
   return  await web3.eth.getTransactionCount(address);
 }
 
-export function sendTx(tx) {
-  return web3.eth.sendSignedTransaction(tx, (err, transactionHash) => {
+export async function sendTx(tx) {
+  return await web3.eth.sendSignedTransaction(tx, (err, transactionHash) => {
     console.log('transactionHash: ', transactionHash)
     if (err)
       return err
