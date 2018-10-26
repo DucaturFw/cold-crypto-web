@@ -6,7 +6,7 @@ import QRCode from 'qrcode.react'
 
 import { requestPushTx } from '../../actions'
 
-import { Column, Row } from '../shared/layout'
+import { Column, Row, Centered } from '../shared/layout'
 import { H2 } from '../shared/typography'
 
 interface IProps {
@@ -22,23 +22,31 @@ interface IProps {
 }
 
 const TxSign = (props: IProps) =>
-  <Row style={{ minWidth: '80vw' }}>
-    <Column style={{ width: '40%', marginRight: '0 5%' }}>
-      <H2>1. Scan this request</H2>
-      <QRCode
-        value={JSON.stringify(props.value)}
-        renderAs='svg'
-        size='100%'
-      />
+  <Row style={{ width: '100vw' }}>
+    <Column style={{ width: '40%', margin: '0 5%' }}>
+      <Centered>
+        <H2>1. Scan this request</H2>
+      </Centered>
+      <Centered style={{display: 'flex'}}>
+        <QRCode
+          value={JSON.stringify(props.value)}
+          renderAs='svg'
+          size='100%'
+        />
+      </Centered>
     </Column>
     <Column style={{ width: '40%', margin: '0 5%' }}>
-      <H2>2. Show response here</H2>
-      <QrReader
-        delay={300}
-        onScan={(sign) => sign && props.requestPushTx(sign)}
-        onError={(err) => props.requestPushTx(Error(err))}
-        style={{ width: '100%' }}
-      />
+      <Centered>
+        <H2>2. Show response here</H2>
+      </Centered>
+      <Centered style={{display: 'flex'}}>
+        <QrReader
+          delay={300}
+          onScan={(sign) => sign && props.requestPushTx(sign)}
+          onError={(err) => props.requestPushTx(Error(err))}
+          style={{ width: '100%' }}
+        />
+      </Centered>
     </Column>
   </Row>
 
