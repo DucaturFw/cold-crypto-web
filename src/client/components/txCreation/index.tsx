@@ -11,7 +11,7 @@ const withBlockchainData = compose(
 
 const withBlockchainPrice = compose(
   fetch(({ match: { params: { blockchain } } }) => `https://api.coinmarketcap.com/v1/ticker/ethereum/`),
-  mapProps((props) => ({ ...props, blockChainPrice: !props.data ? 0 : props.data[0].price_usd })),
+  mapProps((props) => ({ ...props, blockChainPrice: (props.data && props.data[0] && props.data[0].price_usd) || 0 })),
 )
 
 const withConnect = connect(
