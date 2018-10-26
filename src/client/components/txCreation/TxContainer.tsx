@@ -24,11 +24,12 @@ export interface IProps {
   }
   blockChainPrice: string,
   wallets: IWallet[],
-  webrtc: RTCHelper
+  webrtc: RTCHelper,
+  isSending: boolean
 }
 
 
-const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc }: IProps) => {
+const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc, isSending }: IProps) => {
   const wallet = wallets.find(item => item.address === match.params.address)
 
   return (
@@ -50,6 +51,7 @@ const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc }
                       blockChainPrice,
                       value,
                       wallet,
+                      isSending
                     }} />
                   }
                 />
@@ -65,6 +67,7 @@ const TxContainer = ({ match, blockChainData, blockChainPrice, wallets, webrtc }
                       value,
                       webrtc,
                       wallet,
+                      isSending
                     }} />
                   }
                 />

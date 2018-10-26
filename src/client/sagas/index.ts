@@ -1,9 +1,9 @@
 import { navigate } from 'fuse-react'
 import { eventChannel } from 'redux-saga'
 import { call, put, take, takeEvery, all, select } from 'redux-saga/effects'
-const unsign = require('@warren-bank/ethereumjs-tx-unsign')
+import { parseMessage } from '../helpers/json'
 import { getNonce, sendTx } from '../services/ethHelper'
-import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcMessageReceived, setLastTransaction } from '../actions'
+import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcMessageReceived, setLastTransaction, startSendingTx } from '../actions'
 import { RTCCommands } from '../constants' 
 
 function* createEventChannel(rtc) {
@@ -19,7 +19,7 @@ function* createEventChannel(rtc) {
 }
 
 function* initializeWebrtcChannel() {
-  const { webrtc } = yield select(state => state)
+  const { webrtc } = yield select((state: any) => state.webrtc)
   const channel = yield call(createEventChannel, webrtc);
   while (true) {
     const message = yield take(channel);
@@ -40,17 +40,14 @@ function* setWallet(wallet) {
 }
 
 function* webrtcListener(action) {
-  const parts =  action.payload.split('|').filter(Boolean)
-  
-  const commandId = parts[0]
-  const data = JSON.parse(parts[1])
+  const data = parseMessage(action.payload)
 
-  switch (commandId) {
+  switch (data.id) {
     case RTCCommands.getWalletList:
-      yield setWallet(data)
+      yield setWallet(data.result)
       break
     case RTCCommands.signTransferTx: 
-      yield scanTx(data)
+      yield put(scanTransaction(data.result))
       break
     default:
       break
@@ -62,15 +59,15 @@ function* scanTx(action) {
     return
   }
 
-  
   try {
+    yield put(startSendingTx(true))
     const transactionHash = yield sendTx(action.payload)
     
     yield put(setLastTransaction(transactionHash))
   } catch (error) {
     yield put(setLastTransaction(error))
   }
-
+  yield put(startSendingTx(false))
   navigate(`/tx`)
 }
 

@@ -9,7 +9,7 @@ export const setQrCode = createAction<string>('set qr code')
 export const addWallets = createAction<IWallet[] | Error>('add wallets')
 export const scanWallets = createAction<IWallet[] | Error>('scan wallets')
 export const scanTransaction = createAction<ITransaction | Error>('scan transaction')
-
+export const startSendingTx = createAction<boolean>('start transaction')
 
 export const scanAnswer = createAction<RTCSessionDescriptionInit | Error>('scan answer') 
 export const initWebrtcConnaction = createAction('success rtc connection') 

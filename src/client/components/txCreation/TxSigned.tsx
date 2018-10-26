@@ -19,12 +19,12 @@ class TxSigned extends React.Component<any> {
   }
 
   render() {
-    const { value, wallet } = this.props
+    const { value, wallet, isSending } = this.props
     const { isScaned } = this.state
 
     const sendData = signTransferTx(value, wallet)
 
-    if(isScaned) {
+    if(isSending) {
       return (
         <Row style={{ minWidth: '80vw' }}>
           <H2>Sending...</H2>
