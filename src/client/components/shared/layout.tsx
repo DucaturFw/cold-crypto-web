@@ -7,13 +7,13 @@ export const Container = styled('main')({
   background: '#f1faee',
   display: 'flex',
   justifyContent: 'center',
-  minHeight: 'calc(100vh - 12rem)',
+  minHeight: 'calc(100vh - 8rem - 4vh)',
   width: '100vw',
 })
 
 export const Centered = styled('div')({
-  justifyContent: 'center',
   alignItems: 'center',
+  justifyContent: 'center',
   textAlign: 'center',
 })
 
@@ -40,5 +40,5 @@ export const Header = styled(Link)({
   },
   background: 'linear-gradient(60deg, #abcedb 0%, #abcedb 49%, #c5dee7 49%, #c5dee7 54%, #d7e9ef 54%, #d7e9ef 100%)',
   display: 'block',
-  padding: '2rem 0',
+  padding: '2vh 0',
 })
