@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {connect} from 'react-redux'
 import QRCode from 'qrcode.react'
 import { Container, Centered, Column, Row, Header } from '../shared/layout'
@@ -8,39 +8,39 @@ import { handshakeServerUrl } from '../../constants'
 import { getWalletList, webrtcLogin } from '../../helpers/webrtc'
 
 class WebrtcServer extends React.Component {
-  state = {
-    sid: null
+  public state = {
+    sid: null,
   }
 
-  componentDidMount = async () => {
+  public componentDidMount = async () => {
     const { initWebrtcConnaction, webrtc } = this.props
     const offer = await  webrtc.createOffer()
-    let ws = new WebSocket(handshakeServerUrl)
+    const ws = new WebSocket(handshakeServerUrl)
 
     ws.addEventListener('open', () =>
     {
       console.log('opened!')
-      ws.send(JSON.stringify({ jsonrpc: "2.0", id: 1, method: "offer", params: { offer: offer.sdp } }))
+      ws.send(JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'offer', params: { offer: offer.sdp } }))
     })
     ws.addEventListener('message', async (data) =>
     {
       console.log(`message: ${data.data}`)
-      let json = JSON.parse(data.data.toString())
-      if(json.id == 1) {
+      const json = JSON.parse(data.data.toString())
+      if (json.id === 1) {
         this.setState({sid: json.result.sid})
       }
 
-      if (json.method == 'ice') {
+      if (json.method === 'ice') {
         webrtc.pushIceCandidate(json.params.ice)
       }
 
-      if(json.method === 'answer') {
-        webrtc.on('ice', ice => {
-          ws.send(JSON.stringify({ jsonrpc: "2.0", id: 2, method: "ice", params: { ice: ice } }))
+      if (json.method === 'answer') {
+        webrtc.on('ice', (ice) => {
+          ws.send(JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'ice', params: { ice } }))
         })
 
-        await webrtc.pushAnswer({ type: "answer", sdp: json.params.answer })
-        
+        await webrtc.pushAnswer({ type: 'answer', sdp: json.params.answer })
+
         console.log('wait connection')
 
         await webrtc.waitConnection()
@@ -48,11 +48,11 @@ class WebrtcServer extends React.Component {
         webrtc.dataChannel.send(getWalletList())
         ws.close()
       }
-      
+
     })
   }
 
-  render() {
+  public render() {
     const { sid } = this.state
 
     return (
