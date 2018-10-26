@@ -3,6 +3,7 @@ import QrReader from 'react-qr-reader'
 import QRCode from 'qrcode.react'
 import {connect } from 'react-redux'
 import { scanTransaction as handleScan } from '../../actions'
+import { parseJsonString } from '../../helpers/json'
 import { Column, Row } from '../shared/layout'
 import { H2 } from '../shared/typography'
 import { signTransferTx } from '../../helpers/webrtc'
@@ -24,7 +25,7 @@ const TxSigned = ({ value, handleScan, wallet }) => {
       <H2>2. Show response here</H2>
       <QrReader
         delay={300}
-        onScan={(result) => result && handleScan(result.substr(3))}
+        onScan={(result) => result && handleScan(parseJsonString(result.substr(3)))}
         onError={(error) => console.log(error)}
         style={{ width: '100%' }}
       />
