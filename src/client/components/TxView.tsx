@@ -9,17 +9,17 @@ const TxView = ({error, lastTransaction : tx}) => {
       <Header to='/' />
       <Container>
         <Centered>
-          <Column style={{ width: '45%', marginLeft: '5%' }}>
+          <Column>
             <H1>Tx sent result</H1>
             {error
               ? (<p>{error}</p>)
               : (
-                <React.Fragment>
+                <>
                   {`From : ${tx.from} To: ${tx.to}, txhash: ${tx.transactionHash}`}
-                  <a target="_blank" href={`https://rinkeby.etherscan.io/tx/${tx.transactionHash}`}>
+                  <a target='_blank' href={`https://rinkeby.etherscan.io/tx/${tx.transactionHash}`}>
                     {`https://rinkeby.etherscan.io/tx/${tx.transactionHash}`}
                   </a>
-                </React.Fragment>
+                </>
               )
             }
           </Column>
@@ -27,6 +27,6 @@ const TxView = ({error, lastTransaction : tx}) => {
       </Container>
     </>
   )
-};
+}
 
 export default connect( (state: any) => state.webrtc)(TxView)
