@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import { injectGlobal } from 'emotion'
 import { Provider } from 'react-redux'
-import { Switch, Route } from 'fuse-react'
+import { Switch, Route, Query } from 'fuse-react'
 import createSagaMiddleware from 'redux-saga'
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
@@ -16,6 +16,7 @@ import Wallet from './components/Wallet'
 import WalletList from './components/WalletList'
 import Webrtc from './components/Webrtc/WebrtcServer'
 import TxView from './components/TxView'
+import Pay from './components/Pay'
 
 injectGlobal({
   'html,body,button,input,select': {
@@ -39,6 +40,7 @@ class Root extends Component {
           />
           <Route path='/webrtc' component={Webrtc}/>
           <Route path='/tx' component={TxView}/>
+          <Route path='/pay/:address' component={Pay}/>
         </Switch>
       </Provider>
     )

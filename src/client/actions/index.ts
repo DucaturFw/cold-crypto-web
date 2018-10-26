@@ -15,3 +15,6 @@ export const scanAnswer = createAction<RTCSessionDescriptionInit | Error>('scan 
 export const initWebrtcConnaction = createAction('success rtc connection')
 export const webrtcMessageReceived = createAction<string>('message received')
 export const setLastTransaction = createAction<ITransaction | Error>('set last transaction')
+
+export const setPayData = createAction<any>('set pay data')
+
