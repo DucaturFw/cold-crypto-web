@@ -1,5 +1,5 @@
 import React from 'react';
-import {Column} from './layout'
+import {Column} from '../components/shared/layout'
 import { H1 } from './shared/typography'
 import { connect} from 'react-redux'
 

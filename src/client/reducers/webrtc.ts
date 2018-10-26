@@ -11,13 +11,13 @@ export interface ITransaction {
 
 export interface IWebrtcDefaultState {
   webrtc: RTCHelper
-  lastTransaction: ITransaction | Error
+  lastTransaction: ITransaction | Error | {}
   error: any,
 }
 
 const webrtcDefaultState: IWebrtcDefaultState = {
   error: '',
-  lastTransaction: null,
+  lastTransaction: {},
   webrtc: RTC,
 }
 
