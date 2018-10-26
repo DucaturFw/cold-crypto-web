@@ -11,7 +11,7 @@ const TxView = ({error, lastTransaction : tx}) => {
         ? (<p>{error}</p>)
         : (
           <React.Fragment>
-            {`From: ${tx.from}, to: ${tx.to}, txhash: ${tx.hash}`}
+            {`To: ${tx.to}, txhash: ${tx.hash}`}
             <a target="_blank" href={`https://rinkeby.etherscan.io/tx/${tx.hash}`}>
               {`https://rinkeby.etherscan.io/tx/${tx.hash}`}
             </a>

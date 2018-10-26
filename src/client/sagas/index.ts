@@ -1,7 +1,7 @@
 import { navigate } from 'fuse-react'
 import { eventChannel } from 'redux-saga'
 import { call, put, take, takeEvery, all, select } from 'redux-saga/effects'
-const EthereumTx = require('ethereumjs-tx')
+const unsign = require('@warren-bank/ethereumjs-tx-unsign')
 import { getNonce, sendTx } from '../services/ethHelper'
 import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcMessageReceived, setLastTransaction } from '../actions'
 import { RTCCommands } from '../constants' 
@@ -62,7 +62,7 @@ function* scanTx(action) {
     return
   }
 
-  let tx = new EthereumTx(action.payload)
+  let tx = new unsign(action.payload)
   let transactionHash
 
   try {
