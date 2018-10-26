@@ -16,16 +16,17 @@ export interface IWebrtcDefaultState {
 }
 
 const webrtcDefaultState: IWebrtcDefaultState = {
-  webrtc: RTC,
+  error: '',
   lastTransaction: null,
-  error: ''
+  webrtc: RTC,
 }
 
 const webrtcReducer = createReducer<typeof webrtcDefaultState>({}, webrtcDefaultState)
 
-webrtcReducer.on(setLastTransaction, (_, payload) => {
+webrtcReducer.on(setLastTransaction, (state, payload) => {
   const isErr = payload instanceof Error
-  return {..._,
+  return {
+    ...state,
     error: isErr ? (payload as Error).message : null,
     lastTransaction: isErr ? null : payload,
   }

@@ -5,33 +5,41 @@ import { connect } from 'react-redux'
 import { IWalletDefaultState, IWallet } from '../reducers/wallet'
 import SupportedCurrenciesList from './SupportedCurrenciesList'
 
-import { Container, Centered, Row } from './shared/layout'
+import { Container, Centered, Row, Header } from './shared/layout'
+import { Separator, JustSeparator } from './shared/typography'
 import { ButtonBase, ButtonSecondary, ButtonWarning } from './shared/buttons'
 import { TextInput } from './shared/inputs'
 
-const Home = ({ wallets }: { wallets: IWallet[] }) =>  { 
-  return (
-  <Container>
-    <Centered>
-      <Link to='/login'>
-        <ButtonBase>Login using QR code</ButtonBase>
-      </Link>
-      <Row>
-        or
-      </Row>
-      <Row>
-        <TextInput type='text' placeholder='Type your wallet address here' />
-        <SupportedCurrenciesList />
-      </Row>
-      <Row>
-        <ButtonSecondary>Login with address</ButtonSecondary>
-      </Row>
-        <Link to='/webrtc'>
-            <ButtonWarning>Webrtc login</ButtonWarning>
+const Home = ({ wallets }: { wallets: IWallet[] }) => (
+  <>
+    <Header />
+    <Container>
+      <Centered>
+        <Link to='/login'>
+          <ButtonBase>Connect Mobile Wallet</ButtonBase>
         </Link>
-    </Centered>
-  </Container>
-) }
+        <Row>
+          <Separator>or</Separator>
+        </Row>
+        <Row>
+          <TextInput type='text' placeholder='Type your wallet address here' />
+          <SupportedCurrenciesList />
+        </Row>
+        <Row>
+          <ButtonSecondary>Add new</ButtonSecondary>
+        </Row>
+        <Row>
+          <JustSeparator />
+        </Row>
+        {/* { wallets && ( */}
+          <Link to='/wallets'>
+            <ButtonWarning>To wallets list</ButtonWarning>
+          </Link>
+        {/* ) } */}
+      </Centered>
+    </Container>
+  </>
+)
 
 interface IProps {
   wallet: IWalletDefaultState

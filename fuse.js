@@ -1,4 +1,4 @@
-const { FuseBox, WebIndexPlugin, QuantumPlugin, JSONPlugin } = require("fuse-box")
+const { FuseBox, WebIndexPlugin, QuantumPlugin, JSONPlugin, ImageBase64Plugin } = require("fuse-box")
 
 const fuse = FuseBox.init({
   homeDir: "src",
@@ -7,6 +7,7 @@ const fuse = FuseBox.init({
   useTypescriptCompiler : true,
   plugins: [
     JSONPlugin(),
+    ImageBase64Plugin(),
     WebIndexPlugin({
       template: "src/client/index.html",
       bundles: [ 'public/vendor', 'public/client' ],

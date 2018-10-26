@@ -14,12 +14,11 @@ export const TextInput = styled('input')({
 })
 
 export const Select = styled('select')(({ flipToRight }: { flipToRight: boolean }) => ({
-  '::after': {
+  ':after': {
     border: 'solid white',
     borderWidth: '0 3px 3px 0',
     content: '""',
     position: 'absolute',
-    textTransform: 'uppercase',
   },
   appearance: 'none',
   background: '#457b9d',
@@ -28,4 +27,5 @@ export const Select = styled('select')(({ flipToRight }: { flipToRight: boolean 
   color: '#f1faee',
   margin: flipToRight ? '0 0 0 -.2rem' : 0,
   padding: '0 1rem',
+  position: 'relative',
 }))

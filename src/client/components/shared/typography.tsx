@@ -12,3 +12,38 @@ export const H2 = styled(H1)({
   fontSize: '1.2em',
   margin: '.5rem 0',
 })
+
+export const JustSeparator = styled('div')({
+  background: '#babec1',
+  height: 2,
+  margin: '1rem 0',
+  width: '100%',
+})
+
+export const Separator = styled('div')({
+  ':after': {
+    background: '#babec1',
+    content: '""',
+    display: 'block',
+    height: 2,
+    position: 'absolute',
+    right: 0,
+    top: '.8rem',
+    width: '35%',
+  },
+  ':before': {
+    background: '#babec1',
+    content: '""',
+    display: 'block',
+    height: 2,
+    left: 0,
+    position: 'absolute',
+    top: '.8rem',
+    width: '35%',
+  },
+  color: '#1a3640',
+  fontSize: '1.2rem',
+  margin: '1rem 0',
+  position: 'relative',
+  width: '100%',
+})
