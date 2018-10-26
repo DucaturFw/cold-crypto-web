@@ -24,7 +24,7 @@ const TxSigned = ({ value, handleScan, wallet }) => {
       <H2>2. Show response here</H2>
       <QrReader
         delay={300}
-        onScan={(result) => result && handleScan(result)}
+        onScan={(result) => result && handleScan(result.substr(3))}
         onError={(error) => console.log(error)}
         style={{ width: '100%' }}
       />

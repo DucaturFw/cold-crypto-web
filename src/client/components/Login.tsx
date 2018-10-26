@@ -24,7 +24,7 @@ const Login = (props: { scanWallets: typeof scanWallets }) =>
           <H1>Show qrcode</H1>
           <QrReqder
             delay={300}
-            onScan={(result) => result && props.scanWallets(parseJsonString(result))}
+            onScan={(result) => result && props.scanWallets(parseJsonString(result.substr(3)))}
             onError={(error) => props.scanWallets(Error(error))}
             style={{ minWidth: '30vw', maxWidth: '40vw' }}
           />
