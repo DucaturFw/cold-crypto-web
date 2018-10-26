@@ -5,7 +5,6 @@ const EthereumTx = require('ethereumjs-tx')
 import { getNonce, sendTx } from '../services/ethHelper'
 import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcMessageReceived, setLastTransaction } from '../actions'
 import { RTCCommands } from '../constants' 
-import { log } from 'util';
 
 function* createEventChannel(rtc) {
   return eventChannel(emit => {
@@ -74,7 +73,7 @@ function* scanTx(action) {
     yield put(setLastTransaction(error))
   }
 
-  navigate(`/hash`)
+  navigate(`/tx`)
 }
 
 function* complementWallets(action) {

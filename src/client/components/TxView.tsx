@@ -3,7 +3,7 @@ import {Column} from './layout'
 import { H1 } from './shared/typography'
 import { connect} from 'react-redux'
 
-const Success = ({error, lastTransaction : tx}) => {
+const TxView = ({error, lastTransaction : tx}) => {
   return (
     <Column style={{ width: '45%', marginLeft: '5%' }}>
       <H1>Tx sent result</H1>
@@ -22,4 +22,4 @@ const Success = ({error, lastTransaction : tx}) => {
   )
 };
 
-export default connect( (state: any) => state.webrtc)(Success)
+export default connect( (state: any) => state.webrtc)(TxView)
