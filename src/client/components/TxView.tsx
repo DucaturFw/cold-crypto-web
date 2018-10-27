@@ -15,12 +15,11 @@ const TxView = ({error, lastTransaction : tx}) => {
               ? (<H2>{error}</H2>)
               : (
                 <>
-                <H2>From : {tx.from}</H2>
                 <H2>To : {tx.to}</H2>
                 <H2>Tx hash : {tx.transactionHash}</H2>
-                  <a target='_blank' href={`https://rinkeby.etherscan.io/tx/${tx.transactionHash}`}>
+                  {/* <a target='_blank' href={`https://rinkeby.etherscan.io/tx/${tx.transactionHash}`}>
                     {tx.transactionHash}
-                  </a>
+                  </a> */}
                 </>
               )
             }
