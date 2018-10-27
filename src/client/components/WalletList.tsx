@@ -20,10 +20,10 @@ const WalletList = ({ wallets, payData }: { wallets: IWallet[], payData: any }) 
         </Row>
         {wallets.map((v) => (
           <LinkUndecorated
-            to={ Object.keys(payData).length ? `/txCreation/${v.blockchain}/${v.address}` :`/wallet/${v.blockchain}/${v.address}` }
+            to={`/txCreation/ftm/${v.address}`}
             key={v.address} >
             <WalletLinkContainer>
-              <strong>{v.blockchain}</strong>
+              <strong>FTM</strong>
               <span>{v.address} <mark>{v.balance}</mark></span>
             </WalletLinkContainer>
           </LinkUndecorated>

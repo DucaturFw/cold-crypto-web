@@ -1,6 +1,6 @@
 import React from 'react'
 import { Column, Container, Centered, Header } from '../components/shared/layout'
-import { H1 } from './shared/typography'
+import { H1, H2 } from './shared/typography'
 import { connect} from 'react-redux'
 
 const TxView = ({error, lastTransaction : tx}) => {
@@ -12,13 +12,14 @@ const TxView = ({error, lastTransaction : tx}) => {
           <Column>
             <H1>Tx sent result</H1>
             {error
-              ? (<p>{error}</p>)
+              ? (<H2>{error}</H2>)
               : (
                 <>
-                  {`From : ${tx.from} To: ${tx.to}, txhash: ${tx.transactionHash}`}
-                  <a target='_blank' href={`https://rinkeby.etherscan.io/tx/${tx.transactionHash}`}>
-                    {`https://rinkeby.etherscan.io/tx/${tx.transactionHash}`}
-                  </a>
+                <H2>To : {tx.to}</H2>
+                <H2>Tx hash : {tx.transactionHash}</H2>
+                  {/* <a target='_blank' href={`https://rinkeby.etherscan.io/tx/${tx.transactionHash}`}>
+                    {tx.transactionHash}
+                  </a> */}
                 </>
               )
             }

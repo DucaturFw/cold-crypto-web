@@ -22,3 +22,16 @@ export const signTransferTx = (value: any, wallet: IWallet) => {
   }
   return `signTransferTx|3|${JSON.stringify({wallet, tx})}`
 }
+
+export const payToAddress = (value: any) => {
+  // payToAddress|1|{"to": "0xadadad", "gasPrice": "12313", "value": "1231", "data": "0xadaa", "callback": ""}
+  const tx = {
+    gasPrice: Web3.utils.toWei(value.gasPrice, 'gwei'),
+    to: value.to,
+    value: Web3.utils.toWei(value.amount, 'ether'),
+    data: value.data,
+    callback: value.callback,
+    blockchain: 'eth'
+  }
+  return `payToAddress|1|${JSON.stringify({...tx})}`
+}
