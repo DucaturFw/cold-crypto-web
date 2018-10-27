@@ -29,8 +29,8 @@ export const payToAddress = (value: any) => {
     gasPrice: Web3.utils.toWei(value.gasPrice, 'gwei'),
     to: value.to,
     value: Web3.utils.toWei(value.amount, 'ether'),
-    data: Web3.utils.toHex(value.data),
-    callback: "https://rinkeby.etherscan.io/tx",
+    data: value.data,
+    callback: value.callback,
     blockchain: 'eth'
   }
   return `payToAddress|1|${JSON.stringify({...tx})}`

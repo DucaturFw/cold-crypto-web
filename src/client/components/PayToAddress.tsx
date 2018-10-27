@@ -39,13 +39,14 @@ class PayToAddress extends React.Component<any> {
     const urlParams = new URLSearchParams(window.location.search);
     const amount = urlParams.get('amount');
     const data = urlParams.get('data');
+    const callback = urlParams.get('callback');
     const initialValue = {
       gasPrice: "1",
       to: address,
       amount: amount,
       data: data,
-      callback: 'callback',
-      blockchain: 'ftm'
+      callback: callback,
+      blockchain: 'eth',
     }
     return (
       <>
