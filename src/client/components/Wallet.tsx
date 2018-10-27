@@ -56,7 +56,7 @@ export default class Wallet extends Component<IProps, IState> {
             <Row>
               <Column style={{ flexGrow: 1 }}>
                 <Centered>
-                  <H1>{symbol}</H1>
+                  <H1>FTM</H1>
                   <H2>{address}</H2>
                 </Centered>
               </Column>

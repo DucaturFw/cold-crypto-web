@@ -23,7 +23,7 @@ const Home = ({ wallets }: { wallets: IWallet[] }) => (
         </Row>
         <Row>
           <TextInput type='text' placeholder='Type your wallet address here' />
-          <SupportedCurrenciesList />
+          <SupportedCurrenciesList supported={['ftm', 'eth']}/>
         </Row>
         <Row>
           <ButtonSecondary>Login with address</ButtonSecondary>
