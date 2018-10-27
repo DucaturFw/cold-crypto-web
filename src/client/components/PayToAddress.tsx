@@ -58,6 +58,7 @@ class PayToAddress extends React.Component<any> {
                 e.preventDefault()
 
               const command = payToAddress(values)
+              console.log(command)
               window.location.href = `coldcrypto://connect?qr=${command}`
               }}>
                 <Column>
