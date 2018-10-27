@@ -56,6 +56,7 @@ const TxForm = ({ address, blockChainPrice, blockChainData, value, set, webrtc, 
                 <span>~{(Number(values.amount) * Number(blockChainPrice)).toFixed(2)}$</span>
               </Centered>
             </Row>
+            <TextInput type="text" placeholder='Data' {...input('data').bind} />
             <Row>
               <span>Gas price {values.gasPrice} GWEI</span>
               <TextInput type='range' {...input('gasPrice').bind} min='1' max='100' />

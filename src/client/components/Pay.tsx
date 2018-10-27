@@ -10,8 +10,9 @@ const Pay = ({ match: { params: { address } }, setPayData }) => {
   //TODO: rewrite it
   const urlParams = new URLSearchParams(window.location.search);
   const amount = urlParams.get('amount');
+  const data = urlParams.get('data');
 
-  setPayData({to: address, amount: amount})
+  setPayData({to: address, amount, data})
   return (
     <>
       <Header to='/' />
@@ -21,6 +22,7 @@ const Pay = ({ match: { params: { address } }, setPayData }) => {
             <H1>Tx sent data</H1>
             <H2>Address: {address}</H2>
             <H2>Ammount: {amount}</H2>
+            <H2>Data: {data}</H2>
           </Column>
           <Link to='/login'>
             <ButtonBase>Login and pay</ButtonBase>
