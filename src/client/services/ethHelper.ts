@@ -13,6 +13,7 @@ export  async function getNonce (address: string): Promise<number> {
 export async function sendTx(tx) {
   const txData = await unsign(tx).txData
 
-  return axios.post('http://18.221.128.6:8080/rawtx', tx)
+  return axios.post('http://18.221.128.6:8080/rawtx', 'sdfsd' + tx)
     .then(response => ({ transactionHash: response.data.txHash, ...txData}))
+    .catch(error => new Error(error.response.data))
 }
