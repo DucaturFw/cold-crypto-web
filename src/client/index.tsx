@@ -17,6 +17,7 @@ import WalletList from './components/WalletList'
 import Webrtc from './components/Webrtc/WebrtcServer'
 import TxView from './components/TxView'
 import Pay from './components/Pay'
+import PayToAddress from './components/PayToAddress'
 
 injectGlobal({
   'html,body,button,input,select': {
@@ -41,6 +42,7 @@ class Root extends Component {
           <Route path='/webrtc' component={Webrtc}/>
           <Route path='/tx' component={TxView}/>
           <Route exact path='/pay/:address' component={Pay}/>
+          <Route exact path='/paytoaddress/:address' component={PayToAddress}/>
         </Switch>
       </Provider>
     )
