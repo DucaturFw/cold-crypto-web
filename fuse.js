@@ -1,4 +1,4 @@
-const { FuseBox, WebIndexPlugin, QuantumPlugin, JSONPlugin, ImageBase64Plugin } = require("fuse-box")
+const { FuseBox, WebIndexPlugin, QuantumPlugin, JSONPlugin, ImageBase64Plugin, EnvPlugin } = require("fuse-box")
 
 const fuse = FuseBox.init({
   homeDir: "src",
@@ -8,6 +8,7 @@ const fuse = FuseBox.init({
   plugins: [
     JSONPlugin(),
     ImageBase64Plugin(),
+    EnvPlugin({WEBRTC_ADDR: process.env.WEBRTC_ADDR}),
     WebIndexPlugin({
       template: "src/client/index.html",
       bundles: [ 'public/vendor', 'public/client' ],

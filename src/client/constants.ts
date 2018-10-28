@@ -1,5 +1,7 @@
 //TODO: make prod and dev url 
-export const handshakeServerUrl = "ws://localhost:3077"
+const url = process.env.WEBRTC_ADDR
+
+export const handshakeServerUrl = `ws://${url}:3077`
 
 export enum RTCCommands {
   webrtcLogin = 1,
