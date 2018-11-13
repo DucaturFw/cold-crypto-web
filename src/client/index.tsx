@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import { injectGlobal } from 'emotion'
 import { Provider } from 'react-redux'
-import { Switch, Route, Query } from 'fuse-react'
+import { Switch, Route } from 'fuse-react'
 import createSagaMiddleware from 'redux-saga'
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom'
 import reducers from './reducers'
 import sagas from './sagas'
 
-import Home from './components/Home'
+import Home from './components/Pages/Home'
 import Login from './components/Login'
 import TxCreation from './components/txCreation'
 import Wallet from './components/Wallet'
@@ -35,10 +35,7 @@ class Root extends Component {
           <Route path='/login' component={Login} />
           <Route path='/wallets' component={WalletList} />
           <Route path='/wallet/:symbol/:address' component={Wallet} />
-          <Route
-            path='/txCreation/:blockchain/:address'
-            component={TxCreation}
-          />
+          <Route path='/txCreation/:blockchain/:address' component={TxCreation} />
           <Route path='/webrtc' component={Webrtc}/>
           <Route path='/tx' component={TxView}/>
           <Route exact path='/pay/:address' component={Pay}/>
