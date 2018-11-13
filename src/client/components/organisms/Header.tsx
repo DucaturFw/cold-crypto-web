@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'react-emotion'
 import { Link } from 'fuse-react'
 
-import H1 from '../atoms/h1'
+import H1 from '../atoms/H1'
 
 const Root = styled('header')({
   height: '3rem',
