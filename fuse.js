@@ -4,6 +4,7 @@ const fuse = FuseBox.init({
   homeDir: "src",
   output: 'dist/$name.js',
   sourceMaps: true,
+  cache: false,
   useTypescriptCompiler : true,
   plugins: [
     JSONPlugin(),
