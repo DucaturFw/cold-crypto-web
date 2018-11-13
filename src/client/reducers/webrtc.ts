@@ -9,21 +9,14 @@ export interface ITransaction {
   value: string
 }
 
-export interface IWebrtcDefaultState {
-  webrtc: RTCHelper
-  lastTransaction: ITransaction | Error | {}
-  error: any
-  isSending: boolean 
-}
-
-const webrtcDefaultState: IWebrtcDefaultState = {
+const webrtcDefaultState = {
   error: '',
-  lastTransaction: {},
-  webrtc: RTC,
-  isSending: false
+  isSending: false,
+  lastTransaction: {} as ITransaction | Error,
+  webrtc: RTC as RTCHelper,
 }
 
-const webrtcReducer = createReducer<typeof webrtcDefaultState>({}, webrtcDefaultState)
+const webrtcReducer = createReducer({}, webrtcDefaultState)
 
 webrtcReducer.on(setLastTransaction, (state, payload) => {
   const isErr = payload instanceof Error
@@ -34,10 +27,10 @@ webrtcReducer.on(setLastTransaction, (state, payload) => {
   }
 })
 
-webrtcReducer.on(startSendingTx, (_, payload) => {
-  return {..._,
-    isSending: payload,
-  }
-})
+webrtcReducer.on(startSendingTx, (state, payload) => ({
+  ...state,
+  isSending: payload,
+}))
 
 export default webrtcReducer
+export type IWebrtcDefaultState = typeof webrtcDefaultState

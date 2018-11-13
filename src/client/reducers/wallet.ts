@@ -9,32 +9,27 @@ export interface IWallet {
   chainId: string | number
 }
 
-export interface IWalletDefaultState {
-  error: any
-  wallets: IWallet[] | Error
-  payData: any
-}
-
-const walletDefaultState: IWalletDefaultState = {
-  error: null,
-  wallets: [],
+const walletDefaultState = {
+  error: null as any,
   payData: {},
+  wallets: [] as IWallet[] | Error,
 }
 
-const walletReducer = createReducer<typeof walletDefaultState>({}, walletDefaultState)
+const walletReducer = createReducer({}, walletDefaultState)
 
-walletReducer.on(addWallets, (_, payload) => {
+walletReducer.on(addWallets, (state, payload) => {
   const isErr = payload instanceof Error
-  return {..._,
+  return {
+    ...state,
     error: isErr ? (payload as Error).message : null,
     wallets: isErr ? null : payload,
   }
 })
 
-walletReducer.on(setPayData, (_, payload) => {
-  return {..._,
-    payData: payload
-  }
-})
+walletReducer.on(setPayData, (state, payload) => ({
+  ...state,
+  payData: payload,
+}))
 
 export default walletReducer
+export type IWalletDefaultState = typeof walletDefaultState
