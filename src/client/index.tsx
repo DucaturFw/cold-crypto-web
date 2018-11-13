@@ -10,7 +10,7 @@ import reducers from './reducers'
 import sagas from './sagas'
 
 import Home from './components/Pages/Home'
-import Login from './components/Login'
+import Login from './components/Pages/Login'
 import TxCreation from './components/txCreation'
 import Wallet from './components/Wallet'
 import WalletList from './components/WalletList'

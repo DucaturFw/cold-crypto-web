@@ -30,4 +30,5 @@ export const Select = styled('select')(({ flipToRight }: { flipToRight: boolean 
   padding: '0 1rem',
   boxSizing: 'border-box',
   position: 'relative',
+  margin: '.25rem 0',
 }))

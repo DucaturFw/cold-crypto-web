@@ -1,12 +1,13 @@
-const { FuseBox, WebIndexPlugin, QuantumPlugin, JSONPlugin, ImageBase64Plugin, EnvPlugin } = require("fuse-box")
+const { FuseBox, WebIndexPlugin, QuantumPlugin, JSONPlugin, ImageBase64Plugin, EnvPlugin, SVGPlugin } = require("fuse-box")
 
 const fuse = FuseBox.init({
   homeDir: "src",
   output: 'dist/$name.js',
-  sourceMaps: { inline: false, vendor: false },
+  sourceMaps: true,
   useTypescriptCompiler : true,
   plugins: [
     JSONPlugin(),
+    SVGPlugin(),
     ImageBase64Plugin(),
     EnvPlugin({WEBRTC_ADDR: process.env.WEBRTC_ADDR}),
     WebIndexPlugin({

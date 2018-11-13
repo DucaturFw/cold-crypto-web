@@ -5,5 +5,5 @@ export default styled('h2')({
   fontFamily: 'Montserrat, sans-serif',
   fontSize: '1.4rem',
   fontWeight: 'normal',
-  margin: 0,
+  margin: '0 0 .25rem 0',
 })
