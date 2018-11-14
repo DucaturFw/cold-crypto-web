@@ -28,21 +28,23 @@ injectGlobal(globalCss, {
   },
 })
 
+const prefix = 'cold-crypto-web'
+
 class Root extends Component {
   public render() {
     return (
       <Provider store={store}>
-        <BrowserRouter basename='cold-crypto-web' >
+        <BrowserRouter>
           <Switch>
-            <Route path='/' exact component={Home} />
-            <Route path='/login' component={Login} />
-            <Route path='/wallets' component={Wallets} />
-            <Route path='/wallet/:symbol/:address' component={Wallet} />
-            <Route path='/txCreation/:blockchain/:address' component={TxCreation} />
-            <Route path='/webrtc' component={Webrtc}/>
-            <Route path='/tx' component={TxView}/>
-            <Route exact path='/pay/:address' component={Pay}/>
-            <Route exact path='/paytoaddress/:address' component={PayToAddress}/>
+            <Route path={`${prefix}/`} exact component={Home} />
+            <Route path={`${prefix}/login`} component={Login} />
+            <Route path={`${prefix}/wallets`} component={Wallets} />
+            <Route path={`${prefix}/wallet/:symbol/:address`} component={Wallet} />
+            <Route path={`${prefix}/txCreation/:blockchain/:address`} component={TxCreation} />
+            <Route path={`${prefix}/webrtc`} component={Webrtc}/>
+            <Route path={`${prefix}/tx`} component={TxView}/>
+            <Route path={`${prefix}/pay/:address`} component={Pay}/>
+            <Route path={`${prefix}/paytoaddress/:address`} component={PayToAddress}/>
           </Switch>
         </BrowserRouter>
       </Provider>
