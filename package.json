@@ -7,7 +7,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "node fuse.js"
+    "start": "node fuse",
+    "build": "node fuse dist"
   },
   "dependencies": {
     "@warren-bank/ethereumjs-tx-unsign": "^2.0.0",
