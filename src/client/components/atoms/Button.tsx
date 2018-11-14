@@ -1,12 +1,12 @@
 import styled from 'react-emotion'
 
 export default styled('button')({
+  border: 0,
   borderRadius: '.2rem',
   cursor: 'pointer',
-  fontFamily: 'Montserrat, Helvetica, sans-serif',
   fontSize: '.9rem',
   margin: '.25rem 0',
-  outline: 'none',
+  outline: 0,
   padding: '.8rem 2rem',
   width: '100%',
 })
