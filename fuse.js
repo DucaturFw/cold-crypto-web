@@ -1,4 +1,4 @@
-const { FuseBox, WebIndexPlugin, QuantumPlugin, JSONPlugin, ImageBase64Plugin, EnvPlugin, SVGPlugin } = require("fuse-box")
+const { FuseBox, WebIndexPlugin, QuantumPlugin, JSONPlugin, ImageBase64Plugin, EnvPlugin, SVGPlugin, TerserPlugin } = require("fuse-box")
 const { src, task, context } = require('fuse-box/sparky')
 
 context(
@@ -9,6 +9,7 @@ context(
         output: 'dist/$name.js',
         sourceMaps: true,
         useTypescriptCompiler : true,
+        cache: !this.isProduction,
         plugins: [
           JSONPlugin(),
           SVGPlugin(),
@@ -17,17 +18,20 @@ context(
           WebIndexPlugin({
             template: "src/client/index.html",
             path: this.isProduction
-              ? '/cold-crypto-web'
+              ? './'
               : '/',
             bundles: this.isProduction
               ? [ 'app' ]
               : [ 'public/vendor', 'public/client' ],
           }),
-          this.isProduction &&
-            QuantumPlugin({
-              css: true,
-              uglify: true
-            })
+          this.isProduction && TerserPlugin(),
+          this.isProduction && QuantumPlugin({
+            treeshake: false,
+            bakeApiIntoBundle: true,
+            sourceMaps: {
+              path: '/',
+            },
+          }),
         ],
       })
     }
