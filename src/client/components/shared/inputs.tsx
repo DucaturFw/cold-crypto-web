@@ -26,7 +26,6 @@ export const Select = styled('select')(({ flipToRight }: { flipToRight: boolean 
   border: 0,
   borderRadius: flipToRight ? '0 .2rem .2rem 0' : '.2rem',
   color: '#f1faee',
-  margin: flipToRight ? '0 0 0 -.2rem' : 0,
   padding: '0 1rem',
   boxSizing: 'border-box',
   position: 'relative',

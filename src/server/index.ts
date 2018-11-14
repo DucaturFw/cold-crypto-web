@@ -101,4 +101,4 @@ function randomHexDigit() {
 
 app.listen(4443, () => console.log('API emulator listening on port 4443'))
 
-export const shutdown = () => console.log('CLOSE!') || app.close()
+export const shutdown = () => (console.log('CLOSE!'), app.close())

@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'react-emotion'
 
-import Table from '../atoms/Table'
 import Item from './WalletItem'
 import { IWallet } from '../../reducers/wallet'
 
