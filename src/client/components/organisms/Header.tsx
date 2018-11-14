@@ -1,17 +1,19 @@
 import React from 'react'
 import styled from 'react-emotion'
-import { Link } from 'fuse-react'
 
 import H1 from '../atoms/H1'
+import Link from '../atoms/Link'
 
 const Root = styled('header')({
-  height: '3rem',
+  background: 'rgb(0, 74, 124)',
+  gridArea: 'header',
+  height: '4rem',
 })
 
 export default ({ to }: { to: string }) => (
   <Root>
     <Link to={ to }>
-      <H1 style={{ color: '#fff', padding: '2rem' }}>Cold Crypto</H1>
+      <H1 style={{ color: '#fff', padding: '1rem' }}>Cold Crypto</H1>
     </Link>
   </Root>
 )

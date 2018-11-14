@@ -13,17 +13,18 @@ import Home from './components/pages/Home'
 import Login from './components/pages/Login'
 import TxCreation from './components/txCreation'
 import Wallet from './components/Wallet'
-import WalletList from './components/WalletList'
+import Wallets from './components/pages/Wallets'
 import Webrtc from './components/Webrtc/WebrtcServer'
 import TxView from './components/TxView'
 import Pay from './components/Pay'
 import PayToAddress from './components/PayToAddress'
 
-injectGlobal({
+import globalCss from './normalize'
+
+injectGlobal(globalCss, {
   'html,body,button,input,select': {
     fontFamily: '"Lato", Arial, sans-serif',
-    margin: 0,
-  }
+  },
 })
 
 class Root extends Component {
@@ -33,7 +34,7 @@ class Root extends Component {
         <Switch>
           <Route path='/' exact component={Home} />
           <Route path='/login' component={Login} />
-          <Route path='/wallets' component={WalletList} />
+          <Route path='/wallets' component={Wallets} />
           <Route path='/wallet/:symbol/:address' component={Wallet} />
           <Route path='/txCreation/:blockchain/:address' component={TxCreation} />
           <Route path='/webrtc' component={Webrtc}/>
