@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import { injectGlobal } from 'emotion'
 import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router-dom'
 import { Switch, Route } from 'fuse-react'
 import createSagaMiddleware from 'redux-saga'
 import React, { Component } from 'react'
@@ -31,17 +32,19 @@ class Root extends Component {
   public render() {
     return (
       <Provider store={store}>
-        <Switch>
-          <Route path='/' exact component={Home} />
-          <Route path='/login' component={Login} />
-          <Route path='/wallets' component={Wallets} />
-          <Route path='/wallet/:symbol/:address' component={Wallet} />
-          <Route path='/txCreation/:blockchain/:address' component={TxCreation} />
-          <Route path='/webrtc' component={Webrtc}/>
-          <Route path='/tx' component={TxView}/>
-          <Route exact path='/pay/:address' component={Pay}/>
-          <Route exact path='/paytoaddress/:address' component={PayToAddress}/>
-        </Switch>
+        <BrowserRouter basename='cold-crypto-web' >
+          <Switch>
+            <Route path='/' exact component={Home} />
+            <Route path='/login' component={Login} />
+            <Route path='/wallets' component={Wallets} />
+            <Route path='/wallet/:symbol/:address' component={Wallet} />
+            <Route path='/txCreation/:blockchain/:address' component={TxCreation} />
+            <Route path='/webrtc' component={Webrtc}/>
+            <Route path='/tx' component={TxView}/>
+            <Route exact path='/pay/:address' component={Pay}/>
+            <Route exact path='/paytoaddress/:address' component={PayToAddress}/>
+          </Switch>
+        </BrowserRouter>
       </Provider>
     )
   }
