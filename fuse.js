@@ -16,9 +16,12 @@ context(
           EnvPlugin({WEBRTC_ADDR: process.env.WEBRTC_ADDR}),
           WebIndexPlugin({
             template: "src/client/index.html",
+            path: this.isProduction
+              ? '/cold-crypto-web'
+              : '/',
             bundles: this.isProduction
-            ? [ 'app' ]
-            : [ 'public/vendor', 'public/client' ],
+              ? [ 'app' ]
+              : [ 'public/vendor', 'public/client' ],
           }),
           this.isProduction &&
             QuantumPlugin({
