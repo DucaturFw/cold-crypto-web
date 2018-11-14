@@ -16,7 +16,9 @@ context(
           EnvPlugin({WEBRTC_ADDR: process.env.WEBRTC_ADDR}),
           WebIndexPlugin({
             template: "src/client/index.html",
-            bundles: [ 'public/vendor', 'public/client' ],
+            bundles: this.isProduction
+            ? [ 'app' ]
+            : [ 'public/vendor', 'public/client' ],
           }),
           this.isProduction &&
             QuantumPlugin({
@@ -29,7 +31,19 @@ context(
   }
 )
 
-task('default', async context => {
+task('server', async context => {
+  const fuse = context.getConfig()
+
+  fuse
+    .bundle('server')
+    .instructions('>[server/index.ts]')
+    .target('server')
+    .completed(proc => proc.start())
+
+  return fuse.run()
+})
+
+task('default', [ 'server' ], async context => {
   const fuse = context.getConfig()
 
   fuse
@@ -50,29 +64,11 @@ task('default', async context => {
   await fuse.run()
 })
 
-task('server', async context => {
-  const fuse = context.getConfig()
-
-  fuse
-    .bundle('server')
-    .instructions('>[server/index.ts]')
-    .target('server@es2017')
-    .hmr()
-    .completed((proc) => {
-      proc.require({
-        close: ({ FuseBox }) => FuseBox.import(FuseBox.mainFile).shutdown()
-      })
-    })
-
-  return fuse.run()
-})
-
-
 task('clean', () =>
   src('./dist').clean('./dist')
 )
 
-task('dist', [ 'clean', 'server' ], async context => {
+task('dist', [ 'clean' ], async context => {
   context.isProduction = true
   const fuse = context.getConfig()
   
