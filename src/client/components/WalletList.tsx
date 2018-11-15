@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'react-emotion'
 import { connect } from 'react-redux'
-import { Link } from 'fuse-react'
+import { Link } from 'react-router-dom'
 import { compose } from 'recompact'
 import fetch from 'fetch-hoc'
 

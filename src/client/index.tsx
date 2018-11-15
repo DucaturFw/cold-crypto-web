@@ -1,8 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import { injectGlobal } from 'emotion'
 import { Provider } from 'react-redux'
-import { BrowserRouter } from 'react-router-dom'
-import { Switch, Route } from 'fuse-react'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import createSagaMiddleware from 'redux-saga'
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
@@ -28,23 +27,21 @@ injectGlobal(globalCss, {
   },
 })
 
-const prefix = 'cold-crypto-web'
-
 class Root extends Component {
   public render() {
     return (
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter basename='/cold-crypto-web' >
           <Switch>
-            <Route path={`${prefix}/`} exact component={Home} />
-            <Route path={`${prefix}/login`} component={Login} />
-            <Route path={`${prefix}/wallets`} component={Wallets} />
-            <Route path={`${prefix}/wallet/:symbol/:address`} component={Wallet} />
-            <Route path={`${prefix}/txCreation/:blockchain/:address`} component={TxCreation} />
-            <Route path={`${prefix}/webrtc`} component={Webrtc}/>
-            <Route path={`${prefix}/tx`} component={TxView}/>
-            <Route path={`${prefix}/pay/:address`} component={Pay}/>
-            <Route path={`${prefix}/paytoaddress/:address`} component={PayToAddress}/>
+            <Route path='/' exact component={Home} />
+            <Route path='/login' component={Login} />
+            <Route path='/wallets' component={Wallets} />
+            <Route path='/wallet/:blockchain/:address' component={Wallet} />
+            <Route path='/txCreation/:blockchain/:address' component={TxCreation} />
+            <Route path='/webrtc' component={Webrtc}/>
+            <Route path='/tx' component={TxView}/>
+            <Route exact path='/pay/:address' component={Pay}/>
+            <Route exact path='/paytoaddress/:address' component={PayToAddress}/>
           </Switch>
         </BrowserRouter>
       </Provider>

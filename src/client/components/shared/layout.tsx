@@ -1,6 +1,5 @@
 import styled from 'react-emotion'
-import { Link } from 'fuse-react'
-import logo from '../../public/logo.png'
+import { Link } from 'react-router-dom'
 
 export const Container = styled('main')({
   alignItems: 'center',
@@ -32,7 +31,6 @@ export const Column = styled('div')({
 
 export const Header = styled(Link)({
   ':after': {
-    background: `url(${logo}) center center no-repeat`,
     content: '""',
     display: 'block',
     height: '8rem',

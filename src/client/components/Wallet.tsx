@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'react-emotion'
-import { Link } from 'fuse-react'
+import { Link } from 'react-router-dom'
 import { Container, Column, Row, Centered, Header } from './shared/layout'
 import { ButtonBase } from './shared/buttons'
 import { H1, H2 } from './shared/typography'

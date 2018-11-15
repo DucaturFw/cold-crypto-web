@@ -1,6 +1,6 @@
 import React from 'react'
 import { Value } from 'react-powerplug'
-import { Switch, Route } from 'fuse-react'
+import { Switch, Route } from 'react-router-dom'
 
 import { IWallet } from '../../reducers/Wallet'
 import { RTCHelper } from '../../services/webrtc'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'fuse-react'
+import { Link } from 'react-router-dom'
 import { Column, Container, Centered, Header } from '../components/shared/layout'
 import { ButtonBase } from './shared/buttons'
 import { H1, H2 } from './shared/typography'
