@@ -33,4 +33,4 @@ webrtcReducer.on(startSendingTx, (state, payload) => ({
 }))
 
 export default webrtcReducer
-export type IWebrtcDefaultState = typeof webrtcDefaultState
+export type IState = typeof webrtcDefaultState
