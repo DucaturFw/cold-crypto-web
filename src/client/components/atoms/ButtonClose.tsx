@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'react-emotion'
 
-import { Link } from 'fuse-react'
+import { Link } from 'react-router-dom'
 import icon from '../../images/x-mark-thin.svg'
 
 const Root = styled('div')({
@@ -16,7 +16,7 @@ const Img = styled('img')({
 
 export default () => (
   <Root>
-    <Link to='/'>
+    <Link to='../'>
       <Img src={icon} />
     </Link>
   </Root>
