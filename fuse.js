@@ -1,5 +1,6 @@
 const { FuseBox, WebIndexPlugin, QuantumPlugin, JSONPlugin, ImageBase64Plugin, EnvPlugin, SVGPlugin, TerserPlugin } = require("fuse-box")
 const { src, task, context } = require('fuse-box/sparky')
+const fs = require('fs-extra')
 
 context(
   class {
@@ -77,6 +78,8 @@ task('clean', () =>
 
 task('dist', [ 'clean' ], async context => {
   context.isProduction = true
+  fs.copySync('src/client/404.html', 'dist/404.html')
+
   const fuse = context.getConfig()
   
   fuse
