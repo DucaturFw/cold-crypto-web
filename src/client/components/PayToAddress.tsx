@@ -1,11 +1,9 @@
 import React from 'react'
-import { Column, Container, Centered, Header } from '../components/shared/layout'
 import { ButtonBase } from './shared/buttons'
 import { H1, H2 } from './shared/typography'
 import { Form } from 'react-powerplug'
 import web3 from 'web3'
-import { Column, Row, Centered } from './shared/layout'
-import { H2 } from './shared/typography'
+import { Column, Container, Header, Row, Centered } from './shared/layout'
 import { TextInput } from './shared/inputs'
 import { payToAddress } from './../helpers/webrtc'
 

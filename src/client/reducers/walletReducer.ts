@@ -8,6 +8,9 @@ export interface IWallet {
   chainId: string | number
   nonce: number
 }
+export interface ITransaction {
+  
+}
 
 const walletDefaultState = {
   error: null as any,
