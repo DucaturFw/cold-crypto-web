@@ -12,7 +12,7 @@ const Main = styled('main')({
   alignItems: 'center',
   display: 'flex',
   justifyContent: 'center',
-  minHeight: 'calc(100vh - 3rem)',
+  minHeight: 'calc(100vh - 4rem)',
 })
 
 const Modal = styled('div')({
