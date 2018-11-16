@@ -9,7 +9,9 @@
   "scripts": {
     "start": "node fuse",
     "build": "node fuse dist",
-    "test:tsc": "tsc --noEmit -p src"
+    "test:tsc": "tsc --noEmit -p src",
+    "test:jest": "jest",
+    "test": "yarn test:tsc && yarn test:jest"
   },
   "dependencies": {
     "@types/jest": "^23.3.9",

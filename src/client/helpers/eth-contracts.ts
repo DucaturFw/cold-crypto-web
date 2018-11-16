@@ -1,7 +1,7 @@
 export interface IAbiArgument
 {
 	name: string
-	type: 'string' | 'address' | 'bytes32'
+	type: 'string' | 'address' | 'bytes32' | 'uint256'
 }
 export interface IAbiEventInput extends IAbiArgument
 {
