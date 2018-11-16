@@ -1,4 +1,5 @@
 import { createAction } from 'redux-act'
+import { IStateGasEth, IStateTicker } from '../reducers/blockchainsReducer'
 
 export const setQr = createAction<{ key: string; value: string }>('set qr')
 export const generateQr = createAction<{ key: string; value: string }>('generate qr')
@@ -16,5 +17,5 @@ export const setLastTransaction = createAction<any | Error>('set last transactio
 
 export const setPayData = createAction<any>('set pay data')
 
-export const setBlockchainGasInfo = createAction<{ key: string, value: object }>('set blockchain gas info')
-export const setBlockchainTicker = createAction<{ key: string, value: object }>('set blockchain ticker')
+export const setBlockchainGasInfo = createAction<{ key: string, value: IStateGasEth }>('set blockchain gas info')
+export const setBlockchainTicker = createAction<{ key: string, value: IStateTicker }>('set blockchain ticker')
