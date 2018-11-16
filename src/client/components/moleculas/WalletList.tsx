@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'react-emotion'
 
 import Item from './WalletItem'
-import { IWallet } from '../../reducers/wallet'
+import { IWallet } from '../../reducers/walletReducer'
 
 interface IProps {
   list: IWallet[]

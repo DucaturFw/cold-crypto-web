@@ -9,7 +9,7 @@ import Hr from '../atoms/Hr'
 import Column from '../atoms/Column'
 import WalletList from '../moleculas/WalletList'
 
-import { IWalletDefaultState, IWallet } from '../../reducers/wallet'
+import { IWalletDefaultState, IWallet } from '../../reducers/walletReducer'
 
 const Wallets = ({ wallets }: { wallets: IWallet[]}) =>
   <Layout>

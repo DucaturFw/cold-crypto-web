@@ -2,7 +2,7 @@ import React from 'react'
 import { Value } from 'react-powerplug'
 import { Switch, Route } from 'react-router-dom'
 
-import { IWallet } from '../../reducers/wallet'
+import { IWallet } from '../../reducers/walletReducer'
 import { RTCHelper } from '../../services/webrtc'
 
 import { Header } from '../shared/layout'

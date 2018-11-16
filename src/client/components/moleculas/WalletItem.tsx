@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'react-emotion'
 
 import Link from '../atoms/Link'
-import { IWallet } from '../../reducers/wallet'
+import { IWallet } from '../../reducers/walletReducer'
 import Column from '../atoms/Column'
 import Row from '../atoms/Row'
 
