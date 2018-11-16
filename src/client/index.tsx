@@ -14,7 +14,7 @@ import Pay from './components/Pay'
 import PayToAddress from './components/PayToAddress'
 import TxCreation from './components/txCreation'
 import TxView from './components/TxView'
-import Wallet from './components/pages/Wallet'
+import Wallet from './components/pages/Wallets'
 import Wallets from './components/pages/Wallets'
 import Webrtc from './components/Webrtc/WebrtcServer'
 
