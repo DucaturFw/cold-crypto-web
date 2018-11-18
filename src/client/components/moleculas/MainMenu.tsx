@@ -7,10 +7,10 @@ const items = [
   { id: 'wallets', title: 'Wallets' },
 ]
 
-const MenuLink = styled(Link)(({ active }: { active: boolean }) => ({
-  borderLeft: `4px solid ${active ? 'rgb(53, 88, 168)' : 'transparent'}`,
-  color: active ? 'rgb(53, 88, 168)' : 'rgb(84, 84, 86)',
-  fontWeight: active ? 'bold' : 'normal',
+const MenuLink = styled(Link)(({ selected }: { selected: boolean }) => ({
+  borderLeft: `4px solid ${selected ? 'rgb(53, 88, 168)' : 'transparent'}`,
+  color: selected ? 'rgb(53, 88, 168)' : 'rgb(84, 84, 86)',
+  fontWeight: selected ? 'bold' : 'normal',
   padding: '.75rem 1.5rem',
 }))
 
@@ -21,7 +21,7 @@ const Container = styled('menu')({
 export default () => (
   <Container>
     { items.map(({ id, title}) => (
-      <MenuLink to={ `/${id}` } key={ id } active={ true }>{ title }</MenuLink>
+      <MenuLink to={ `/${id}` } key={ id } selected={ true }>{ title }</MenuLink>
     )) }
   </Container>
 )

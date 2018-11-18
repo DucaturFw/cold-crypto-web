@@ -1,7 +1,5 @@
 import React from 'react'
-import styled from 'react-emotion'
-import { connect } from 'react-redux'
-import { Link } from 'fuse-react'
+import { connectAdvanced } from 'react-redux'
 
 import Layout from '../layouts/Dashboard'
 import H1 from '../atoms/H1'
@@ -16,7 +14,7 @@ const Wallets = ({ wallets }: { wallets: IWallet[]}) =>
     <Column>
       <H1>Choose a wallet</H1>
       <Hr />
-      <WalletList list={ wallets } />
+      <WalletList list={ wallets || [] } />
     </Column>
   </Layout>
 
@@ -24,6 +22,6 @@ interface IProps {
   wallet: IWalletDefaultState
 }
 
-const withConnect = connect(({ wallet: { wallets } }: IProps) => ({ wallets }))
+const withConnect = connectAdvanced(() => ({ wallet: { wallets } }: IProps) => ({ wallets }))
 
 export default withConnect(Wallets)

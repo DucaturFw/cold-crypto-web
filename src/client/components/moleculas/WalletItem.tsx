@@ -5,12 +5,13 @@ import Link from '../atoms/Link'
 import { IWallet } from '../../reducers/walletReducer'
 import Column from '../atoms/Column'
 import Row from '../atoms/Row'
+import ButtonAdd from '../atoms/ButtonAdd'
 
 interface IProps {
   item: IWallet
 }
 
-const UndecoratedLink = styled(Link)({
+const WalletRow = styled(Row)({
   ':hover': {
     background: 'rgb(230, 247, 253)',
     borderColor: 'rgb(149, 222, 248)',
@@ -23,7 +24,6 @@ const UndecoratedLink = styled(Link)({
   },
   border: '1px solid transparent',
   borderBottom: '1px solid rgb(234, 234, 234)',
-  color: 'rgb(84, 84, 86)',
   padding: '0 .5rem',
   small: {
     display: 'block',
@@ -42,6 +42,10 @@ const UndecoratedLink = styled(Link)({
   transition: 'all .3s ease-in-out',
 } as any)
 
+const UndecoratedLink = styled(Link)({
+  color: 'rgb(84, 84, 86)',
+})
+
 const Balance = styled('div')({
   color: 'rgb(202, 58, 60)',
 })
@@ -52,20 +56,27 @@ const Centered = styled('div')({
 })
 
 export default ({ item }: IProps) =>
-  <UndecoratedLink
-    to={`/txCreation/${item.blockchain}/${item.address}`}
-    key={item.address} >
-    <Row>
-      <Column style={{ width: '80%' }}>
+  <WalletRow>
+    <Column style={{ width: '70%' }}>
+      <UndecoratedLink
+        to={`/wallet/${item.blockchain}/${item.address}`}
+        key={item.address} >
         <Centered>
           <strong>{item.blockchain}</strong>
           <small>{item.address}</small>
         </Centered>
-      </Column>
-      <Column style={{ width: '20%', justifyContent: 'center' }}>
-        <Centered>
-          <Balance>${item.balance || 0}</Balance>
-        </Centered>
-      </Column>
-    </Row>
-  </UndecoratedLink>
+      </UndecoratedLink>
+    </Column>
+    <Column style={{ width: '20%', justifyContent: 'center' }}>
+      <Centered>
+        <Balance>${item.balance || 0}</Balance>
+      </Centered>
+    </Column>
+    <Column style={{ width: '10%', justifyContent: 'center' }}>
+      <Centered>
+        <ButtonAdd
+          to={`/txCreation/${item.blockchain}/${item.address}`}
+          title='Make a new transaction' />
+      </Centered>
+    </Column>
+  </WalletRow>

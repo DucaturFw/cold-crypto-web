@@ -1,10 +1,8 @@
 import React from 'react'
 import styled from 'react-emotion'
-import { withRouter } from 'react-router'
-import { History } from 'history'
 
 import { Link } from 'react-router-dom'
-import icon from '../../images/x-mark-thin.svg'
+import icon from '../../images/plus-circle-thin.svg'
 
 const Root = styled('div')({
   alignSelf: 'center',
@@ -16,8 +14,10 @@ const Img = styled('img')({
   width: '1.5rem',
 })
 
-export default withRouter(({ history }: { history: History }) => (
-  <Root onClick={() => history.goBack()}>
-    <Img src={icon} />
+export default ({ to, title }: { to: string, title?: string }) => (
+  <Root>
+    <Link to={to} >
+      <Img src={icon} title={title} />
+    </Link>
   </Root>
-))
+)

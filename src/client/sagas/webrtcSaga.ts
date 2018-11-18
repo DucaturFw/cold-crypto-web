@@ -1,9 +1,28 @@
 import { eventChannel } from 'redux-saga'
-import { call, put, take, takeEvery, all, select } from 'redux-saga/effects'
-import { parseMessage } from '../helpers/json'
+import { call, put, take, takeEvery, all, select, fork } from 'redux-saga/effects'
+import { push } from 'connected-react-router'
+import { parseMessage, parseJsonString } from '../helpers/json'
+import { signTransferTx } from '../helpers/webrtc'
 import { getNonce, sendTx } from '../services/ethHelper'
-import { addWallets, scanWallets, scanTransaction, initWebrtcConnaction, webrtcMessageReceived, setLastTransaction, startSendingTx, setPayData } from '../actions'
 import { RTCCommands } from '../constants'
+import WebRTC from '../services/webrtc'
+
+import {
+  addWallets,
+  scanWallets,
+  scanTransaction,
+  initWebrtcConnaction,
+  webrtcMessageReceived,
+  setLastTransaction,
+  startSendingTx,
+  setPayData,
+  signTxRequest,
+  setSignedData,
+  setScanResult,
+  ITxSignFormData,
+} from '../actions'
+
+import { IWallet } from '../reducers/walletReducer'
 
 function* createEventChannel(rtc) {
   return eventChannel((emit) => {
@@ -75,7 +94,7 @@ function* scanTx(action) {
   }
   yield put(startSendingTx(false))
   yield put(setPayData({}))
-  navigate(`/tx`)
+  // navigate(`/tx`)
 }
 
 function* complementWallets(action) {
@@ -85,11 +104,37 @@ function* complementWallets(action) {
   yield setWallet(action.payload)
 }
 
+function waitForTxSignRequest(webrtc: WebRTC) {
+  return function*() {
+    while (true) {
+      type SignTxRequestPayload = { payload: { data: ITxSignFormData, wallet: IWallet } }
+      const { payload: { data, wallet } }: SignTxRequestPayload = yield take(signTxRequest)
+      const signedData = signTransferTx(data, wallet)
+
+      yield put(setSignedData(signedData))
+      if (webrtc.connected) webrtc.dataChannel.send(signedData)
+      // else throw Error('WebRTC is not connected') // TODO: handle it?
+
+      yield put(push(`/txCreation/${wallet.blockchain}/${wallet.address}/sign`))
+
+      const { payload } = yield take(setScanResult)
+      if (payload instanceof Error) throw payload // TODO: handle it too
+
+      const jsonResult = parseJsonString(payload.substr(3))
+
+      alert(jsonResult) // TODO: what's next?
+    }
+  }
+}
+
 export default function* rootSaga() {
+  const webrtc = new WebRTC()
+
   yield all([
     takeEvery(scanTransaction, scanTx),
     takeEvery(scanWallets, complementWallets),
     takeEvery(initWebrtcConnaction, initializeWebrtcChannel),
     takeEvery(webrtcMessageReceived, webrtcListener),
+    fork(waitForTxSignRequest(webrtc)),
   ])
 }

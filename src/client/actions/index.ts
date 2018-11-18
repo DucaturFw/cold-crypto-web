@@ -1,5 +1,13 @@
 import { createAction } from 'redux-act'
 import { IStateGasEth, IStateTicker } from '../reducers/blockchainsReducer'
+import { IWallet } from '../reducers/walletReducer'
+
+export interface ITxSignFormData {
+  to: string
+  amount: string
+  gasPrice: string
+  data: string
+}
 
 export const setQr = createAction<{ key: string; value: string }>('set qr')
 export const generateQr = createAction<{ key: string; value: string }>('generate qr')
@@ -19,3 +27,6 @@ export const setPayData = createAction<any>('set pay data')
 
 export const setBlockchainGasInfo = createAction<{ key: string, value: IStateGasEth }>('set blockchain gas info')
 export const setBlockchainTicker = createAction<{ key: string, value: IStateTicker }>('set blockchain ticker')
+export const signTxRequest = createAction<{ data: ITxSignFormData, wallet: IWallet }>('sign tx request')
+export const setSignedData = createAction<string>('set signed request data')
+export const setScanResult = createAction<string | Error>('set scan result from mobile client')

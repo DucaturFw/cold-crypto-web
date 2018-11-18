@@ -13,7 +13,7 @@ export const getWalletList = () => {
  return `getWalletList|2|${JSON.stringify(params)}`
 }
 
-export const signTransferTx = (value: any, wallet: IWallet) => {
+export const signTransferTx = (value: IPayTx, wallet: IWallet) => {
   const tx: ITransaction = {
     gasPrice: Web3.utils.toWei(value.gasPrice, 'gwei'),
     nonce: wallet.nonce,
@@ -23,7 +23,18 @@ export const signTransferTx = (value: any, wallet: IWallet) => {
   return `signTransferTx|3|${JSON.stringify({wallet, tx})}`
 }
 
-export const payToAddress = (value: any) => {
+interface IPayTx {
+  to: string
+  gasPrice: string | number
+  amount: string | number
+}
+
+interface IPayToAddressTx extends IPayTx {
+  data: string
+  callback: any
+}
+
+export const payToAddress = (value: IPayToAddressTx) => {
   // payToAddress|1|{"to": "0xadadad", "gasPrice": "12313", "value": "1231", "data": "0xadaa", "callback": ""}
   const tx = {
     gasPrice: Web3.utils.toWei(value.gasPrice, 'gwei'),

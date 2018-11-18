@@ -3,29 +3,29 @@ import QrReader from 'react-qr-reader'
 import QRCode from 'qrcode.react'
 import { connect } from 'react-redux'
 
-import { scanWallets } from '../../actions'
-import { parseJsonString } from '../../helpers/json'
-import { getWalletList } from './../../helpers/webrtc'
-
 import ModalLayout from '../layouts/Modal'
+import Column from '../atoms/Column'
+import Row from '../atoms/Row'
 import H2 from '../atoms/H2'
 import H3 from '../atoms/H3'
 import Hr from '../atoms/Hr'
 import ButtonClose from '../atoms/ButtonClose'
-import Row from '../atoms/Row'
-import Column from '../atoms/Column'
 import Centered from '../atoms/Centered'
 
-export interface IProps {
-  scanWallets: typeof scanWallets
+import { setScanResult } from '../../actions'
+import { IState } from '../../reducers'
+
+interface IProps {
+  signedData: string
+  setScanResult: typeof setScanResult
 }
 
-const Login = (props: IProps) => (
+const TxCreationSign = ({ signedData, setScanResult: handleResult }: IProps) =>
   <ModalLayout>
     <Row>
       <Column>
-        <H2>Mobile Login</H2>
-        <H3>Follow these steps to log into your web wallet using your mobile device</H3>
+        <H2>Sign Transaction By Mobile</H2>
+        <H3>Follow these steps to sign your transaction using your mobile device</H3>
       </Column>
       <ButtonClose />
     </Row>
@@ -37,7 +37,7 @@ const Login = (props: IProps) => (
         </Centered>
         <Centered style={{display: 'flex'}}>
           <QRCode
-            value={ getWalletList() }
+            value={signedData || ''}
             renderAs='svg'
             style={{width: '30vh', height: '30vh'}}
           />
@@ -50,14 +50,16 @@ const Login = (props: IProps) => (
         <Centered style={{display: 'flex'}}>
           <QrReader
             delay={300}
-            onScan={(result: string) => result && props.scanWallets(parseJsonString(result.substr(3)))}
-            onError={(error: string) => props.scanWallets(Error(error))}
+            onScan={(result) => result && handleResult(result)}
+            onError={(error) => handleResult(Error(error))}
             style={{ width: '30vh' }}
           />
         </Centered>
       </Column>
     </Row>
   </ModalLayout>
-)
 
-export default connect(null, { scanWallets })(Login)
+const mapStateToProps = ({ wallet: { signedData } }: IState) => ({ signedData })
+const withConnect = connect(mapStateToProps, { setScanResult })
+
+export default withConnect(TxCreationSign)

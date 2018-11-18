@@ -18,7 +18,7 @@ export const Centered = styled('div')({
 
 export const Row = styled('div')({
   display: 'flex',
-  justifyContent: 'space-around',
+  justifyContent: 'space-between',
   margin: '1rem 0',
   width: '100%',
 })

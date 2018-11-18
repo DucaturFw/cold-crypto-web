@@ -1,14 +1,14 @@
 import React from 'react'
 import { defaultProps } from 'recompact'
 import { Form } from 'react-powerplug'
-import { navigate } from 'fuse-react'
+import { navigate } from 'react-router-dom'
 import web3 from 'web3'
 import { Column, Row, Centered } from '../shared/layout'
 import { H2 } from '../shared/typography'
 import { TextInput } from '../shared/inputs'
 import { ButtonBase } from '../shared/buttons'
-import { RTCHelper } from '../../services/webrtc';
-import { IWallet } from '../../model';
+import { RTCHelper } from '../../services/webrtc'
+import { IWallet } from '../../model'
 import { signTransferTx } from '../../helpers/webrtc'
 
 interface ITxFormProps {
@@ -26,7 +26,7 @@ interface ITxFormProps {
 
 const TxForm = ({ address, blockChainPrice, blockChainData, value, set, webrtc, wallet, isSending }: ITxFormProps) => {
 
-  if(isSending) {
+  if (isSending) {
     return (
       <Row style={{ minWidth: '80vw' }}>
         <H2>Sending...</H2>
