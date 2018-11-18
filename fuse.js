@@ -15,9 +15,12 @@ context(
           JSONPlugin(),
           SVGPlugin(),
           ImageBase64Plugin(),
-          EnvPlugin({WEBRTC_ADDR: process.env.WEBRTC_ADDR}),
+          EnvPlugin({
+            WEBRTC_ADDR: process.env.WEBRTC_ADDR,
+            NODE_ENV: this.isProduction ? 'production' : 'development',
+          }),
           WebIndexPlugin({
-            template: "src/client/index.html",
+            template: 'src/client/index.html',
             path: this.isProduction
               ? './'
               : '/',
@@ -27,11 +30,11 @@ context(
           }),
           this.isProduction && TerserPlugin(),
           this.isProduction && QuantumPlugin({
+            processPolyfill: true,
+            // replaceProcessEnv: false,
+            webIndexPlugin: false,
             treeshake: false,
             bakeApiIntoBundle: true,
-            sourceMaps: {
-              path: '/',
-            },
           }),
         ],
       })
