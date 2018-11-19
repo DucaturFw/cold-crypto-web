@@ -100,8 +100,8 @@ function makeTxSignRequestSaga(webrtc: WebRTC) {
       // Pass to react to render as qr code
       yield put(setSignedData(signedData))
 
-      if (webrtc.connected) webrtc.dataChannel.send(signedData)
-      else throw Error('WebRTC is not connected') // TODO: handle it?
+      // if (webrtc.connected) webrtc.dataChannel.send(signedData)
+      // else throw Error('WebRTC is not connected') // TODO: handle it?
 
       const { blockchain, address } = wallet
       yield put(push(`/txCreation/${blockchain}/${address}/sign`))
@@ -130,7 +130,7 @@ export default function* rootSaga() {
   yield all([
     takeEvery(scanWallets, complementWallets),
     takeEvery(webrtcMessageReceived, webrtcListener),
-    fork(makeWebrtcChannelSaga(webrtc)),
+    // fork(makeWebrtcChannelSaga(webrtc)),
     fork(makeTxSignRequestSaga(webrtc)),
   ])
 }
