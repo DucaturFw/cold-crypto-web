@@ -1,5 +1,5 @@
 import "jest-extended"
-import { getPublicMethodNames } from "./eth-contracts"
+import { getPublicMethodNames, implementsInterface, isErc20 } from "./eth-contracts"
 
 describe('contract ABI processing', () =>
 {
@@ -39,5 +39,23 @@ describe('contract ABI processing', () =>
 		const abi1 = require(`./__tests__/${fname}.json`)
 		let methods = getPublicMethodNames(abi1).sort()
 		expect(methods).toIncludeSameMembers(expectedMethods.sort())
+	})
+	/* it('regression erc20 test with uint32 in decimals', () =>
+	{
+		const bigAbi = require(`./__tests__/abi2.json`)
+		const tokenAbi = require(`./erc20abi.json`)
+		const tokenAbi32 = require(`./erc20abi.decimals32.json`)
+		expect(implementsInterface(bigAbi, tokenAbi)).toBeFalse()
+		expect(implementsInterface(bigAbi, tokenAbi32)).toBeTrue()
+		const bigAbiIncorrect = bigAbi.slice(1)
+		expect(implementsInterface(bigAbiIncorrect, tokenAbi)).toBeFalse()
+		expect(implementsInterface(bigAbiIncorrect, tokenAbi32)).toBeFalse()
+	}) */
+	it('should compare erc20 interfaces', () =>
+	{
+		const bigAbi = require(`./__tests__/abi2.json`)
+		expect(isErc20(bigAbi)).toBeTrue()
+		const bigAbiIncorrect = bigAbi.slice(1, 5)
+		expect(isErc20(bigAbiIncorrect)).toBeFalse()
 	})
 })
