@@ -6,12 +6,12 @@ import { signTransferTx } from '../helpers/webrtc'
 import { getNonce, sendTx } from '../services/ethHelper'
 import { RTCCommands } from '../constants'
 import WebRTC from '../services/webrtc'
+import { IWallet } from '../reducers/walletReducer'
 
 import {
   addWallets,
   scanWallets,
   scanTransaction,
-  initWebrtcConnaction,
   webrtcMessageReceived,
   setLastTransaction,
   startSendingTx,
@@ -22,47 +22,49 @@ import {
   ITxSignFormData,
 } from '../actions'
 
-import { IWallet } from '../reducers/walletReducer'
-
 function* createEventChannel(rtc) {
   return eventChannel((emit) => {
-    rtc.dataChannel.onmessage = ((message) => {
-      return emit(message.data)
-    })
-
-    return () => {
-      rtc.close()
-    }
+    rtc.dataChannel.onmessage = (message) => emit(message.data)
+    return () => rtc.close()
   })
 }
 
-function* initializeWebrtcChannel() {
-  const { webrtc } = yield select((state: any) => state.webrtc)
-  const channel = yield call(createEventChannel, webrtc)
-  while (true) {
-    const message = yield take(channel)
-    console.log(message)
-    yield put(webrtcMessageReceived(message))
+function makeWebrtcChannelSaga(webrtc: WebRTC) {
+  return function* webrtcChannelSaga() {
+    const channel = yield call(createEventChannel, webrtc)
+    while (true) {
+      const message = yield take(channel)
+      const { id, result } = parseMessage(message)
+
+      switch (id) {
+        case RTCCommands.getWalletList:
+          yield setWallet(result)
+          break
+        case RTCCommands.signTransferTx:
+          yield put(scanTransaction(result))
+          break
+        default:
+          break
+      }
+    }
   }
 }
 
 function* setWallet(wallet) {
-  const wallets = yield wallet.map((item) => {
-    return getNonce(item.address).then((resolve) => {
-      return { ...item, nonce: resolve }
-    })
-  })
+  const wallets = yield wallet.map((item) =>
+    getNonce(item.address).then((resolve) =>
+      ({ ...item, nonce: resolve })))
 
   yield put(addWallets(wallets))
 
-  if(wallets.length === 1) {
+  if (wallets.length === 1) {
     const payData = yield select((state: any) => state.wallet.payData)
+    const rootPagePath = Object.keys(payData).length ? 'txCreation' : 'wallet'
+    const [ { blockchain, address } ] = wallet
 
-    // navigate(`/${Object.keys(payData).length ? 'txCreation': 'wallet'}/${wallet[0].blockchain}/${wallet[0].address}`)
-    return
-  }
-
-  // navigate('/wallets')
+    yield put(push(`/${rootPagePath}/${blockchain}/${address}`))
+  } else
+    yield put(push('/wallets'))
 }
 
 function* webrtcListener(action) {
@@ -80,23 +82,6 @@ function* webrtcListener(action) {
   }
 }
 
-function* scanTx(action) {
-  if (action.payload instanceof Error) return
-
-
-  try {
-    yield put(startSendingTx(true))
-    const transactionHash = yield sendTx(action.payload)
-
-    yield put(setLastTransaction(transactionHash))
-  } catch (error) {
-    yield put(setLastTransaction(error))
-  }
-  yield put(startSendingTx(false))
-  yield put(setPayData({}))
-  // navigate(`/tx`)
-}
-
 function* complementWallets(action) {
   // TODO: make notification about not valid qrcode
   if (!action.payload.length) return
@@ -104,25 +89,37 @@ function* complementWallets(action) {
   yield setWallet(action.payload)
 }
 
-function waitForTxSignRequest(webrtc: WebRTC) {
-  return function*() {
-    while (true) {
+function makeTxSignRequestSaga(webrtc: WebRTC) {
+  return function* waitForTxSignRequestSaga() {
+    while (true) try {
+      // Wait for action in a loop
       type SignTxRequestPayload = { payload: { data: ITxSignFormData, wallet: IWallet } }
       const { payload: { data, wallet } }: SignTxRequestPayload = yield take(signTxRequest)
       const signedData = signTransferTx(data, wallet)
 
+      // Pass to react to render as qr code
       yield put(setSignedData(signedData))
+
       if (webrtc.connected) webrtc.dataChannel.send(signedData)
-      // else throw Error('WebRTC is not connected') // TODO: handle it?
+      else throw Error('WebRTC is not connected') // TODO: handle it?
 
-      yield put(push(`/txCreation/${wallet.blockchain}/${wallet.address}/sign`))
+      const { blockchain, address } = wallet
+      yield put(push(`/txCreation/${blockchain}/${address}/sign`))
 
+      // Waiting for qr scan result
       const { payload } = yield take(setScanResult)
       if (payload instanceof Error) throw payload // TODO: handle it too
 
-      const jsonResult = parseJsonString(payload.substr(3))
+      const signedTx = parseJsonString(payload.substr(3))
+      const txHash = yield sendTx(signedTx)
 
-      alert(jsonResult) // TODO: what's next?
+      // Pass tx hash to a view
+      yield put(setLastTransaction(txHash))
+      yield put(push('/tx'))
+
+      // Don't use statement `return` because we will go out from the loop and can't handle other one.
+    } catch (err) {
+      console.log(err)
     }
   }
 }
@@ -131,10 +128,9 @@ export default function* rootSaga() {
   const webrtc = new WebRTC()
 
   yield all([
-    takeEvery(scanTransaction, scanTx),
     takeEvery(scanWallets, complementWallets),
-    takeEvery(initWebrtcConnaction, initializeWebrtcChannel),
     takeEvery(webrtcMessageReceived, webrtcListener),
-    fork(waitForTxSignRequest(webrtc)),
+    fork(makeWebrtcChannelSaga(webrtc)),
+    fork(makeTxSignRequestSaga(webrtc)),
   ])
 }
