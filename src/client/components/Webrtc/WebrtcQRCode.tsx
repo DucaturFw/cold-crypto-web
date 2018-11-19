@@ -1,7 +1,7 @@
 import React from 'react'
 import RTCHelper from '../../services/webrtc'
 
-import { scanAnswer }from '../../actions';
+import { scanAnswer } from '../../actions'
 import { Container, Centered, Column, Row } from '../shared/layout'
 
 import Offer from './OfferAndAnswer'
@@ -17,8 +17,8 @@ class Webrtc extends React.Component {
   }
 
   componentDidMount = async () => {
-    const { rpc } = this.state;
-    const offer = await  rpc.createOffer()
+    const { rpc } = this.state
+    const offer = await rpc.createOffer()
 
     this.setState({offer})
   }
@@ -32,7 +32,7 @@ class Webrtc extends React.Component {
 
     console.log('wait connection')
     await rpc.waitConnection()
-    
+
     this.setState({connected: true})
     console.log('connection ready')
   }

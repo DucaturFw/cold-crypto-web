@@ -1,5 +1,5 @@
 import { createReducer } from 'redux-act'
-import RTC, { RTCHelper } from '../services/webrtc'
+import RTC from '../services/webrtc'
 import { setLastTransaction, startSendingTx } from '../actions'
 
 export interface ITransaction {
@@ -13,7 +13,7 @@ const webrtcDefaultState = {
   error: '',
   isSending: false,
   lastTransaction: {} as ITransaction | Error,
-  webrtc: RTC as RTCHelper,
+  webrtc: RTC,
 }
 
 const webrtcReducer = createReducer({}, webrtcDefaultState)

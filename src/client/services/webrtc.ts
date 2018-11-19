@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 
-export default class RTCHelper extends EventEmitter {
+export class WebRTC extends EventEmitter {
   public rpc = new RTCPeerConnection()
   public candidates: RTCIceCandidate[] = []
   public dataChannel?: RTCDataChannel
@@ -14,12 +14,13 @@ export default class RTCHelper extends EventEmitter {
     if (name) this.tag = `[${name}] `
     this.rpc.onicecandidate = this.onIceCandidate
     this.rpc.ondatachannel = this.onDataChannel
+    return this
   }
   public onIceCandidate = (ev: RTCPeerConnectionIceEvent) => {
     console.log(`${this.tag}onIceCandidate: ${JSON.stringify(ev.candidate)}`)
     if (ev.candidate)
       this.candidates.push(ev.candidate)
-    
+
     this.emit('ice', ev.candidate)
   }
   public onDataChannel = (ev: RTCDataChannelEvent) => {
@@ -70,3 +71,5 @@ export default class RTCHelper extends EventEmitter {
     await this.rpc.addIceCandidate(candidate)
   }
 }
+
+export default new WebRTC()

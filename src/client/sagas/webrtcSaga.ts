@@ -29,7 +29,7 @@ function* createEventChannel(rtc) {
   })
 }
 
-function makeWebrtcChannelSaga(webrtc: WebRTC) {
+function makeWebrtcChannelSaga(webrtc: typeof WebRTC) {
   return function* webrtcChannelSaga() {
     const channel = yield call(createEventChannel, webrtc)
     while (true) {
@@ -89,7 +89,7 @@ function* complementWallets(action) {
   yield setWallet(action.payload)
 }
 
-function makeTxSignRequestSaga(webrtc: WebRTC) {
+function makeTxSignRequestSaga(webrtc: typeof WebRTC) {
   return function* waitForTxSignRequestSaga() {
     while (true) try {
       // Wait for action in a loop
@@ -125,7 +125,7 @@ function makeTxSignRequestSaga(webrtc: WebRTC) {
 }
 
 export default function* rootSaga() {
-  const webrtc = new WebRTC()
+  const webrtc = WebRTC // new WebRTC()
 
   yield all([
     takeEvery(scanWallets, complementWallets),
