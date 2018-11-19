@@ -111,7 +111,7 @@ function makeTxSignRequestSaga(webrtc: WebRTC) {
       if (payload instanceof Error) throw payload // TODO: handle it too
 
       const signedTx = parseJsonString(payload.substr(3))
-      const txHash = yield sendTx(signedTx)
+      const txHash = yield call(sendTx, signedTx)
 
       // Pass tx hash to a view
       yield put(setLastTransaction(txHash))
