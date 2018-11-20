@@ -1,5 +1,5 @@
 import { all, call, take, put } from 'redux-saga/effects'
-import fetchJson from './fetch'
+import fetchJson from './fetchSaga'
 
 import { setBlockchainGasInfo, setBlockchainTicker, setRoutePath } from '../actions'
 

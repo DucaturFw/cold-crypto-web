@@ -35,3 +35,4 @@ export const setScanResult = createAction<string | Error>('set scan result from 
 export const setTransactionError = createAction<Error>('set transaction error')
 
 export const setRoutePath = createAction<match>('set route path match')
+export const setLoaderState = createAction<boolean>('set loader state')

@@ -10,6 +10,7 @@ import LabelAtop from '../atoms/LabelAtop'
 import Column from '../atoms/Column'
 import Row from '../atoms/Row'
 import ButtonBase from '../atoms/ButtonBase'
+import LoaderContent from '../moleculas/LoaderContent'
 
 interface IFormData {
   to: string
@@ -78,17 +79,19 @@ export default ({ onSubmit, avgWait, blockchain, blockchainPrice }: IProps) => (
                 <TextArea type='text' {...field('data').bind as any} />
               </Column>
             </RowMargined>
-            <RowMargined>
-              <Column>
-                <Label>Gas price {values.gasPrice} GWEI</Label>
-                <TextInput type='range' {...field('gasPrice').bind as any} min='1' max='100' />
-                <Row>
-                  <span>${gweiPrice}</span>
-                  <span> {`< ${awaitTime} min`}</span>
-                </Row>
-              </Column>
-            </RowMargined>
-            <ButtonBase type='submit'>Continue</ButtonBase>
+            <LoaderContent>
+              <RowMargined>
+                <Column>
+                  <Label>Gas price {values.gasPrice} GWEI</Label>
+                  <TextInput type='range' {...field('gasPrice').bind as any} min='1' max='7' />
+                  <Row>
+                    <span>${gweiPrice}</span>
+                    <span> {`< ${awaitTime} min`}</span>
+                  </Row>
+                </Column>
+              </RowMargined>
+              <ButtonBase type='submit'>Continue</ButtonBase>
+            </LoaderContent>
           </Column>
         </form>
       )

@@ -1,5 +1,7 @@
-import { call, race } from 'redux-saga/effects'
+import { call, race, put } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
+
+import { setLoaderState } from '../actions'
 
 interface IFetchOptions {
   body?: any
@@ -17,8 +19,10 @@ const makeFetchOptions = ({ body, method, authToken }: IFetchOptions = {}): Requ
   method: method || 'GET',
 })
 
-export default function* fetchJson(url: string, options?: IFetchOptions): IterableIterator<[ unknown?, Error? ]> {
+export default function* fetchJson(url: string, options?: IFetchOptions) {
   try {
+    yield put(setLoaderState(true))
+
     const [ res, timeout ] = yield race([
       call(window.fetch, url, makeFetchOptions(options)),
       delay(10000),
@@ -28,10 +32,13 @@ export default function* fetchJson(url: string, options?: IFetchOptions): Iterab
     if (!res.ok) throw Error(res.statusText)
 
     const response = yield res.json()
+    yield put(setLoaderState(false))
 
     return [ response, null ]
   } catch (error) {
     console.error(error)
+
+    yield put(setLoaderState(false))
     return [ null, error ]
   }
 }
