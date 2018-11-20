@@ -1,4 +1,4 @@
-import { IWallet, ITransaction } from '../reducers/walletReducer'
+import { ITransaction } from '../reducers/webrtcReducer'
 import Web3 from 'web3'
 import { handshakeServerUrl } from '../constants'
 

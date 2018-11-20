@@ -5,7 +5,7 @@ import { setLastTransaction, startSendingTx } from '../actions'
 export interface ITransaction {
   nonce: number
   gasPrice: string
-  to: number
+  to: string
   value: string
 }
 
