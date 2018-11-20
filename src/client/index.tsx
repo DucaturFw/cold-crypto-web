@@ -7,16 +7,7 @@ import React from 'react'
 
 import globalCss from './normalize'
 import store, { history } from './configureStore'
-
-import Home from './components/pages/Home'
-import Login from './components/pages/Login'
-import Pay from './components/Pay'
-import PayToAddress from './components/PayToAddress'
-import TxCreation from './components/pages/TxCreation'
-import TxView from './components/TxView'
-import Wallet from './components/pages/Wallet'
-import Wallets from './components/pages/Wallets'
-import Webrtc from './components/Webrtc/WebrtcServer'
+import routes from './routes'
 
 injectGlobal(globalCss, {
   'html,body,button,input,select': {
@@ -28,15 +19,7 @@ render(
   <Provider store={store}>
     <ConnectedRouter history={history} >
       <Switch>
-        <Route path='/' exact component={Home} />
-        <Route path='/login' component={Login} />
-        <Route path='/wallets' component={Wallets} />
-        <Route path='/wallet/:blockchain/:address' component={Wallet} />
-        <Route path='/txCreation/:blockchain/:address' component={TxCreation} />
-        <Route path='/webrtc' component={Webrtc}/>
-        <Route path='/tx' component={TxView}/>
-        <Route path='/pay/:address' component={Pay}/>
-        <Route path='/paytoaddress/:address' component={PayToAddress}/>
+        { routes.map((route) => <Route {...route} key={route.path} />) }
       </Switch>
     </ConnectedRouter>
   </Provider>
