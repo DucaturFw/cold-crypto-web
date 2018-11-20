@@ -7,6 +7,7 @@ import TxView from './components/TxView'
 import Wallet from './components/pages/Wallet'
 import Wallets from './components/pages/Wallets'
 import Webrtc from './components/Webrtc/WebrtcServer'
+import ContractCall from './components/pages/ContractCall'
 
 export default [
   { path: '/', exact: true, component: Home },
@@ -18,4 +19,5 @@ export default [
   { path: '/tx', component: TxView },
   { path: '/pay/:address', component: Pay },
   { path: '/paytoaddress/:address', component: PayToAddress },
+  { path: '/contract/:blockchain/:address/call', component: ContractCall },
 ]
