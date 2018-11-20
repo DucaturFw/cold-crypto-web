@@ -10,10 +10,24 @@ const Root = styled('header')({
   height: '4rem',
 })
 
+const Logo = styled(H1)({
+  color: '#fff',
+  padding: '1rem',
+  sup: {
+    color: '#f2494d',
+    fontSize: '.8rem',
+    textTransform: 'lowercase',
+    verticalAlign: 'super',
+  },
+} as any)
+
 export default ({ to }: { to: string }) => (
   <Root>
     <Link to={ to }>
-      <H1 style={{ color: '#fff', padding: '1rem' }}>Cold Crypto</H1>
+      <Logo>
+        Cold Crypto
+        <sup>beta mode</sup>
+      </Logo>
     </Link>
   </Root>
 )
