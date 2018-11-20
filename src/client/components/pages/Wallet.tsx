@@ -80,7 +80,7 @@ const Wallet = ({ txs, blockchain, address }: IProps) =>
 
 const withFetch = fetch(({ match: { params: { address } } }) =>
   /* tslint:disable:max-line-length */
-  `http://api-rinkeby.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken`)
+  `//api-rinkeby.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken`)
 
 const withMapProps = mapProps(({ data, match: { params: { blockchain, address } } }) => ({
   address,

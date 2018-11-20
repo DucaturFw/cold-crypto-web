@@ -82,7 +82,7 @@ interface IProps {
   wallet: IStateWallet
 }
 
-const withFetch = fetch('http://localhost:4443/addresses')
+const withFetch = fetch('//localhost:4443/addresses')
 const withConnect = connect(({ wallet: { wallets, payData } }: IProps) => ({ wallets, payData }))
 
 export default compose(withFetch, withConnect)(WalletList)

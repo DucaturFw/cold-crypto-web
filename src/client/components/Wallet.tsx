@@ -41,7 +41,7 @@ export default class Wallet extends Component<IProps, IState> {
 
   public componentWillMount = () => {
     const { match: { params: { symbol, address } } } = this.props
-    fetch(`http://api-rinkeby.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken`)
+    fetch(`//api-rinkeby.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken`)
       .then((res) => res.json())
       .then((json) => this.setState({txs: json.result}))
   }
