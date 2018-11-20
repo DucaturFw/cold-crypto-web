@@ -8,7 +8,7 @@ import fetch from 'fetch-hoc'
 import { Container, Column, Row, Header } from './shared/layout'
 import { H1 } from './shared/typography'
 
-import { IWalletDefaultState, IWallet } from '../reducers/walletReducer'
+import { IState as IStateWallet, IWallet } from '../reducers/walletReducer'
 
 const WalletList = ({ wallets, payData }: { wallets: IWallet[], payData: any }) =>
   <>
@@ -79,7 +79,7 @@ const WalletLinkContainer = styled(Row)({
 })
 
 interface IProps {
-  wallet: IWalletDefaultState
+  wallet: IStateWallet
 }
 
 const withFetch = fetch('http://localhost:4443/addresses')

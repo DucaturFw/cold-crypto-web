@@ -44,7 +44,7 @@ class PayToAddress extends React.Component<any> {
       <Container>
         <Centered style={{ maxWidth: '80vw' }}>
             <Form initial={initialValue} >
-            {({ input, values }) => (
+            {({ field, values }) => (
               <form onSubmit={(e) => {
                 e.preventDefault()
 
@@ -59,7 +59,7 @@ class PayToAddress extends React.Component<any> {
                   <H2>Data: {data}</H2>
                   <Row>
                     <span>Gas price {values.gasPrice} GWEI</span>
-                    <TextInput type='range' {...input('gasPrice').bind} min='1' max='100' />
+                    <TextInput type='range' {...field('gasPrice').bind} min='1' max='100' />
                     <span> {(Number(web3.utils.fromWei(values.gasPrice, "gwei")) * 21000 * Number(blockChainPrice)).toFixed(3)} USD</span>
                     <span style={{minWidth: '5rem', marginLeft: '.5rem'}}> {`< ${(Number(blockChainData.avgWait) * Number(values.gasPrice)).toFixed(2)} min`}</span>
                   </Row>
