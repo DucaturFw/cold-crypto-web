@@ -1,6 +1,7 @@
 import { ITransaction } from '../reducers/webrtcReducer'
 import Web3 from 'web3'
 import { handshakeServerUrl } from '../constants'
+import { IWallet } from '../reducers/walletReducer'
 
 // TODO: add supported blockchain enum
 export const webrtcLogin = (sid: string) => {
@@ -37,12 +38,12 @@ interface IPayToAddressTx extends IPayTx {
 export const payToAddress = (value: IPayToAddressTx) => {
   // payToAddress|1|{"to": "0xadadad", "gasPrice": "12313", "value": "1231", "data": "0xadaa", "callback": ""}
   const tx = {
+    blockchain: 'eth',
+    callback: value.callback,
+    data: value.data,
     gasPrice: Web3.utils.toWei(value.gasPrice, 'gwei'),
     to: value.to,
     value: Web3.utils.toWei(value.amount, 'ether'),
-    data: value.data,
-    callback: value.callback,
-    blockchain: 'eth'
   }
   return `payToAddress|1|${JSON.stringify({...tx})}`
 }

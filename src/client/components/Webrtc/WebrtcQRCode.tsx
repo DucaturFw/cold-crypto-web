@@ -8,12 +8,16 @@ import Offer from './OfferAndAnswer'
 import Candidates from './Candidates'
 import { connect } from 'react-redux'
 
-class Webrtc extends React.Component {
+interface IProps {
+  rpc: any
+}
+
+class Webrtc extends React.Component<IProps> {
   state = {
+    answer: null,
+    connected: false,
     offer: '',
     rpc: RTCHelper,
-    connected: false,
-    answer: null
   }
 
   componentDidMount = async () => {
@@ -37,7 +41,7 @@ class Webrtc extends React.Component {
     console.log('connection ready')
   }
 
-  render () {
+  public render() {
     const { rpc, offer, answer, connected } = this.state
     return (
       <Container>

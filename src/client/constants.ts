@@ -1,4 +1,4 @@
-//TODO: make prod and dev url 
+// TODO: make prod and dev url
 const url = process.env.WEBRTC_ADDR
 
 export const handshakeServerUrl = `ws://${url}:3077`

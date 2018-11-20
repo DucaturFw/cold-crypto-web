@@ -7,13 +7,18 @@ import { initWebrtcConnaction } from '../../actions'
 import { handshakeServerUrl } from '../../constants'
 import { getWalletList, webrtcLogin } from '../../helpers/webrtc'
 
-class WebrtcServer extends React.Component {
+interface IProps {
+  initWebrtcConnaction: any
+  webrtc: any
+}
+
+class WebrtcServer extends React.Component<IProps> {
   public state = {
     sid: null,
   }
 
   public componentDidMount = async () => {
-    const { initWebrtcConnaction, webrtc } = this.props
+    const { initWebrtcConnaction: initConnection, webrtc } = this.props
     const offer = await  webrtc.createOffer()
     const ws = new WebSocket(handshakeServerUrl)
 
@@ -26,13 +31,11 @@ class WebrtcServer extends React.Component {
     {
       console.log(`message: ${data.data}`)
       const json = JSON.parse(data.data.toString())
-      if (json.id === 1) {
+      if (json.id === 1)
         this.setState({sid: json.result.sid})
-      }
 
-      if (json.method === 'ice') {
+      if (json.method === 'ice')
         webrtc.pushIceCandidate(json.params.ice)
-      }
 
       if (json.method === 'answer') {
         webrtc.on('ice', (ice) => {
@@ -44,7 +47,7 @@ class WebrtcServer extends React.Component {
         console.log('wait connection')
 
         await webrtc.waitConnection()
-        initWebrtcConnaction()
+        initConnection()
         webrtc.dataChannel.send(getWalletList())
         ws.close()
       }
