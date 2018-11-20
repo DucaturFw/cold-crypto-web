@@ -1,7 +1,7 @@
-import { all, call, fork, put } from 'redux-saga/effects'
+import { all, call, take, put } from 'redux-saga/effects'
 import fetchJson from './fetch'
 
-import { setBlockchainGasInfo, setBlockchainTicker } from '../actions'
+import { setBlockchainGasInfo, setBlockchainTicker, setRoutePath } from '../actions'
 
 function* fetchBlockchainGasInfo() {
   const [ response, error ] = yield call(fetchJson, 'https://ethgasstation.info/json/ethgasAPI.json')
@@ -16,12 +16,16 @@ function* fetchBlockchainTicker() {
 }
 
 export default function* blockchainsSaga() {
-  try {
-    yield all([
-      call(fetchBlockchainGasInfo),
-      call(fetchBlockchainTicker),
-    ])
-  } catch (err) {
-    console.log(err)
+  while (true) {
+    const { payload } = yield take(setRoutePath)
+    if (payload.path === '/txCreation/:blockchain/:address') try {
+      yield all([
+        call(fetchBlockchainGasInfo),
+        call(fetchBlockchainTicker),
+      ])
+      return
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
