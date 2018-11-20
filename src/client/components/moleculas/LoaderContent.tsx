@@ -8,14 +8,19 @@ const Container = styled('strong')({
   position: 'relative',
 })
 
+type PropFunc = (a: { isLoaded: boolean }) => JSX.Element | JSX.Element[]
+
 interface IProps {
   loaderState: boolean
-  children: JSX.Element | JSX.Element[]
+  children: JSX.Element | JSX.Element[] | PropFunc
 }
 
 const LoaderContent = ({ loaderState, children }: IProps) => (
   <Container>
-    { loaderState ? 'Loading...' : children }
+    { typeof children === 'function' ?
+      children({ isLoaded: !loaderState }) :
+      (loaderState ? 'Loading...' : children)
+    }
   </Container>
 )
 
