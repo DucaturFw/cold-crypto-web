@@ -16,8 +16,12 @@ function* fetchBlockchainTicker() {
 }
 
 export default function* blockchainsSaga() {
-  yield all([
-    fork(fetchBlockchainGasInfo),
-    fork(fetchBlockchainTicker),
-  ])
+  try {
+    yield all([
+      fork(fetchBlockchainGasInfo),
+      fork(fetchBlockchainTicker),
+    ])
+  } catch (err) {
+    console.log(err)
+  }
 }
