@@ -12,6 +12,7 @@ import Wallet from './Wallet'
 import ModalWindow from '../organisms/ModalWindow'
 import TxCreationForm from '../organisms/TxCreationForm'
 import TxCreationSign from '../organisms/TxCreationSign'
+import TxCreationError from '../organisms/TxCreationError'
 
 import { signTxRequest } from '../../actions'
 import { IState } from '../../reducers'
@@ -31,10 +32,13 @@ const ModalContainer = styled('div')({
   padding: '2rem',
 })
 
-const TxCreation = ({ gas, ticker, wallet, sign, blockchain}: IProps) =>
+const TxCreation = ({ gas, ticker, wallet, sign, blockchain }: IProps) =>
   <Switch>
     <Route path='/txCreation/:blockchain/:address/sign' render={() =>
       <TxCreationSign />
+    } />
+    <Route path='/txCreation/:blockchain/:address/error' render={() =>
+      <TxCreationError />
     } />
     <Route exact render={(props) => (
       <>

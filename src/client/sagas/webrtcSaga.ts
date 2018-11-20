@@ -10,16 +10,15 @@ import { IWallet } from '../reducers/walletReducer'
 
 import {
   addWallets,
-  scanWallets,
-  scanTransaction,
-  webrtcMessageReceived,
-  setLastTransaction,
-  startSendingTx,
-  setPayData,
-  signTxRequest,
-  setSignedData,
-  setScanResult,
   ITxSignFormData,
+  scanTransaction,
+  scanWallets,
+  setLastTransaction,
+  setScanResult,
+  setSignedData,
+  setTransactionError,
+  signTxRequest,
+  webrtcMessageReceived,
 } from '../actions'
 
 function* createEventChannel(rtc) {
@@ -120,6 +119,8 @@ function makeTxSignRequestSaga(webrtc: typeof WebRTC) {
       // Don't use statement `return` because we will go out from the loop and can't handle other one.
     } catch (err) {
       console.log(err)
+      yield put(setTransactionError(err))
+      yield put(push('error'))
     }
   }
 }

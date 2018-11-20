@@ -30,3 +30,4 @@ export const setBlockchainTicker = createAction<{ key: string, value: IStateTick
 export const signTxRequest = createAction<{ data: ITxSignFormData, wallet: IWallet }>('sign tx request')
 export const setSignedData = createAction<string>('set signed request data')
 export const setScanResult = createAction<string | Error>('set scan result from mobile client')
+export const setTransactionError = createAction<Error>('set transaction error')
