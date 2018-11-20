@@ -16,5 +16,5 @@ const Container = styled('div')({
 
 export default ({ list }: IProps) =>
   <Container>
-    { list.map((v) => <Item key={v.nonce} item={v} />) }
+    { list.map((v) => <Item key={v.address} item={v} />) }
   </Container>

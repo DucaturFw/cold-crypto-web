@@ -14,7 +14,7 @@ import Pay from './components/Pay'
 import PayToAddress from './components/PayToAddress'
 import TxCreation from './components/pages/TxCreation'
 import TxView from './components/TxView'
-import Wallet from './components/pages/Wallets'
+import Wallet from './components/pages/Wallet'
 import Wallets from './components/pages/Wallets'
 import Webrtc from './components/Webrtc/WebrtcServer'
 
@@ -35,8 +35,8 @@ render(
         <Route path='/txCreation/:blockchain/:address' component={TxCreation} />
         <Route path='/webrtc' component={Webrtc}/>
         <Route path='/tx' component={TxView}/>
-        <Route exact path='/pay/:address' component={Pay}/>
-        <Route exact path='/paytoaddress/:address' component={PayToAddress}/>
+        <Route path='/pay/:address' component={Pay}/>
+        <Route path='/paytoaddress/:address' component={PayToAddress}/>
       </Switch>
     </ConnectedRouter>
   </Provider>

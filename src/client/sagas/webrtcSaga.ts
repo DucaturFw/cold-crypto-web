@@ -51,9 +51,9 @@ function makeWebrtcChannelSaga(webrtc: typeof WebRTC) {
 }
 
 function* setWallet(wallet) {
-  const wallets = yield wallet.map((item) =>
+  const wallets = yield all(wallet.map((item) =>
     getNonce(item.address).then((resolve) =>
-      ({ ...item, nonce: resolve })))
+      ({ ...item, nonce: resolve }))))
 
   yield put(addWallets(wallets))
 

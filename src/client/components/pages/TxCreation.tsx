@@ -38,7 +38,7 @@ const TxCreation = ({ gas, ticker, wallet, sign, blockchain}: IProps) =>
     } />
     <Route exact render={(props) => (
       <>
-        <Wallet { ...props } /> // It use route params
+        <Wallet { ...props } />
         <ModalWindow>
           <ModalContainer>
             <Row>

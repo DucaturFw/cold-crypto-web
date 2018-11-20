@@ -1,5 +1,5 @@
 import React from 'react'
-import { connectAdvanced } from 'react-redux'
+import { connect } from 'react-redux'
 
 import Layout from '../layouts/Dashboard'
 import H1 from '../atoms/H1'
@@ -7,7 +7,7 @@ import Hr from '../atoms/Hr'
 import Column from '../atoms/Column'
 import WalletList from '../moleculas/WalletList'
 
-import { IWalletDefaultState, IWallet } from '../../reducers/walletReducer'
+import { IState, IWallet } from '../../reducers/walletReducer'
 
 const Wallets = ({ wallets }: { wallets: IWallet[]}) =>
   <Layout>
@@ -18,10 +18,6 @@ const Wallets = ({ wallets }: { wallets: IWallet[]}) =>
     </Column>
   </Layout>
 
-interface IProps {
-  wallet: IWalletDefaultState
-}
-
-const withConnect = connectAdvanced(() => ({ wallet: { wallets } }: IProps) => ({ wallets }))
+const withConnect = connect(({ wallet: { wallets } }: { wallet: IState }) => ({ wallets }))
 
 export default withConnect(Wallets)
