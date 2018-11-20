@@ -5,8 +5,6 @@ import { compose } from 'recompact'
 import { withRouter } from 'react-router'
 
 import { scanWallets } from '../../actions'
-import { parseJsonString } from '../../helpers/json'
-import { getWalletList } from './../../helpers/webrtc'
 
 import ModalLayout from '../layouts/Modal'
 import H2 from '../atoms/H2'
@@ -15,7 +13,6 @@ import Hr from '../atoms/Hr'
 import ButtonClose from '../atoms/ButtonClose'
 import Row from '../atoms/Row'
 import Column from '../atoms/Column'
-import Centered from '../atoms/Centered'
 import Label from '../atoms/Label'
 import LabelAtop from '../atoms/LabelAtop'
 import TextInput from '../atoms/TextInput'
@@ -28,6 +25,7 @@ export interface IProps {
     params: {
       address: string,
       blockchain: string,
+      contract: string,
     },
   },
   address: string,
@@ -44,13 +42,20 @@ const ContractCall = (props: IProps) => (
     </Row>
     <Hr/>
     <Row>
-      <Form initial={{ address: props.address, to: '', method: null, parameters: '', gasPrice: '0' }}>
+      <Form initial={{
+        address: props.address,
+        gasPrice: '0',
+        method: 'Initial',
+        parameters: '',
+        to: props.match.params.contract,
+      }}>
         {({ field, values }) => (
           <Column>
             <Row>
               <Column style={{ flexBasis: '65%', marginRight: '5%' }}>
                 <Label>Address:</Label>
-                <TextInput {...field('to').bind as any} />
+                <TextInput
+                  {...field('to').bind as any} />
               </Column>
               <Column style={{ flexBasis: '30%' }}>
                 <Label><small>Select from computer:</small></Label>
@@ -63,17 +68,18 @@ const ContractCall = (props: IProps) => (
                 <Label>Method:</Label>
                 <Select
                   options={[ 'First', 'Second' ]}
+                  // value='First'
                   {...field('method').bind as any} />
                 <Wrap vertical={1} />
                 <Label>Parameters:</Label>
                 <LabelAtop label='owner'>
-                  <TextInput {...field('parameters').bind} />
+                  <TextInput {...field('parameters').bind as any} />
                 </LabelAtop>
                 <LabelAtop label='owner'>
-                  <TextInput {...field('parameters').bind} />
+                  <TextInput {...field('parameters').bind as any} />
                 </LabelAtop>
                 <LabelAtop label='value'>
-                  <TextInput {...field('parameters').bind} />
+                  <TextInput {...field('parameters').bind as any} />
                 </LabelAtop>
               </Column>
               <Column>
