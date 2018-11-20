@@ -1,6 +1,8 @@
 import { createAction } from 'redux-act'
+import { match } from 'react-router'
 import { IStateGasEth, IStateTicker } from '../reducers/blockchainsReducer'
 import { IWallet } from '../reducers/walletReducer'
+
 
 export interface ITxSignFormData {
   to: string
@@ -31,3 +33,5 @@ export const signTxRequest = createAction<{ data: ITxSignFormData, wallet: IWall
 export const setSignedData = createAction<string>('set signed request data')
 export const setScanResult = createAction<string | Error>('set scan result from mobile client')
 export const setTransactionError = createAction<Error>('set transaction error')
+
+export const setRoutePath = createAction<match>('set route path match')
