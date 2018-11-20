@@ -88,9 +88,28 @@ function* complementWallets(action) {
   yield setWallet(action.payload)
 }
 
+function* waitForScanResults() {
+  while (true) try {
+    const { payload } = yield take(setScanResult)
+    if (payload instanceof Error) throw payload
+
+    const signedTx = parseJsonString(payload.substr(3))
+    const txHash = yield call(sendTx, signedTx)
+
+    // Pass a tx hash to a view
+    yield put(setLastTransaction(txHash))
+    yield put(push('/tx'))
+    return // exit from loop if successed
+  } catch (err) {
+    yield put(setTransactionError(err))
+    yield put(push('error'))
+    // Don't use statement `return` because we will go out from the loop and can't handle other one.
+  }
+}
+
 function makeTxSignRequestSaga(webrtc: typeof WebRTC) {
   return function* waitForTxSignRequestSaga() {
-    while (true) try {
+    while (true) {
       // Wait for action in a loop
       type SignTxRequestPayload = { payload: { data: ITxSignFormData, wallet: IWallet } }
       const { payload: { data, wallet } }: SignTxRequestPayload = yield take(signTxRequest)
@@ -105,22 +124,9 @@ function makeTxSignRequestSaga(webrtc: typeof WebRTC) {
       const { blockchain, address } = wallet
       yield put(push(`/txCreation/${blockchain}/${address}/sign`))
 
-      // Waiting for qr scan result
-      const { payload } = yield take(setScanResult)
-      if (payload instanceof Error) throw payload // TODO: handle it too
-
-      const signedTx = parseJsonString(payload.substr(3))
-      const txHash = yield call(sendTx, signedTx)
-
-      // Pass tx hash to a view
-      yield put(setLastTransaction(txHash))
-      yield put(push('/tx'))
-
-      // Don't use statement `return` because we will go out from the loop and can't handle other one.
-    } catch (err) {
-      console.log(err)
-      yield put(setTransactionError(err))
-      yield put(push('error'))
+      // Waiting for a qr scan result
+      // Enable multiple attempts by fork a loop
+      yield fork(waitForScanResults) // Maybe need to pass some key or props?
     }
   }
 }
