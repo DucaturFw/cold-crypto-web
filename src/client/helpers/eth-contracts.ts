@@ -1,45 +1,50 @@
+import { IUints, IInts, IBytes, IFixed, IUfixed } from './eth-abi-types'
+
 export interface IAbiArgument
 {
 	name: string
-	type: 'string' | 'address' | 'bytes32' | 'uint256'
+	type: 'string' | 'address' | 'bool' | 'function' | IUints | IInts | IFixed | IBytes | IUfixed
+	components?: IAbiArgument[]
 }
 export interface IAbiEventInput extends IAbiArgument
 {
 	indexed: boolean
 }
+export type IStateMutability = 'pure' | 'view' | 'nonpayable' | 'payable'
 export interface IAbiFunctionEntry
 {
-	type: 'function'
-	constant: boolean
-	inputs: IAbiArgument[]
+	type?: 'function'
 	name: string
-	outputs: IAbiArgument[]
-	payable: boolean
-	stateMutability: string
+	inputs: IAbiArgument[]
+	outputs?: IAbiArgument[]
+	stateMutability: IStateMutability
+	// payable?: boolean // deprecated
+	// constant?: boolean // deprecated
 }
 export interface IAbiEventEntry
 {
 	type: 'event'
-	anonymous: boolean
-	inputs: IAbiEventInput[]
 	name: string
+	inputs: IAbiEventInput[]
+	anonymous: boolean
 }
 export interface IAbiConstructorEntry
 {
 	type: "constructor"
-	// TODO: incomplete
+	inputs: IAbiArgument[]
+	stateMutability: IStateMutability
 }
 export interface IAbiFallbackEntry
 {
 	type: "fallback"
-	// TODO: incomplete
+	stateMutability: IStateMutability
 }
 export type IAbiEntry = IAbiFallbackEntry | IAbiFunctionEntry | IAbiEventEntry | IAbiConstructorEntry
 export type ABI = IAbiEntry[]
 
 function isFunction(abiEntry: IAbiEntry): abiEntry is IAbiFunctionEntry
 {
-	return abiEntry.type == 'function'
+	return (abiEntry.type == 'function')
 }
 function isEvent(abiEntry: IAbiEntry): abiEntry is IAbiEventEntry
 {
@@ -61,7 +66,8 @@ export function isPayable(abi: ABI, methodName: string): boolean
 	let f = abi.filter(isFunction).find(x => methodSignature(x) == methodName)
 	if (!f)
 		throw "function not found"
-	return f.payable
+	
+	return f.stateMutability == 'payable'
 }
 export function getArguments(abi: ABI, methodName: string): IAbiArgument[]
 {
@@ -100,15 +106,14 @@ export function entryEquals(e1: IAbiEntry, e2: IAbiEntry): boolean
 }
 export function functionEquals(f1: IAbiFunctionEntry, f2: IAbiFunctionEntry): boolean
 {
-	let str = (f: IAbiFunctionEntry) => `${f.name}(${f.inputs.map(x => x.type)}):${f.outputs.map(x => x.type)}${
-		f.payable ? ' payable' : ''
-	}`
+	let str = (f: IAbiFunctionEntry) => `${f.name}(${f.inputs.map(x => x.type)}):${f.outputs.map(x => x.type)}${f.stateMutability}`
 	// console.log(`comparing ${str(f1)} with ${str(f2)}`)
 	if (f1.name != f2.name)
 		return false
 	
-	if (f1.payable && !f2.payable) // if reference function is payable, second should also
-		return false               // be payable. doesn't matter otherwise.
+	// TODO: temporary disabled (more research needed)
+	// if (f1.payable && !f2.payable) // if reference function is payable, second should also
+	// 	return false               // be payable. doesn't matter otherwise.
 	
 	if (!tupleEquivalent(f1.inputs, f2.inputs))
 		return false
