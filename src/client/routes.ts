@@ -19,5 +19,5 @@ export default [
   { path: '/tx', component: TxView },
   { path: '/pay/:address', component: Pay },
   { path: '/paytoaddress/:address', component: PayToAddress },
-  { path: '/contract/:blockchain/:address/call/:contract', component: ContractCall },
+  { path: '/contract/:blockchain/:address/call/:contract?', component: ContractCall },
 ]

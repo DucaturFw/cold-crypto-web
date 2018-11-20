@@ -44,6 +44,9 @@ const Wallet = ({ txs, blockchain, address }: IProps) =>
           <Link to={`/txCreation/${blockchain}/${address}`}>
             <ButtonBase>Create New Tx</ButtonBase>
           </Link>
+          <Link to={`/contract/${blockchain}/${address}/call`}>
+            <ButtonBase>Call Contract</ButtonBase>
+          </Link>
         </Column>
         <Column>
           <H1>{blockchain} Wallet</H1>
