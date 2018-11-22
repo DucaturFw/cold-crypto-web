@@ -11,6 +11,16 @@ export interface ITxSignFormData {
   data: string
 }
 
+export interface IContractSignFormData {
+  to: string
+  amount: string
+  gasPrice: string
+  gasLimit: string;
+  abi: any,
+  method: string,
+  args: []
+}
+
 export const setQr = createAction<{ key: string; value: string }>('set qr')
 export const generateQr = createAction<{ key: string; value: string }>('generate qr')
 export const setQrScanned = createAction<string | Error>('set qr scanned')
@@ -33,6 +43,8 @@ export const signTxRequest = createAction<{ data: ITxSignFormData, wallet: IWall
 export const setSignedData = createAction<string>('set signed request data')
 export const setScanResult = createAction<string | Error>('set scan result from mobile client')
 export const setTransactionError = createAction<Error>('set transaction error')
+
+export const signContractRequest = createAction<{ data: IContractSignFormData, wallet: IWallet }>('sign contract request')
 
 export const setRoutePath = createAction<match>('set route path match')
 export const setLoaderState = createAction<boolean>('set loader state')
