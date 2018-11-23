@@ -72,4 +72,48 @@ export class WebRTC extends EventEmitter {
   }
 }
 
+export class JsonRpcOverWebRtc
+{
+  public dataChannel: RTCDataChannel
+
+  lastOutgoingMsgId: number = 0
+
+  listeners: { [id: number]: (json: any) => void }
+
+  constructor(dataChannel: RTCDataChannel)
+  {
+    this.dataChannel = dataChannel
+    this.dataChannel.onmessage = this.onMessage
+  }
+  onMessage = (msg: MessageEvent) =>
+  {
+    let data = msg.data ? msg.data.toString() : ''
+    let json = JSON.parse(data)
+    let id = json.id
+    if (this.listeners[id])
+      this.listeners[id](json)
+    
+    delete this.listeners[id]
+  }
+  public async ping()
+  {
+    let response = await this.call("ping")
+    if (response != "pong")
+      throw "JSON-RPC over WebRTC: unknown ping error!"
+  }
+  public async call(method: string, ...args): Promise<any>
+  {
+    return new Promise((res, rej) =>
+    {
+      let id = this.getNextMsgId()
+      this.listeners[id] = msg => res(msg)
+      this.dataChannel.send(JSON.stringify({ id, method, params: args }))
+    })
+  }
+  getNextMsgId()
+  {
+    return this.lastOutgoingMsgId++
+  }
+}
+
 export default new WebRTC()
