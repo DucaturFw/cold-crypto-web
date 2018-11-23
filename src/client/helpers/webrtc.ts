@@ -4,6 +4,7 @@ import { handshakeServerUrl } from '../constants'
 import { IWallet } from '../reducers/walletReducer'
 import { getContractData } from '../services/ethHelper';
 import { IContractSignFormData } from '../actions';
+import { getPublicMethodNames, methodSignature, getArguments } from './eth-contracts';
 
 // TODO: add supported blockchain enum
 export const webrtcLogin = (sid: string) => {
@@ -34,13 +35,16 @@ export const signContractCall = (value: IContractSignFormData, wallet: IWallet) 
     // value: Web3.utils.toWei(value.amount),
     data: getContractData(value.abi, value.method, value.args),
   }
-  return `signContractCall|4|${JSON.stringify({wallet, tx})}`
+  const abi = {method: value.method, args: getArguments(value.abi, value.method)}
+  console.log('abi', abi)
+  return `signContractCall|4|${JSON.stringify({abi, wallet, tx})}`
 }
 
 interface IPayTx {
   to: string
   gasPrice: string | number
   amount: string | number
+  abi: any
 }
 
 interface IPayToAddressTx extends IPayTx {
