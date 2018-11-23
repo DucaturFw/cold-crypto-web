@@ -49,7 +49,7 @@ interface IPayTx {
   to: string
   gasPrice: string | number
   amount: string | number
-  abi: any
+  abi?: any
 }
 
 interface IPayToAddressTx extends IPayTx {
