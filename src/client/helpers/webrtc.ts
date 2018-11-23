@@ -1,11 +1,10 @@
 import { ITransaction, IContract } from '../reducers/webrtcReducer'
 import Web3 from 'web3'
-var ethAbi = require('ethereumjs-abi')
 import { handshakeServerUrl } from '../constants'
 import { IWallet } from '../reducers/walletReducer'
 import { getContractData, convertParamsToEth } from '../services/ethHelper';
 import { IContractSignFormData } from '../actions';
-import { getPublicMethodNames, methodSignature, getArguments, IAbiArgumentType } from './eth-contracts';
+import { getArguments } from './eth-contracts';
 
 // TODO: add supported blockchain enum
 export const webrtcLogin = (sid: string) => {
