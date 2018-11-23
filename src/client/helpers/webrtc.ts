@@ -42,7 +42,6 @@ export const signContractCall = (value: IContractSignFormData, wallet: IWallet) 
   
   const abi = {method: value.method, args }
   
-  console.log('abi', abi)
   return `signContractCall|4|${JSON.stringify({abi, wallet, tx})}`
 }
 

@@ -35,18 +35,6 @@ export interface IProps {
   wallets: IWallet[],
   signContractRequest: ({data: IContractSignFormData, wallet: IWallet}) => void,
 }
-// type IViewArgType = 'string' | 'bytes' | 'uint' | 'fixed' | 'ufixed' | 'int' | 'function' | 'address' | 'bool'
-// const abiToView = (abiType: IAbiArgumentType):{ type: IViewArgType, size?: string } =>
-// {
-//   let prefixes = ['uint', 'int', 'fixed', 'ufixed', 'bytes'] as IViewArgType[]
-//   for (let i = 0; i < prefixes.length; i++)
-//   {
-//     const prefix = prefixes[i]
-//     if (abiType.startsWith(prefix))
-//       return { type: prefix, size: abiType.replace(prefix, '') }
-//   }
-//   return { type: abiType as IViewArgType }
-// }
 
 const ContractCall = (props: IProps) => (
   <ModalLayout>
