@@ -2,7 +2,7 @@ import "jest-extended"
 
 import { start, getNode, uploadFile, downloadFile } from "./"
 
-describe('basic IPFS functionality', () =>
+describe.skip('basic IPFS functionality', () =>
 {
 	it('should start a node', async () =>
 	{
