@@ -18,7 +18,7 @@ describe('basic IPFS functionality', () =>
 		let hash = await uploadFile(content)
 		// console.log(hash)
 		expect(hash).toStartWith('Qm')
-	})
+	}, 15000)
 	it('should download a file', async () =>
 	{
 		await start()
@@ -31,5 +31,5 @@ describe('basic IPFS functionality', () =>
 		// expect(file.size).toEqual(3)
 		// expect(file.content).toBeTruthy()
 		// expect(file.content.toString()).toEqual('ABC')
-	})
+	}, 15000)
 })
