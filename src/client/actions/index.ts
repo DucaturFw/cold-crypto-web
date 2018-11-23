@@ -9,6 +9,7 @@ export interface ITxSignFormData {
   amount: string
   gasPrice: string
   data: string
+  abi: any
 }
 
 export interface IContractSignFormData {
