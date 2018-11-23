@@ -139,7 +139,6 @@ function makeContractSignRequestSaga() {
       // Wait for action in a loop
       type SignContractRequestPayload = { payload: { data: IContractSignFormData, wallet: IWallet } }
       const { payload: { data, wallet} }: SignContractRequestPayload  = yield take(signContractRequest)
-      console.log('XYUUUU', data, wallet)
       const signedData = signContractCall(data, wallet)
       console.log(signedData)
       // // Pass to react to render as qr code

@@ -12,6 +12,7 @@ export interface ITransaction {
 export interface IContract {
   nonce: number
   gasPrice: string
+  gasLimit: string
   to: string
   data: string
 }

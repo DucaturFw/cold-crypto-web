@@ -1,6 +1,6 @@
-import Web3 = require('web3');
-import { getArguments } from '../helpers/eth-contracts';
-const web3 = new Web3();
+import Web3 = require('web3')
+import { getArguments, IAbiArgumentType } from '../helpers/eth-contracts'
+const web3 = new Web3()
 
 web3.setProvider(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws'))
 
@@ -20,10 +20,14 @@ export async function sendTx(tx) {
 
 export const getContractData = (abi, method, args) => {
   const inputs = getArguments(abi, method)
-  
+
   return web3.eth.abi.encodeFunctionCall({
     name: method,
     type: 'function',
     inputs,
   }, args);
 }
+
+export const convertParamsToEth = (types: IAbiArgumentType[], params: any[]) => types
+  .map((x,i) => [x, params[i]] as [string, any])
+  .map(x => web3.eth.abi.encodeParameter(x[0], x[1]))
