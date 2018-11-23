@@ -1,9 +1,10 @@
 import { IUints, IInts, IBytes, IFixed, IUfixed } from './eth-abi-types'
 
+export type IAbiArgumentType = 'string' | 'address' | 'bool' | 'function' | IUints | IInts | IFixed | IBytes | IUfixed
 export interface IAbiArgument
 {
 	name: string
-	type: 'string' | 'address' | 'bool' | 'function' | IUints | IInts | IFixed | IBytes | IUfixed
+	type: IAbiArgumentType
 	components?: IAbiArgument[]
 }
 export interface IAbiEventInput extends IAbiArgument

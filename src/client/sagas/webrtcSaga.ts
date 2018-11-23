@@ -2,7 +2,7 @@ import { eventChannel } from 'redux-saga'
 import { call, put, take, takeEvery, all, select, fork } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
 import { parseMessage, parseJsonString } from '../helpers/json'
-import { signTransferTx } from '../helpers/webrtc'
+import { signTransferTx, signContractCall } from '../helpers/webrtc'
 import { getNonce, sendTx } from '../services/ethHelper'
 import { RTCCommands } from '../constants'
 import WebRTC from '../services/webrtc'
@@ -19,6 +19,8 @@ import {
   setTransactionError,
   signTxRequest,
   webrtcMessageReceived,
+  signContractRequest,
+  IContractSignFormData,
 } from '../actions'
 
 function* createEventChannel(rtc) {
@@ -131,6 +133,30 @@ function makeTxSignRequestSaga(webrtc: typeof WebRTC) {
   }
 }
 
+function makeContractSignRequestSaga() {
+  return function* waitForContractSignRequestSaga() {
+    while (true) {
+      // Wait for action in a loop
+      type SignContractRequestPayload = { payload: { data: IContractSignFormData, wallet: IWallet } }
+      const { payload: { data, wallet} }: SignContractRequestPayload  = yield take(signContractRequest)
+      const signedData = signContractCall(data, wallet)
+      console.log(signedData)
+      // // Pass to react to render as qr code
+      yield put(setSignedData(signedData))
+
+      // // if (webrtc.connected) webrtc.dataChannel.send(signedData)
+      // // else throw Error('WebRTC is not connected') // TODO: handle it?
+
+      const { blockchain, address } = wallet
+      yield put(push(`/txCreation/${blockchain}/${address}/sign`))
+
+      // Waiting for a qr scan result
+      // Enable multiple attempts by fork a loop
+      yield fork(waitForScanResults) // Maybe need to pass some key or props?
+    }
+  }
+}
+
 export default function* rootSaga() {
   const webrtc = WebRTC // new WebRTC()
 
@@ -139,5 +165,6 @@ export default function* rootSaga() {
     takeEvery(webrtcMessageReceived, webrtcListener),
     // fork(makeWebrtcChannelSaga(webrtc)),
     fork(makeTxSignRequestSaga(webrtc)),
+    fork(makeContractSignRequestSaga()),
   ])
 }

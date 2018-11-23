@@ -9,6 +9,14 @@ export interface ITransaction {
   value: string
 }
 
+export interface IContract {
+  nonce: number
+  gasPrice: string
+  gasLimit: string
+  to: string
+  data: string
+}
+
 const webrtcDefaultState = {
   error: '',
   isSending: false,
