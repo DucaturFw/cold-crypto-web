@@ -7,7 +7,7 @@ import { IWallet } from '../reducers/walletReducer'
 export interface ITxSignFormData {
   to: string
   amount: string
-  gasPrice: string
+  gasPrice?: string
   data: string
   abi?: any
 }

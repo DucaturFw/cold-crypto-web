@@ -18,12 +18,25 @@ export const getWalletList = () => {
 }
 
 export const signTransferTx = (value: IPayTx, wallet: IWallet) => {
-  const tx: ITransaction = {
-    gasPrice: Web3.utils.toWei(value.gasPrice, 'gwei'),
-    nonce: wallet.nonce,
-    to: value.to,
-    value: Web3.utils.toWei(value.amount),
+  let tx: ITransaction
+
+  if (wallet.blockchain === 'eth') {
+    tx = {
+      gasPrice: Web3.utils.toWei(value.gasPrice, 'gwei'),
+      nonce: wallet.nonce,
+      to: value.to,
+      value: Web3.utils.toWei(value.amount),
+    }
   }
+  
+  if(wallet.blockchain === 'eos') {
+    tx = {
+      to: value.to,
+      value: `${(+value.amount).toFixed(4) as string} EOS`,
+      ...{} as {nonce: number}
+    }
+  }
+  
   return `signTransferTx|3|${JSON.stringify({wallet, tx})}`
 }
 
@@ -47,7 +60,7 @@ export const signContractCall = (value: IContractSignFormData, wallet: IWallet) 
 
 interface IPayTx {
   to: string
-  gasPrice: string | number
+  gasPrice?: string | number
   amount: string | number
   abi?: any
 }

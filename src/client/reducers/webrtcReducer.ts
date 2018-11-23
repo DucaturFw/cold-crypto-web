@@ -4,7 +4,7 @@ import { setLastTransaction, startSendingTx } from '../actions'
 
 export interface ITransaction {
   nonce: number
-  gasPrice: string
+  gasPrice?: string
   to: string
   value: string
 }
@@ -12,7 +12,7 @@ export interface ITransaction {
 export interface IContract {
   nonce: number
   gasPrice: string
-  gasLimit: string
+  gasLimit?: string
   to: string
   data: string
 }
