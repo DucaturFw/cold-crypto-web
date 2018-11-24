@@ -6,7 +6,7 @@ const TEST = {
   "transaction":{  
      "compression":"none",
      "transaction":{  
-        "expiration":"2018-11-23T17:06:11",
+        "expiration":"2018-11-24T17:06:11",
         "ref_block_num":57300,
         "ref_block_prefix":729210420,
         "max_net_usage_words":0,

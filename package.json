@@ -21,7 +21,7 @@
     "connected-react-router": "^5.0.1",
     "emotion": "^9.2.12",
     "eos-rc-parser": "^1.0.4",
-    "eosjs": "^16.0.9",
+    "eosjs": "16.0.8",
     "express": "^4.16.3",
     "fetch-hoc": "0.5.0",
     "fs-extra": "^7.0.1",
