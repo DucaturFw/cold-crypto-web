@@ -18,6 +18,8 @@ export async function start()
 
 export async function uploadFile(data: string | Buffer): Promise<string>
 {
+	await start()
+
 	if (typeof data === "string")
 		data = node.types.Buffer.from(data)
 	
@@ -28,6 +30,8 @@ export async function uploadFile(data: string | Buffer): Promise<string>
 
 export async function downloadFile(hash: string): Promise<string>
 {
+	await start()
+	
 	let results = await node.files.get(hash)
 	// console.log(results)
 	return results[0].content.toString()
