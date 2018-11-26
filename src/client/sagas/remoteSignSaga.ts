@@ -1,8 +1,8 @@
 import { call, put, take, fork } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 
-import WebRTC from '../services/webrtc'
-import IPFS from '../services/ipfs'
+import { WebRTC } from '../services/webrtc'
+import * as ipfs from '../helpers/ipfs'
 
 import {
   setWebRtcConnectionState,
@@ -16,7 +16,6 @@ export default function* remoteSignSaga() {
   const offer = yield call(rtc.createOffer)
   const candidates = yield call(rtc.candidates)
 
-  const ipfs = new IPFS()
   const file = `${offer}\n\n\n---\n\n\n${candidates}`
   const hash = yield call(ipfs.uploadFile, file)
 
