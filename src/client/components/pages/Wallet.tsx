@@ -81,9 +81,12 @@ const Wallet = ({ txs, blockchain, address }: IProps) =>
     </Column>
   </Layout>
 
-const withFetch = fetch(({ match: { params: { address } } }) =>
+const withFetch = fetch(({ match: { params: { address, blockchain } } }) =>
+{
   /* tslint:disable:max-line-length */
-  `//api-rinkeby.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken`)
+  if(blockchain === 'eos') return 
+  return `//api-rinkeby.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken`
+})
 
 const withMapProps = mapProps(({ data, match: { params: { blockchain, address } } }) => ({
   address,

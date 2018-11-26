@@ -22,6 +22,7 @@ import {
   signContractRequest,
   IContractSignFormData,
 } from '../actions'
+import { sendEOSTx } from '../helpers/eos-helper';
 
 function* createEventChannel(rtc) {
   return eventChannel((emit) => {
@@ -52,9 +53,14 @@ function makeWebrtcChannelSaga(webrtc: typeof WebRTC) {
 }
 
 function* setWallet(wallet) {
-  const wallets = yield all(wallet.map((item) =>
-    getNonce(item.address).then((resolve) =>
-      ({ ...item, nonce: resolve }))))
+  console.log('11111', wallet)
+  const wallets = yield all(wallet.map(item => {
+    if(item.blockchain === 'eth') {
+      return getNonce(item.address).then((resolve) =>
+        ({ ...item, nonce: resolve }))
+    }
+    return item
+  }))
 
   yield put(addWallets(wallets))
 
@@ -94,9 +100,19 @@ function* waitForScanResults() {
   while (true) try {
     const { payload } = yield take(setScanResult)
     if (payload instanceof Error) throw payload
-
+    const payData = yield select((state: any) => state.wallet.signedData)
+    const blockchain = parseMessage(payData).params.wallet.blockchain
+    
     const signedTx = parseJsonString(payload.substr(3))
-    const txHash = yield call(sendTx, signedTx)
+    let txHash
+    if(blockchain === 'eth') {
+      txHash = yield call(sendTx, signedTx)  
+    }
+
+    if(blockchain === 'eos') {
+      txHash = yield call(sendEOSTx, signedTx)
+      // txHash = yield call(sendEOSTx, "702bf85b5ed1b81732e7000000000100a6823403ea3055000000572d3ccdcd010000000000ea305500000000a8ed32322e0000000000ea3055e0d9a4914d25b59b40420f000000000004454f53000000000d4a756e676c652046617563657400$SIG_K1_K5by9EKtKqjyDkErWDLwbs1SsLwf4HDDnWjMUeAfeVmPZ4ZVptDDvUyfn41vhfsHiQuHHUiKL9H3BahuGXREF1Fh6aMxhJ")
+    }
 
     // Pass a tx hash to a view
     yield put(setLastTransaction(txHash))
@@ -115,7 +131,7 @@ function makeTxSignRequestSaga(webrtc: typeof WebRTC) {
       // Wait for action in a loop
       type SignTxRequestPayload = { payload: { data: ITxSignFormData, wallet: IWallet } }
       const { payload: { data, wallet } }: SignTxRequestPayload = yield take(signTxRequest)
-      const signedData = signTransferTx(data, wallet)
+      const signedData = yield signTransferTx(data, wallet)
 
       // Pass to react to render as qr code
       yield put(setSignedData(signedData))
@@ -139,7 +155,8 @@ function makeContractSignRequestSaga() {
       // Wait for action in a loop
       type SignContractRequestPayload = { payload: { data: IContractSignFormData, wallet: IWallet } }
       const { payload: { data, wallet} }: SignContractRequestPayload  = yield take(signContractRequest)
-      const signedData = signContractCall(data, wallet)
+
+      const signedData =  yield signContractCall(data, wallet)
       console.log(signedData)
       // // Pass to react to render as qr code
       yield put(setSignedData(signedData))

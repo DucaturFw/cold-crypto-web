@@ -66,7 +66,7 @@ export default ({ onSubmit, avgWait, blockchain, blockchainPrice }: IProps) => (
                       step={1e-18.toFixed(20)}
                       value={totalPrice}
                       onChange={({ target: { value } }) => {
-                        // field('amount').set((Number(blockchainPrice) / Number(value)).toFixed(2))
+                        field('amount').set(Number(value).toFixed(4))
                       }}
                     />
                   </LabelAtop>
