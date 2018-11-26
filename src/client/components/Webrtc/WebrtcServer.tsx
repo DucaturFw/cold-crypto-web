@@ -38,10 +38,15 @@ class WebrtcServer extends React.Component<IProps> {
       if (json.method === 'ice')
         webrtc.pushIceCandidate(json.params.ice)
 
-      if (json.method === 'answer') {
-        webrtc.on('ice', (ice) => {
+      if (json.method === 'answer')
+      {
+        const sendIce = (ice) =>
+        {
           ws.send(JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'ice', params: { ice } }))
-        })
+        }
+
+        webrtc.candidates.map(sendIce)
+        webrtc.on('ice', sendIce)
 
         await webrtc.pushAnswer({ type: 'answer', sdp: json.params.answer })
 
