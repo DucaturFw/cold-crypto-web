@@ -11,7 +11,7 @@ import Row from '../atoms/Row'
 import Wallet from './Wallet'
 import ModalWindow from '../organisms/ModalWindow'
 import EthTxCreationForm from '../organisms/EthTxCreationForm'
-import EOSTxCreationForm from '../organisms/EOSTxCreationForm'
+import EosTxCreationForm from '../organisms/EosTxCreationForm'
 import TxCreationSign from '../organisms/TxCreationSign'
 import TxCreationError from '../organisms/TxCreationError'
 
@@ -52,20 +52,19 @@ const TxCreation = ({ gas, ticker, wallet, sign, blockchain }: IProps) =>
             </Row>
             <Hr />
             {
-              blockchain ==='eth'
-              ? <EthTxCreationForm
-                avgWait={ gas && gas.avgWait }
-                blockchain={ blockchain }
-                blockchainPrice={ ticker && ticker.price_usd }
-                onSubmit={(data) => sign({ data, wallet })}
-              /> 
-              : <EOSTxCreationForm
+              blockchain === 'eth'
+                ? <EthTxCreationForm
+                  avgWait={ gas && gas.avgWait }
                   blockchain={ blockchain }
                   blockchainPrice={ ticker && ticker.price_usd }
                   onSubmit={(data) => sign({ data, wallet })}
-                /> 
+                />
+                : <EosTxCreationForm
+                    blockchain={ blockchain }
+                    blockchainPrice={ ticker && ticker.price_usd }
+                    onSubmit={(data) => sign({ data, wallet })}
+                  />
             }
-            
           </ModalContainer>
         </ModalWindow>
       </>
