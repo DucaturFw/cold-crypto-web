@@ -8,16 +8,30 @@ import Wallet from './components/pages/Wallet'
 import Wallets from './components/pages/Wallets'
 import Webrtc from './components/Webrtc/WebrtcServer'
 import ContractCall from './components/pages/ContractCall'
+import Sending from './components/pages/Sending'
+
+export const CONTRACT_CALL_PATH = '/contract/:blockchain/:address/call/:contract?'
+export const HOME_PATH = '/'
+export const LOGIN_PATH = '/login'
+export const PAY_ADDRESS_PATH = '/pay/:address'
+export const PAY_TO_ADDRESS_PATH = '/paytoaddress/:address'
+export const TX_CREATION_PATH = '/txCreation/:blockchain/:address'
+export const TX_PATH = '/tx'
+export const WALLET_PATH = '/wallet/:blockchain/:address'
+export const WALLETS_PATH = '/wallets'
+export const WEBRTC_PATH = '/webrtc'
+export const SENDING_PATH = '/sending'
 
 export default [
-  { path: '/', exact: true, component: Home },
-  { path: '/login', component: Login },
-  { path: '/wallets', component: Wallets },
-  { path: '/wallet/:blockchain/:address', component: Wallet },
-  { path: '/txCreation/:blockchain/:address', component: TxCreation },
-  { path: '/webrtc', component: Webrtc },
-  { path: '/tx', component: TxView },
-  { path: '/pay/:address', component: Pay },
-  { path: '/paytoaddress/:address', component: PayToAddress },
-  { path: '/contract/:blockchain/:address/call/:contract?', component: ContractCall },
+  { path: CONTRACT_CALL_PATH, component: ContractCall },
+  { path: HOME_PATH, exact: true, component: Home },
+  { path: LOGIN_PATH, component: Login },
+  { path: PAY_ADDRESS_PATH, component: Pay },
+  { path: PAY_TO_ADDRESS_PATH, component: PayToAddress },
+  { path: TX_CREATION_PATH, component: TxCreation },
+  { path: TX_PATH, component: TxView },
+  { path: WALLET_PATH, component: Wallet },
+  { path: WALLETS_PATH, component: Wallets },
+  { path: WEBRTC_PATH, component: Webrtc },
+  { path: SENDING_PATH, component: Sending },
 ]
