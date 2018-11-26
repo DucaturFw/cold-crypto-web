@@ -1,7 +1,7 @@
 import { call, put, take, fork } from 'redux-saga/effects'
 import { eventChannel, delay } from 'redux-saga'
 
-import { WebRTC } from '../services/webrtc'
+import RTC, { WebRTC } from '../services/webrtc'
 // import { uploadFile, downloadFile } from '../helpers/ipfs'
 
 import {
@@ -12,7 +12,7 @@ import {
 } from '../actions'
 
 export default function* remoteSignSaga() {
-  const rtc = new WebRTC()
+  const rtc = RTC()
   const offer = yield call(rtc.createOffer)
   console.log({ offer })
   yield delay(5000)

@@ -1,5 +1,5 @@
 import React from 'react'
-import RTCHelper from '../../services/webrtc'
+import RTCHelper, { WebRTC } from '../../services/webrtc'
 
 import { scanAnswer } from '../../actions'
 import { Container, Centered, Column, Row } from '../shared/layout'
@@ -9,7 +9,7 @@ import Candidates from './Candidates'
 import { connect } from 'react-redux'
 
 interface IProps {
-  rpc: any
+  rpc: WebRTC
 }
 
 class Webrtc extends React.Component<IProps> {
@@ -22,7 +22,7 @@ class Webrtc extends React.Component<IProps> {
 
   componentDidMount = async () => {
     const { rpc } = this.state
-    const offer = await rpc.createOffer()
+    const offer = rpc.offer || await rpc.createOffer()
 
     this.setState({offer})
   }
