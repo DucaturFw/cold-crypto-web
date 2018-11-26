@@ -20,9 +20,9 @@ import {
   setSignedData,
   setTransactionError,
   signTxRequest,
-  webrtcMessageReceived,
   signContractRequest,
   IContractSignFormData,
+  initWebrtcConnaction,
 } from '../actions'
 
 function* createEventChannel(rtc) {
@@ -37,14 +37,17 @@ function makeWebrtcChannelSaga(webrtc: typeof WebRTC) {
     const channel = yield call(createEventChannel, webrtc)
     while (true) {
       const message = yield take(channel)
-      const { id, result } = parseMessage(message)
 
+      const { id, result } = parseMessage(message)
       switch (id) {
         case RTCCommands.getWalletList:
           yield setWallet(result)
           break
         case RTCCommands.signTransferTx:
-          yield put(scanTransaction(result))
+          yield put(setScanResult(result))
+          break
+        case RTCCommands.signContractCall:
+          yield put(setScanResult(result))
           break
         default:
           break
@@ -72,21 +75,6 @@ function* setWallet(wallet) {
     yield put(push(`/${rootPagePath}/${blockchain}/${address}`))
   } else
     yield put(push('/wallets'))
-}
-
-function* webrtcListener(action) {
-  const data = parseMessage(action.payload)
-
-  switch (data.id) {
-    case RTCCommands.getWalletList:
-      yield setWallet(data.result)
-      break
-    case RTCCommands.signTransferTx:
-      yield put(scanTransaction(data.result))
-      break
-    default:
-      break
-  }
 }
 
 function* complementWallets(action) {
@@ -133,7 +121,11 @@ function makeTxSignRequestSaga(webrtc: typeof WebRTC) {
       // else throw Error('WebRTC is not connected') // TODO: handle it?
 
       const { blockchain, address } = wallet
-      yield put(push(`/txCreation/${blockchain}/${address}/sign`))
+      if(webrtc.connected) {
+        webrtc.dataChannel.send(signedData)
+      } else {
+        yield put(push(`/txCreation/${blockchain}/${address}/sign`))
+      }
 
       // Waiting for a qr scan result
       // Enable multiple attempts by fork a loop
@@ -142,7 +134,7 @@ function makeTxSignRequestSaga(webrtc: typeof WebRTC) {
   }
 }
 
-function makeContractSignRequestSaga() {
+function makeContractSignRequestSaga(webrtc: typeof WebRTC) {
   return function* waitForContractSignRequestSaga() {
     while (true) {
       // Wait for action in a loop
@@ -154,11 +146,12 @@ function makeContractSignRequestSaga() {
       // // Pass to react to render as qr code
       yield put(setSignedData(signedData))
 
-      // // if (webrtc.connected) webrtc.dataChannel.send(signedData)
-      // // else throw Error('WebRTC is not connected') // TODO: handle it?
-
-      const { blockchain, address } = wallet
-      yield put(push(`/txCreation/${blockchain}/${address}/sign`))
+      if (webrtc.connected) {
+        webrtc.dataChannel.send(signedData)
+      } else {
+        const { blockchain, address } = wallet
+        yield put(push(`/txCreation/${blockchain}/${address}/sign`))
+      }
 
       // Waiting for a qr scan result
       // Enable multiple attempts by fork a loop
@@ -172,9 +165,8 @@ export default function* rootSaga() {
 
   yield all([
     takeEvery(scanWallets, complementWallets),
-    takeEvery(webrtcMessageReceived, webrtcListener),
-    // fork(makeWebrtcChannelSaga(webrtc)),
+    takeEvery(initWebrtcConnaction, makeWebrtcChannelSaga(webrtc)), 
     fork(makeTxSignRequestSaga(webrtc)),
-    fork(makeContractSignRequestSaga()),
+    fork(makeContractSignRequestSaga(webrtc)),
   ])
 }
