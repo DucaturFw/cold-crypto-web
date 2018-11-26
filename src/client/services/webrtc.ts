@@ -78,7 +78,7 @@ export class JsonRpcOverWebRtc
 
   lastOutgoingMsgId: number = 0
 
-  listeners: { [id: number]: (json: any) => void }
+  listeners: { [id: number]: (err: any, json: any) => void } = { }
 
   constructor(dataChannel: RTCDataChannel)
   {
@@ -89,11 +89,14 @@ export class JsonRpcOverWebRtc
   {
     let data = msg.data ? msg.data.toString() : ''
     let json = JSON.parse(data)
+    // console.log(json)
     let id = json.id
     if (this.listeners[id])
-      this.listeners[id](json)
-    
-    delete this.listeners[id]
+    {
+      let m = this.listeners[id]
+      delete this.listeners[id]
+      m(json.error, json.result)
+    }
   }
   public async ping()
   {
@@ -106,7 +109,7 @@ export class JsonRpcOverWebRtc
     return new Promise((res, rej) =>
     {
       let id = this.getNextMsgId()
-      this.listeners[id] = msg => res(msg)
+      this.listeners[id] = (err, msg) => err ? rej(err) : res(msg)
       this.dataChannel.send(JSON.stringify({ id, method, params: args }))
     })
   }
@@ -116,4 +119,6 @@ export class JsonRpcOverWebRtc
   }
 }
 
-export default new WebRTC()
+let wrtc: WebRTC
+
+export default () => (wrtc || (wrtc = new WebRTC()))

@@ -6,7 +6,7 @@ import { parseMessage, parseJsonString } from '../helpers/json'
 import { signTransferTx, signContractCall } from '../helpers/webrtc'
 import { getNonce, sendTx } from '../services/ethHelper'
 import { RTCCommands } from '../constants'
-import WebRTC from '../services/webrtc'
+import RTC, { WebRTC } from '../services/webrtc'
 import { IWallet } from '../reducers/walletReducer'
 import { sendEOSTx } from '../helpers/eos-helper'
 
@@ -32,7 +32,7 @@ function* createEventChannel(rtc) {
   })
 }
 
-function makeWebrtcChannelSaga(webrtc: typeof WebRTC) {
+function makeWebrtcChannelSaga(webrtc: WebRTC) {
   return function* webrtcChannelSaga() {
     const channel = yield call(createEventChannel, webrtc)
     while (true) {
@@ -108,7 +108,7 @@ function* waitForScanResults() {
   }
 }
 
-function makeTxSignRequestSaga(webrtc: typeof WebRTC) {
+function makeTxSignRequestSaga(webrtc: WebRTC) {
   return function* waitForTxSignRequestSaga() {
     while (true) {
       // Wait for action in a loop
@@ -165,7 +165,7 @@ function makeContractSignRequestSaga(webrtc: typeof WebRTC) {
 }
 
 export default function* rootSaga() {
-  const webrtc = WebRTC // new WebRTC()
+  const webrtc = RTC() // new WebRTC()
 
   yield all([
     takeEvery(scanWallets, complementWallets),

@@ -21,7 +21,7 @@ const webrtcDefaultState = {
   error: '',
   isSending: false,
   lastTransaction: {} as ITransaction | Error,
-  webrtc: RTC,
+  webrtc: RTC(),
 }
 
 const webrtcReducer = createReducer({}, webrtcDefaultState)
