@@ -8,6 +8,7 @@ import Wallet from './components/pages/Wallet'
 import Wallets from './components/pages/Wallets'
 import Webrtc from './components/Webrtc/WebrtcServer'
 import ContractCall from './components/pages/ContractCall'
+import Sending from './components/pages/Sending'
 
 export const CONTRACT_CALL_PATH = '/contract/:blockchain/:address/call/:contract?'
 export const HOME_PATH = '/'
@@ -19,6 +20,7 @@ export const TX_PATH = '/tx'
 export const WALLET_PATH = '/wallet/:blockchain/:address'
 export const WALLETS_PATH = '/wallets'
 export const WEBRTC_PATH = '/webrtc'
+export const SENDING_PATH = '/sending'
 
 export default [
   { path: CONTRACT_CALL_PATH, component: ContractCall },
@@ -31,4 +33,5 @@ export default [
   { path: WALLET_PATH, component: Wallet },
   { path: WALLETS_PATH, component: Wallets },
   { path: WEBRTC_PATH, component: Webrtc },
+  { path: SENDING_PATH, component: Sending },
 ]

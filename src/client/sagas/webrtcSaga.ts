@@ -44,10 +44,10 @@ function makeWebrtcChannelSaga(webrtc: typeof WebRTC) {
           yield setWallet(result)
           break
         case RTCCommands.signTransferTx:
-          yield put(setScanResult(result))
+          yield put(setScanResult(message))
           break
         case RTCCommands.signContractCall:
-          yield put(setScanResult(result))
+          yield put(setScanResult(message))
           break
         default:
           break
@@ -85,23 +85,25 @@ function* complementWallets(action) {
 }
 
 function* waitForScanResults() {
+  const payData = yield select((state: any) => state.wallet.signedData)
+  const {blockchain, address} = parseMessage(payData).params.wallet
+
   while (true) try {
     const { payload } = yield take(setScanResult)
     if (payload instanceof Error) throw payload
-    const payData = yield select((state: any) => state.wallet.signedData)
+    
     const blockchain = parseMessage(payData).params.wallet.blockchain
+    const {result: signedTx} = parseMessage(payload)
 
-    const signedTx = parseJsonString(payload.substr(3))
     const blockchainSendTxSaga = blockchain === 'eth' ? sendTx : sendEOSTx
     const txHash = yield call(blockchainSendTxSaga, signedTx)
-
     // Pass a tx hash to a view
     yield put(setLastTransaction(txHash))
     yield put(push('/tx'))
     return // exit from loop if successed
   } catch (err) {
     yield put(setTransactionError(err))
-    yield put(push('error'))
+    yield put(push(`/txCreation/${blockchain}/${address}/error`))
     // Don't use statement `return` because we will go out from the loop and can't handle other one.
   }
 }
@@ -123,6 +125,7 @@ function makeTxSignRequestSaga(webrtc: typeof WebRTC) {
       const { blockchain, address } = wallet
       if(webrtc.connected) {
         webrtc.dataChannel.send(signedData)
+        yield put(push(`/sending`))
       } else {
         yield put(push(`/txCreation/${blockchain}/${address}/sign`))
       }
@@ -142,12 +145,13 @@ function makeContractSignRequestSaga(webrtc: typeof WebRTC) {
       const { payload: { data, wallet} }: SignContractRequestPayload  = yield take(signContractRequest)
 
       const signedData =  yield signContractCall(data, wallet)
-      console.log(signedData)
+
       // // Pass to react to render as qr code
       yield put(setSignedData(signedData))
 
       if (webrtc.connected) {
         webrtc.dataChannel.send(signedData)
+        yield put(push(`/sending`))
       } else {
         const { blockchain, address } = wallet
         yield put(push(`/txCreation/${blockchain}/${address}/sign`))
