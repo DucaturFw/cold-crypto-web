@@ -156,7 +156,7 @@ function makeContractSignRequestSaga() {
       type SignContractRequestPayload = { payload: { data: IContractSignFormData, wallet: IWallet } }
       const { payload: { data, wallet} }: SignContractRequestPayload  = yield take(signContractRequest)
 
-      const signedData = signContractCall(data, wallet)
+      const signedData =  yield signContractCall(data, wallet)
       console.log(signedData)
       // // Pass to react to render as qr code
       yield put(setSignedData(signedData))

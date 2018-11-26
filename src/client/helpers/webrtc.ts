@@ -5,7 +5,7 @@ import { IWallet } from '../reducers/walletReducer'
 import { getContractData, convertParamsToEth } from '../services/ethHelper'
 import { IContractSignFormData } from '../actions'
 import { getArguments } from './eth-contracts'
-import { ITransferTx, ITxHeaders } from './eos-types'
+import { ITransferTx, ITxHeaders, IContractCall } from './eos-types'
 import { getTxHeaders } from './eos-tx-headers'
 
 
@@ -37,47 +37,82 @@ export const signTransferTx = async (value: IPayTx, wallet: IWallet) => {
   {
     let txHeaders: ITxHeaders = await getTxHeaders(wallet.chainId as string)
     tx = {
-      ...txHeaders,
-      actions: [
-        {
-          name: "transfer",
-          account: wallet.address,
-          authorization: [
-            {
-              actor: wallet.address,
-              permission: "active"
+      method: "transfer(from:name,to:name,quantity:asset,memo:string)",
+      transaction: {
+        ...txHeaders,
+        actions: [
+          {
+            name: "transfer",
+            account: wallet.address,
+            authorization: [
+              {
+                actor: wallet.address,
+                permission: "active"
+              }
+            ],
+            data: {
+              to: value.to,
+              from: wallet.address,
+              quantity: `${(+value.amount).toFixed(4) as string} EOS`,
+              memo: ''
             }
-          ],
-          data: {
-            to: value.to,
-            from: wallet.address,
-            quantity: `${(+value.amount).toFixed(4) as string} EOS`,
-            memo: ''
           }
-        }
-      ]
+        ]
+      }
     }
   }
   
   return `signTransferTx|3|${JSON.stringify({wallet, tx})}`
 }
 
-export const signContractCall = (value: IContractSignFormData, wallet: IWallet) => {
-  const tx: IContract = {
-    gasPrice: Web3.utils.toWei(value.gasPrice, 'gwei'),
-    gasLimit: value.gasLimit,
-    nonce: wallet.nonce,
-    to: value.to,
-    // value: Web3.utils.toWei(value.amount),
-    data: getContractData(value.abi, value.method, value.args),
+export const signContractCall = async (value: IContractSignFormData, wallet: IWallet) =>
+{
+  let callRequest: {abi?: {method: string, args: string[]}, wallet: IWallet, tx: IContract | IContractCall }
+  if (wallet.blockchain == 'eth')
+  {
+    const tx: IContract = {
+      gasPrice: Web3.utils.toWei(value.gasPrice, 'gwei'),
+      gasLimit: value.gasLimit,
+      nonce: wallet.nonce,
+      to: value.to,
+      // value: Web3.utils.toWei(value.amount),
+      data: getContractData(value.abi, value.method, value.args),
+    }
+  
+    const argsTypes = getArguments(value.abi, value.method).map(item => item.type)
+    const args = convertParamsToEth(argsTypes, value.args)
+    
+    const abi = {method: value.method, args }
+    callRequest = {abi, wallet, tx}
   }
-
-  const argsTypes = getArguments(value.abi, value.method).map(item => item.type)
-  const args = convertParamsToEth(argsTypes, value.args)
+  else if (wallet.blockchain == 'eos')
+  {
+    let txHeaders: ITxHeaders = await getTxHeaders(wallet.chainId as string)
+    let argNames = value.method.split('(')[1].replace(')', '').split(',').map(x => x.split(':').pop())
+    let argPairs = argNames.map((x,i) => [x, value.args[i]])
+    let argObj = argNames.reduce((acc, [key, val]) => (acc[key] = val, acc), {})
+    const tx: IContractCall = {
+      method: value.method,
+      transaction: {
+        ...txHeaders,
+        actions: [
+          {
+            name: value.method.split('(')[0],
+            account: wallet.address,
+            authorization: [
+              {
+                actor: wallet.address,
+                permission: "active"
+              }
+            ],
+            data: argObj
+          }
+        ]
+      }
+    }
+  }
   
-  const abi = {method: value.method, args }
-  
-  return `signContractCall|4|${JSON.stringify({abi, wallet, tx})}`
+  return `signContractCall|4|${JSON.stringify(callRequest)}`
 }
 
 interface IPayTx {
