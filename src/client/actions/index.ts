@@ -16,9 +16,9 @@ export interface IContractSignFormData {
   to: string
   amount: string
   gasPrice: string
-  gasLimit: string;
-  abi?: any,
-  method: string,
+  gasLimit: string
+  abi?: any
+  method: string
   args: []
 }
 
@@ -45,10 +45,16 @@ export const setSignedData = createAction<string>('set signed request data')
 export const setScanResult = createAction<string | Error>('set scan result from mobile client')
 export const setTransactionError = createAction<Error>('set transaction error')
 
-export const signContractRequest = createAction<{ data: IContractSignFormData, wallet: IWallet }>('sign contract request')
+export type ISignContractRequest = { data: IContractSignFormData, wallet: IWallet }
+export const signContractRequest = createAction<ISignContractRequest>('sign contract request')
 
 export const setRoutePath = createAction<match>('set route path match')
 export const setLoaderState = createAction<boolean>('set loader state')
 
 export type ISetTxsOfWallet = { blockchain: 'eth' | 'eos', address: string, txs: object[] }
 export const setTxsOfWallet = createAction<ISetTxsOfWallet>('set txs of wallet')
+
+export const setWebRtcConnectionState = createAction('set webrtc connecttion state')
+export const setQrAnswer = createAction('set qr answer')
+export const requestJRPC = createAction('request jrsp')
+export const setResponseJRPC = createAction('set response jrpc')
