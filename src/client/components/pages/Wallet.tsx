@@ -1,6 +1,5 @@
 import React from 'react'
-import fetch from 'fetch-hoc'
-import { compose, mapProps } from 'recompact'
+import { connect } from 'react-redux'
 import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
 
@@ -13,6 +12,8 @@ import H2 from '../atoms/H2'
 import Hr from '../atoms/Hr'
 import Column from '../atoms/Column'
 import Row from '../atoms/Row'
+
+import { IState } from '../../reducers'
 
 interface IProps {
   blockchain: string,
@@ -81,14 +82,8 @@ const Wallet = ({ txs, blockchain, address }: IProps) =>
     </Column>
   </Layout>
 
-const withFetch = fetch(({ match: { params: { address } } }) =>
-  /* tslint:disable:max-line-length */
-  `//api-rinkeby.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken`)
+const withConnect = connect(
+  ({ txs }: IState, { match: { params: { blockchain, address } } }: any) =>
+    ({ txs: txs[blockchain][address] || [], blockchain, address }))
 
-const withMapProps = mapProps(({ data, match: { params: { blockchain, address } } }) => ({
-  address,
-  blockchain,
-  txs: (data && data.result) ? data.result : [],
-}))
-
-export default compose(withFetch, withMapProps)(Wallet)
+export default withConnect(Wallet)

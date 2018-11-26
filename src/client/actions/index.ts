@@ -49,3 +49,6 @@ export const signContractRequest = createAction<{ data: IContractSignFormData, w
 
 export const setRoutePath = createAction<match>('set route path match')
 export const setLoaderState = createAction<boolean>('set loader state')
+
+export type ISetTxsOfWallet = { blockchain: 'eth' | 'eos', address: string, txs: object[] }
+export const setTxsOfWallet = createAction<ISetTxsOfWallet>('set txs of wallet')
