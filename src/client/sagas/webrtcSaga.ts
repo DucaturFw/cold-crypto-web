@@ -137,7 +137,7 @@ function makeTxSignRequestSaga(webrtc: WebRTC) {
   }
 }
 
-function makeContractSignRequestSaga(webrtc: typeof WebRTC) {
+function makeContractSignRequestSaga(webrtc: WebRTC) {
   return function* waitForContractSignRequestSaga() {
     while (true) {
       // Wait for action in a loop
