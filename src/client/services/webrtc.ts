@@ -40,13 +40,13 @@ export class WebRTC extends EventEmitter {
     this.dataChannel.onopen = this.onDataChannelOpen
     this.dataChannel.onmessage = this.onMessage
   }
-  public async waitConnection(): Promise<void> {
+  public waitConnection = async (): Promise<void> => {
     if (this.connected)
       return Promise.resolve()
 
     return new Promise<void>((res, rej) => this.on('connected', () => res()))
   }
-  public async createOffer(): Promise<RTCSessionDescriptionInit> {
+  public createOffer = async (): Promise<RTCSessionDescriptionInit> => {
     console.log(`${this.tag}createOffer`)
     this.setChannel(this.rpc.createDataChannel('chat'))
     this.offer = await this.rpc.createOffer()
@@ -63,7 +63,7 @@ export class WebRTC extends EventEmitter {
     await this.rpc.setLocalDescription(answer)
     return answer
   }
-  public async pushAnswer(answer: RTCSessionDescriptionInit) {
+  public pushAnswer = async (answer: RTCSessionDescriptionInit) => {
     console.log(`${this.tag}pushAnswer: ${JSON.stringify(answer)}`)
     await this.rpc.setRemoteDescription(answer)
   }
