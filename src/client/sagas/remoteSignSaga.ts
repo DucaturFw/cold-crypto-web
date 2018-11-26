@@ -4,6 +4,13 @@ import { eventChannel } from 'redux-saga'
 import WebRTC from '../services/webrtc'
 import IPFS from '../services/ipfs'
 
+import {
+  setWebRtcConnectionState,
+  setQrAnswer,
+  requestJRPC,
+  setResponseJRPC,
+} from '../actions'
+
 export default function* remoteSignSaga() {
   const rtc = new WebRTC()
   const offer = yield call(rtc.createOffer)
