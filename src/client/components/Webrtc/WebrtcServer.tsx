@@ -6,10 +6,11 @@ import { H1 } from '../shared/typography'
 import { initWebrtcConnaction } from '../../actions'
 import { handshakeServerUrl } from '../../constants'
 import { getWalletList, webrtcLogin } from '../../helpers/webrtc'
+import { WebRTC } from '../../services/webrtc'
 
 interface IProps {
   initWebrtcConnaction: any
-  webrtc: any
+  webrtc: WebRTC
 }
 
 class WebrtcServer extends React.Component<IProps> {
@@ -19,7 +20,7 @@ class WebrtcServer extends React.Component<IProps> {
 
   public componentDidMount = async () => {
     const { initWebrtcConnaction: initConnection, webrtc } = this.props
-    const offer = await  webrtc.createOffer()
+    const offer = webrtc.offer || await webrtc.createOffer()
     const ws = new WebSocket(handshakeServerUrl)
 
     ws.addEventListener('open', () =>
