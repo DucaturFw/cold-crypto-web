@@ -11,7 +11,7 @@ import Row from '../atoms/Row'
 import Wallet from './Wallet'
 import ModalWindow from '../organisms/ModalWindow'
 import EthTxCreationForm from '../organisms/EthTxCreationForm'
-import EosTxCreationForm from '../organisms/EosTxCreationForm'
+import EosTxCreationForm from '../organisms/EOSTxCreationForm'
 import TxCreationSign from '../organisms/TxCreationSign'
 import TxCreationError from '../organisms/TxCreationError'
 

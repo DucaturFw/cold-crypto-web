@@ -47,8 +47,8 @@ export default function* remoteSignSaga() {
   }
 }
 
-function* jsonRPCCallSaga(jrpcCall, method, data) {
-  const response = yield call(jrpcCall, method, data)
+function* jsonRPCCallSaga<T extends unknown, U extends unknown>(jrpcCall: (method: string, data: T) => U, method: string, data: T) {
+  const response: U = yield call(jrpcCall, method, data)
   // Notify store and UI about response
   yield put(setResponseJRPC({ method, data, response }))
 }
