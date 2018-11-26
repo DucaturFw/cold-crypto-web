@@ -47,17 +47,11 @@ export default ({ onSubmit, blockchain, blockchainPrice }: IProps) => (
                 <Row>
                   <LabelAtop label={blockchain}>
                     <TextInput
-                      type='number'
-                      min='0'
-                      step={1e-18.toFixed(20)}
                       { ...field('amount').bind as any }
                     />
                   </LabelAtop>
                   <LabelAtop label='usd'>
                     <TextInput
-                      type='number'
-                      min='0'
-                      step={1e-18.toFixed(20)}
                       value={totalPrice}
                       onChange={({ target: { value } }) => {
                         // field('amount').set((Number(blockchainPrice) / Number(value)).toFixed(2))
