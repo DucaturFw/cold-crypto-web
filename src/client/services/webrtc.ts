@@ -119,4 +119,6 @@ export class JsonRpcOverWebRtc
   }
 }
 
-export default new WebRTC()
+let wrtc: WebRTC
+
+export default () => (wrtc || (wrtc = new WebRTC()))

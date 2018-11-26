@@ -17,7 +17,7 @@ class Webrtc extends React.Component<IProps> {
     answer: null,
     connected: false,
     offer: '',
-    rpc: RTCHelper,
+    rpc: RTCHelper(),
   }
 
   componentDidMount = async () => {
