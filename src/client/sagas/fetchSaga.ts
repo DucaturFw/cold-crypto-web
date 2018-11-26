@@ -13,7 +13,7 @@ const makeFetchOptions = ({ body, method, authToken }: IFetchOptions = {}): Requ
   body: body ? JSON.stringify(body) : null,
   credentials: 'same-origin',
   headers: {
-    Authorization: authToken ? `Basic ${authToken}` : null,
+    'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json; charset=utf-8',
   },
   method: method || 'GET',
