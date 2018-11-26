@@ -1,15 +1,13 @@
 import { all, fork } from 'redux-saga/effects'
 
-import blockchainsSaga from './blockchainsSaga'
+import blockchains from './blockchainsSaga'
+import webRtc from './webrtcSaga'
 import routerSaga from './routerSaga'
-import walletsSaga from './walletsSaga'
-import webRtcSaga from './webrtcSaga'
 
 export default function* rootSaga() {
   yield all([
+    fork(blockchains),
+    fork(webRtc),
     fork(routerSaga),
-    fork(blockchainsSaga),
-    fork(walletsSaga),
-    fork(webRtcSaga),
   ])
 }
