@@ -6,7 +6,7 @@ import TxCreation from './components/pages/TxCreation'
 import TxView from './components/TxView'
 import Wallet from './components/pages/Wallet'
 import Wallets from './components/pages/Wallets'
-// import Webrtc from './components/Webrtc/WebrtcServer' // Don't need?
+import Webrtc from './components/Webrtc/WebrtcServer'
 import ContractCall from './components/pages/ContractCall'
 
 export const CONTRACT_CALL_PATH = '/contract/:blockchain/:address/call/:contract?'
@@ -18,6 +18,7 @@ export const TX_CREATION_PATH = '/txCreation/:blockchain/:address'
 export const TX_PATH = '/tx'
 export const WALLET_PATH = '/wallet/:blockchain/:address'
 export const WALLETS_PATH = '/wallets'
+export const WEBRTC_PATH = '/webrtc'
 
 export default [
   { path: CONTRACT_CALL_PATH, component: ContractCall },
@@ -29,4 +30,5 @@ export default [
   { path: TX_PATH, component: TxView },
   { path: WALLET_PATH, component: Wallet },
   { path: WALLETS_PATH, component: Wallets },
+  { path: WEBRTC_PATH, component: Webrtc },
 ]
