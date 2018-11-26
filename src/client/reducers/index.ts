@@ -7,6 +7,7 @@ import wallet, { IState as IStateWallet } from './walletReducer'
 import webrtc, { IState as IStateWebrtc } from './webrtcReducer'
 import errors, { IState as IStateErrors } from './errorsReducer'
 import loaderState, { IState as IStateLoader } from './loaderReducer'
+import txs, { IState as IStateTxs } from './txsReducer'
 
 export default (history: History) =>
   combineReducers({
@@ -14,6 +15,7 @@ export default (history: History) =>
     errors,
     loaderState,
     router: connectRouter(history),
+    txs,
     wallet,
     webrtc,
   })
@@ -23,6 +25,7 @@ export interface IState {
   errors: IStateErrors
   loaderState: IStateLoader
   router: RouterState
+  txs: IStateTxs
   wallet: IStateWallet
   webrtc: IStateWebrtc
 }
