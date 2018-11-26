@@ -131,7 +131,7 @@ function makeTxSignRequestSaga(webrtc: typeof WebRTC) {
       // Wait for action in a loop
       type SignTxRequestPayload = { payload: { data: ITxSignFormData, wallet: IWallet } }
       const { payload: { data, wallet } }: SignTxRequestPayload = yield take(signTxRequest)
-      const signedData = signTransferTx(data, wallet)
+      const signedData = yield signTransferTx(data, wallet)
 
       // Pass to react to render as qr code
       yield put(setSignedData(signedData))

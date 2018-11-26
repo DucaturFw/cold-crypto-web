@@ -2,9 +2,12 @@ import { ITransaction, IContract } from '../reducers/webrtcReducer'
 import Web3 from 'web3'
 import { handshakeServerUrl } from '../constants'
 import { IWallet } from '../reducers/walletReducer'
-import { getContractData, convertParamsToEth } from '../services/ethHelper';
-import { IContractSignFormData } from '../actions';
-import { getArguments } from './eth-contracts';
+import { getContractData, convertParamsToEth } from '../services/ethHelper'
+import { IContractSignFormData } from '../actions'
+import { getArguments } from './eth-contracts'
+import { ITransferTx, ITxHeaders } from './eos-types'
+import { getTxHeaders } from './eos-tx-headers'
+
 
 // TODO: add supported blockchain enum
 export const webrtcLogin = (sid: string) => {
@@ -17,10 +20,11 @@ export const getWalletList = () => {
  return `getWalletList|2|${JSON.stringify(params)}`
 }
 
-export const signTransferTx = (value: IPayTx, wallet: IWallet) => {
-  let tx: ITransaction
+export const signTransferTx = async (value: IPayTx, wallet: IWallet) => {
+  let tx: ITransaction | ITransferTx
 
-  if (wallet.blockchain === 'eth') {
+  if (wallet.blockchain === 'eth')
+  {
     tx = {
       gasPrice: Web3.utils.toWei(value.gasPrice, 'gwei'),
       nonce: wallet.nonce,
@@ -29,11 +33,29 @@ export const signTransferTx = (value: IPayTx, wallet: IWallet) => {
     }
   }
   
-  if(wallet.blockchain === 'eos') {
+  if (wallet.blockchain === 'eos')
+  {
+    let txHeaders: ITxHeaders = await getTxHeaders(wallet.chainId as string)
     tx = {
-      to: value.to,
-      value: `${(+value.amount).toFixed(4) as string} EOS`,
-      ...{} as {nonce: number}
+      ...txHeaders,
+      actions: [
+        {
+          name: "transfer",
+          account: wallet.address,
+          authorization: [
+            {
+              actor: wallet.address,
+              permission: "active"
+            }
+          ],
+          data: {
+            to: value.to,
+            from: wallet.address,
+            quantity: `${(+value.amount).toFixed(4) as string} EOS`,
+            memo: ''
+          }
+        }
+      ]
     }
   }
   
