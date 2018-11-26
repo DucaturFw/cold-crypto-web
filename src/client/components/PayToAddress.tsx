@@ -15,10 +15,10 @@ class PayToAddress extends React.Component<any> {
     blockChainPrice: 0
   }
   componentDidMount() {
-    fetch(`https://ethgasstation.info/json/ethgasAPI.json`)
+    fetch(`https://cors-anywhere.herokuapp.com/https://ethgasstation.info/json/ethgasAPI.json`)
       .then((res) => res.json())
       .then((json) => this.setState({blockChainData: json}))
-    fetch(`https://api.coinmarketcap.com/v1/ticker/ethereum/`)
+    fetch(`https://cors-anywhere.herokuapp.com/https://api.coinmarketcap.com/v1/ticker/ethereum/`)
       .then((res) => res.json())
       .then((json) => this.setState({blockChainPrice: json[0].price_usd}))
   }
