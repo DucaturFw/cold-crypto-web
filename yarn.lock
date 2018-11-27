@@ -246,7 +246,7 @@
     "@types/history" "*"
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.3.17", "@types/react@^16.4.15":
+"@types/react@*", "@types/react@^16.4.15":
   version "16.7.3"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.3.tgz#dd96b19b21c450fab7d136f71d48f4b8fc72777e"
   integrity sha512-ve/2lnXuLNaTDR1SPvsEX25m+NoNW3PMJxL2jd372UR8oJPwR5+jgtcheUoN27O+qKLFmQy0y0YKRwZcwtny3w==
@@ -2320,11 +2320,6 @@ decompress@^4.0.0:
     pify "^2.3.0"
     strip-dirs "^2.0.0"
 
-deep-equal@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
-  integrity sha1-9dJgKStmDghO/0zbyfCK0yR0SLU=
-
 deep-extend@^0.6.0, deep-extend@~0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
@@ -3613,17 +3608,6 @@ fuse-concat-with-sourcemaps@^1.0.5:
   integrity sha512-tKsRJIxn9tU3IH8JHMwFhGbObqkDKXhNKOvcM+QyflAlYb2EgOvIQe8D6WB/cocA3puldHatsp9SN5SKryasrw==
   dependencies:
     source-map "^0.6.1"
-
-fuse-react@^1.0.21:
-  version "1.0.21"
-  resolved "https://registry.yarnpkg.com/fuse-react/-/fuse-react-1.0.21.tgz#0fd33c33152ed57867d5b39412d6e10136ece829"
-  integrity sha512-DouNpQ5z5E9nsraJpSYzEES8CPw+OblKjMnNYbHs1d0omKu2cbGhximIKX20ynULC8kYbORmNw1/VFBT/LuUkg==
-  dependencies:
-    "@types/react" "^16.3.17"
-    deep-equal "^1.0.1"
-    path-to-regexp "^2.2.1"
-    react "*"
-    react-dom "*"
 
 gar@^1.0.2:
   version "1.0.3"
@@ -7941,11 +7925,6 @@ path-to-regexp@^1.7.0:
   dependencies:
     isarray "0.0.1"
 
-path-to-regexp@^2.2.1:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-2.4.0.tgz#35ce7f333d5616f1c1e1bfe266c3aba2e5b2e704"
-  integrity sha512-G6zHoVqC6GGTQkZwF4lkuEyMbVOjoBKAEybQUypI1WTkqinCOrq2x6U2+phkJ1XsEMTy4LjtwPI7HW+NVrRR2w==
-
 path-type@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-1.1.0.tgz#59c44f7ee491da704da415da5a4070ba4f8fe441"
@@ -8712,7 +8691,7 @@ react-display-name@^0.2.4:
   resolved "https://registry.yarnpkg.com/react-display-name/-/react-display-name-0.2.4.tgz#e2a670b81d79a2204335510c01246f4c92ff12cf"
   integrity sha512-zvU6iouW+SWwHTyThwxGICjJYCMZFk/6r/+jmOdC7ntQoPlS/Pqb81MkxaMf2bHTSq9TN3K3zX2/ayMW/jCtyA==
 
-react-dom@*, react-dom@^16.5.2:
+react-dom@^16.5.2:
   version "16.6.3"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.6.3.tgz#8fa7ba6883c85211b8da2d0efeffc9d3825cccc0"
   integrity sha512-8ugJWRCWLGXy+7PmNh8WJz3g1TaTUt1XyoIcFN+x0Zbkoz+KKdUyx1AQLYJdbFXjuF41Nmjn5+j//rxvhFjgSQ==
@@ -8798,7 +8777,7 @@ react-router@^4.4.0-beta.6:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react@*, react@^16.3.2, react@^16.5.2:
+react@^16.3.2, react@^16.5.2:
   version "16.6.3"
   resolved "https://registry.yarnpkg.com/react/-/react-16.6.3.tgz#25d77c91911d6bbdd23db41e70fb094cc1e0871c"
   integrity sha512-zCvmH2vbEolgKxtqXL2wmGCUxUyNheYn/C+PD1YAjfxHC54+MhdruyhO7QieQrYsYeTxrn93PM2y0jRH1zEExw==
@@ -9204,7 +9183,7 @@ resolve@1.1.7:
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
   integrity sha1-IDEU2CrSxe2ejgQRs5ModeiJ6Xs=
 
-resolve@^1.8.1:
+resolve@1.x, resolve@^1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.8.1.tgz#82f1ec19a423ac1fbd080b0bab06ba36e84a7a26"
   integrity sha512-AicPrAC7Qu1JxPCZ9ZgCZlY35QgFnNqc+0LtbRNxnVw4TXvjQ72wnuL9JQcEBgXkI9JM8MsT9kaQoHcpCRJOYA==
@@ -10426,10 +10405,10 @@ truncate-utf8-bytes@^1.0.0:
   dependencies:
     utf8-byte-length "^1.0.1"
 
-ts-jest@^23.10.4:
-  version "23.10.4"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-23.10.4.tgz#a7a953f55c9165bcaa90ff91014a178e87fe0df8"
-  integrity sha512-oV/wBwGUS7olSk/9yWMiSIJWbz5xO4zhftnY3gwv6s4SMg6WHF1m8XZNBvQOKQRiTAexZ9754Z13dxBq3Zgssw==
+ts-jest@^23.10.5:
+  version "23.10.5"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-23.10.5.tgz#cdb550df4466a30489bf70ba867615799f388dd5"
+  integrity sha512-MRCs9qnGoyKgFc8adDEntAOP64fWK1vZKnOYU1o2HxaqjdJvGqmkLCPCnVq1/If4zkUmEjKPnCiUisTrlX2p2A==
   dependencies:
     bs-logger "0.x"
     buffer-from "1.x"
@@ -10437,6 +10416,7 @@ ts-jest@^23.10.4:
     json5 "2.x"
     make-error "1.x"
     mkdirp "0.x"
+    resolve "1.x"
     semver "^5.5"
     yargs-parser "10.x"
 
