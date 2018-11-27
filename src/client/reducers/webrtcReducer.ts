@@ -1,6 +1,6 @@
 import { createReducer } from 'redux-act'
 import RTC from '../services/webrtc'
-import { setLastTransaction, startSendingTx, setWebRtcConnectionSid } from '../actions'
+import { setLastTransaction, setWebRtcConnectionSid } from '../actions'
 
 export interface ITransaction {
   nonce: number
@@ -35,11 +35,6 @@ webrtcReducer.on(setLastTransaction, (state, payload) => {
     lastTransaction: isErr ? null : payload,
   }
 })
-
-webrtcReducer.on(startSendingTx, (state, payload) => ({
-  ...state,
-  isSending: payload,
-}))
 
 webrtcReducer.on(setWebRtcConnectionSid, (state, payload) => ({
   ...state,

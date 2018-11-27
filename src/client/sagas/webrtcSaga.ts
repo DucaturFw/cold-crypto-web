@@ -13,7 +13,6 @@ import { sendEOSTx } from '../helpers/eos-helper'
 import {
   addWallets,
   ITxSignFormData,
-  scanTransaction,
   scanWallets,
   setLastTransaction,
   setScanResult,
