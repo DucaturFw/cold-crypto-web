@@ -1,5 +1,5 @@
 import Web3 = require('web3')
-import { getArguments, IAbiArgumentType } from '../helpers/eth-contracts'
+import { getArguments, IAbiArgumentType } from './eth-contracts'
 const web3 = new Web3()
 
 web3.setProvider(new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws'))

@@ -1,7 +1,7 @@
 import "jest-extended"
 
 import Web3 = require('web3')
-import { convertParamsToEth } from '../services/ethHelper'
+import { convertParamsToEth } from './ethHelper'
 
 describe('eth encode', () =>
 {
