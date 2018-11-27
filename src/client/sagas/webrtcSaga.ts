@@ -4,7 +4,7 @@ import { push } from 'connected-react-router'
 
 import { parseMessage, parseJsonString } from '../helpers/json'
 import { signTransferTx, signContractCall } from '../helpers/webrtc'
-import { getNonce, sendTx } from '../services/ethHelper'
+import { getNonce, sendTx } from '../helpers/ethHelper'
 import { RTCCommands } from '../constants'
 import RTC, { WebRTC } from '../services/webrtc'
 import { IWallet } from '../reducers/walletReducer'
@@ -87,6 +87,10 @@ function* complementWallets(action) {
 function* waitForScanResults() {
   const payData = yield select((state: any) => state.wallet.signedData)
   const {blockchain, address} = parseMessage(payData).params.wallet
+  const test = parseMessage(payData)
+  console.log('====================================');
+  console.log(test);
+  console.log('====================================');
 
   while (true) try {
     const { payload } = yield take(setScanResult)
