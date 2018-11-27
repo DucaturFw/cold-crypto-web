@@ -32,7 +32,7 @@ export const scanTransaction = createAction<any | Error>('scan transaction')
 export const startSendingTx = createAction<boolean>('start transaction')
 
 export const scanAnswer = createAction<RTCSessionDescriptionInit | Error>('scan answer')
-export const initWebrtcConnaction = createAction('success rtc connection')
+export const initWebrtcConnection = createAction('success rtc connection')
 export const webrtcMessageReceived = createAction<string>('message received')
 export const setLastTransaction = createAction<any | Error>('set last transaction')
 
