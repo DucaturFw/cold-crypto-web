@@ -11,6 +11,7 @@
     "build": "node fuse dist",
     "test:tsc": "tsc --noEmit -p src",
     "test:jest": "jest --forceExit",
+    "test:cypress": "cypress open",
     "test": "yarn test:tsc && yarn test:jest"
   },
   "dependencies": {
