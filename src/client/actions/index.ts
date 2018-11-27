@@ -33,9 +33,10 @@ export const startSendingTx = createAction<boolean>('start transaction')
 
 export const scanAnswer = createAction<RTCSessionDescriptionInit | Error>('scan answer')
 export const initWebrtcConnection = createAction('success rtc connection')
+export const setWebRtcConnectionSid = createAction<string>('set webrtc connection sid')
 export const webrtcMessageReceived = createAction<string>('message received')
 export const setLastTransaction = createAction<any | Error>('set last transaction')
-
+export const webrtcConnectionReady = createAction('webrtc connection is ready')
 export const setPayData = createAction<any>('set pay data')
 
 export const setBlockchainGasInfo = createAction<{ key: string, value: IStateGasEth }>('set blockchain gas info')

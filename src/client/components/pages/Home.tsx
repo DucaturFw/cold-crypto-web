@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import ModalLayout from '../layouts/Modal'
 import H2 from '../atoms/H2'
@@ -10,10 +11,11 @@ import TextInput from '../atoms/TextInput'
 import Row from '../atoms/Row'
 import Column from '../atoms/Column'
 import Link from '../atoms/Link'
-
 import SupportedCurrenciesList from '../SupportedCurrenciesList'
 
-export default () => (
+import { IState } from '../../reducers'
+
+const Home = ({ sid }: { sid: IState['webrtc']['sid'] }) => (
   <ModalLayout>
     <H2>Welcome Back!</H2>
     <H3>Sign in to your wallet below</H3>
@@ -42,5 +44,10 @@ export default () => (
         </Row>
       </Column>
     </Row>
+    <Hr />
+    { sid && <small>Connected as <mark>{sid}</mark></small> }
   </ModalLayout>
 )
+
+const withConnect = connect(({ webrtc: { sid } }: IState) => ({ sid }))
+export default withConnect(Home)
