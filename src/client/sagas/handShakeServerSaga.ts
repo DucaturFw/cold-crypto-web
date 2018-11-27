@@ -1,7 +1,7 @@
 import { call, take, put, cancelled } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 
-import RTC, { WebRTC } from '../services/webrtc'
+import { WebRTC } from '../services/webrtc'
 import { getWalletList } from '../helpers/webrtc'
 import { handshakeServerUrl } from '../constants'
 import { webrtcConnectionReady, setWebRtcConnectionSid } from '../actions'
@@ -36,10 +36,8 @@ function* answerSaga(ws: WebSocket, rtc: WebRTC, answer: string) {
   return ws.close()
 }
 
-export default function* handshakeServerSaga() {
+export default function* handshakeServerSaga(rtc: WebRTC, offer: { sdp: string }) {
   const ws = new WebSocket(handshakeServerUrl)
-  const rtc = RTC()
-  const offer = yield call(rtc.createOffer)
   const openChan = onOpenChannel(ws)
   const messageChan = onMessageChannel(ws)
 

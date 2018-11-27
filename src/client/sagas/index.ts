@@ -5,7 +5,6 @@ import remoteSignSaga from './remoteSignSaga'
 import routerSaga from './routerSaga'
 import walletsSaga from './walletsSaga'
 import webRtcSaga from './webrtcSaga'
-import handShakeServerSaga from './handShakeServerSaga'
 
 export default function* rootSaga() {
   yield fork(routerSaga)
@@ -15,6 +14,5 @@ export default function* rootSaga() {
     fork(remoteSignSaga),
     fork(walletsSaga),
     fork(webRtcSaga),
-    fork(handShakeServerSaga),
   ])
 }

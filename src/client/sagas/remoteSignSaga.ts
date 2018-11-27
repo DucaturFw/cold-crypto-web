@@ -1,24 +1,39 @@
-import { call, put, take, fork } from 'redux-saga/effects'
+import { call, put, take, fork, race } from 'redux-saga/effects'
 import { eventChannel, delay } from 'redux-saga'
 
 import RTC, { WebRTC } from '../services/webrtc'
 // import { uploadFile, downloadFile } from '../helpers/ipfs'
+
+import handshakeServerSaga from './handShakeServerSaga'
 
 import {
   setWebRtcConnectionState,
   setQrAnswer,
   requestJRPC,
   setResponseJRPC,
+  setWebRtcConnectionSid,
 } from '../actions'
 
 export default function* remoteSignSaga() {
   const rtc = RTC()
   const offer = yield call(rtc.createOffer)
-  console.log({ offer })
-  yield delay(5000)
-  const candidates = rtc.candidates
-  console.log({ candidates })
 
+  // Init WebRTC connection
+  yield fork(handshakeServerSaga, rtc, offer)
+
+  // Choose method of login based on webrtc connection
+  const { qrMethod, webrtcMethod } = yield race({
+    qrMethod: delay(3000),
+    webrtcMethod: take(setWebRtcConnectionSid),
+  })
+
+  if (webrtcMethod)
+    console.log('Ready to webrtc connection')
+
+  if (qrMethod)
+    console.log('No webrtc connection, use QR login instead')
+
+  // const candidates = rtc.candidates
   // const ipfs = new IPFS()
   // const file = `${offer}\n\n\n---\n\n\n${candidates}`
   // const hash = yield call(uploadFile, file)
@@ -47,7 +62,11 @@ export default function* remoteSignSaga() {
   }
 }
 
-function* jsonRPCCallSaga<T extends unknown, U extends unknown>(jrpcCall: (method: string, data: T) => U, method: string, data: T) {
+function* jsonRPCCallSaga<T extends unknown, U extends unknown>(
+  jrpcCall: (method: string, data: T) => U,
+  method: string,
+  data: T,
+) {
   const response: U = yield call(jrpcCall, method, data)
   // Notify store and UI about response
   yield put(setResponseJRPC({ method, data, response }))
