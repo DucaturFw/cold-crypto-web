@@ -88,9 +88,6 @@ function* waitForScanResults() {
   const payData = yield select((state: any) => state.wallet.signedData)
   const {blockchain, address} = parseMessage(payData).params.wallet
   const test = parseMessage(payData)
-  console.log('====================================');
-  console.log(test);
-  console.log('====================================');
 
   while (true) try {
     const { payload } = yield take(setScanResult)
