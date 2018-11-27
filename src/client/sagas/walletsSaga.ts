@@ -5,10 +5,10 @@ import { WALLET_PATH } from '../routes'
 import { setTxsOfWallet, setRoutePath } from '../actions'
 
 const makeTxsRequestPathOfEth = (address: string) =>
-  `//api-rinkeby.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken`
+  `https://cors-anywhere.herokuapp.com/https://api-rinkeby.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken`
 
 const makeTxsRequestPathOfEos = (address: string) =>
-  `//api.eospark.com/api?module=account&action=get_account_related_trx_info&apikey=a9564ebc3289b7a14551baf8ad5ec60a&account=${address}&page=1&size=999`
+  `https://cors-anywhere.herokuapp.com/https://api.eospark.com/api?module=account&action=get_account_related_trx_info&apikey=a9564ebc3289b7a14551baf8ad5ec60a&account=${address}&page=1&size=999`
 
 function* fetchTxOfWallet(blockchain: 'eth' | 'eos', address: string) {
   const txsRequestPath = blockchain === 'eth'
