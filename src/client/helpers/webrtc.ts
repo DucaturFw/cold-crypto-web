@@ -43,7 +43,7 @@ export const signTransferTx = async (value: IPayTx, wallet: IWallet) => {
         actions: [
           {
             name: "transfer",
-            account: wallet.address,
+            account: "eosio.token",
             authorization: [
               {
                 actor: wallet.address,
@@ -98,7 +98,7 @@ export const signContractCall = async (value: IContractSignFormData, wallet: IWa
         actions: [
           {
             name: value.method.split('(')[0],
-            account: wallet.address,
+            account: value.to,
             authorization: [
               {
                 actor: wallet.address,
