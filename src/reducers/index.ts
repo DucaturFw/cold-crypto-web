@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import { IWallet } from '../model'
-import * as walletReducder from './wallet'
+import * as wallet from './wallet'
+import * as auth from './auth'
 import { RouterState, connectRouter } from 'connected-react-router'
 
 export interface IRootState {
@@ -10,7 +11,8 @@ export interface IRootState {
 
 const rootReducer = (history: any) =>
   combineReducers({
-    ...walletReducder,
+    ...wallet,
+    ...auth,
     router: connectRouter(history),
   })
 
