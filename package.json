@@ -7,6 +7,7 @@
   "dependencies": {
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1"
   },
   "scripts": {
@@ -14,7 +15,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "analyze": "source-map-explorer build/static/js/main.*.js",
+    "analyze": "source-map-explorer build/static/js/main.*",
     "lint": "tslint 'src/**/*.{ts, tsx}'"
   },
   "eslintConfig": {
@@ -31,6 +32,7 @@
     "@types/node": "^10.12.10",
     "@types/react": "^16.7.8",
     "@types/react-dom": "^16.0.11",
+    "@types/react-router-dom": "^4.3.1",
     "prettier": "^1.15.2",
     "source-map-explorer": "^1.6.0",
     "tslint": "^5.11.0",
