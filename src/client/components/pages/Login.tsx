@@ -33,7 +33,7 @@ const Login = (props: IProps) => (
       <ButtonClose />
     </Row>
     <Hr/>
-    { props.sid ?
+    { !props.sid ?
       <Row>
         <Column>
           <Centered>
