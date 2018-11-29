@@ -53,7 +53,7 @@ export class WebRTC extends EventEmitter {
     await this.rpc.setLocalDescription(this.offer)
     return this.offer
   }
-  public async pushOffer(offer: RTCSessionDescriptionInit): Promise<RTCSessionDescriptionInit> {
+  public pushOffer = async (offer: RTCSessionDescriptionInit): Promise<RTCSessionDescriptionInit> => {
     console.log(`${this.tag}pushOffer: ${JSON.stringify(offer)}`)
     if (this.offer)
       throw new Error('can\'t push offer to already inited rtc connection!')
@@ -67,7 +67,7 @@ export class WebRTC extends EventEmitter {
     console.log(`${this.tag}pushAnswer: ${JSON.stringify(answer)}`)
     await this.rpc.setRemoteDescription(answer)
   }
-  public async pushIceCandidate(candidate: RTCIceCandidateInit | RTCIceCandidate) {
+  public pushIceCandidate = async (candidate: RTCIceCandidateInit | RTCIceCandidate) => {
     await this.rpc.addIceCandidate(candidate)
   }
 }

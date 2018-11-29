@@ -13,7 +13,6 @@ import { sendEOSTx } from '../helpers/eos-helper'
 import {
   addWallets,
   ITxSignFormData,
-  scanTransaction,
   scanWallets,
   setLastTransaction,
   setScanResult,
@@ -22,7 +21,7 @@ import {
   signTxRequest,
   signContractRequest,
   IContractSignFormData,
-  initWebrtcConnaction,
+  initWebrtcConnection,
 } from '../actions'
 
 function* createEventChannel(rtc) {
@@ -170,7 +169,7 @@ export default function* rootSaga() {
 
   yield all([
     takeEvery(scanWallets, complementWallets),
-    takeEvery(initWebrtcConnaction, makeWebrtcChannelSaga(webrtc)), 
+    takeEvery(initWebrtcConnection, makeWebrtcChannelSaga(webrtc)), 
     fork(makeTxSignRequestSaga(webrtc)),
     fork(makeContractSignRequestSaga(webrtc)),
   ])

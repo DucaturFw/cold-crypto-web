@@ -3,13 +3,13 @@ import {connect} from 'react-redux'
 import QRCode from 'qrcode.react'
 import { Container, Centered, Column, Row, Header } from '../shared/layout'
 import { H1 } from '../shared/typography'
-import { initWebrtcConnaction } from '../../actions'
+import { initWebrtcConnection } from '../../actions'
 import { handshakeServerUrl } from '../../constants'
 import { getWalletList, webrtcLogin } from '../../helpers/webrtc'
 import { WebRTC } from '../../services/webrtc'
 
 interface IProps {
-  initWebrtcConnaction: any
+  initWebrtcConnection: any
   webrtc: WebRTC
 }
 
@@ -19,7 +19,7 @@ class WebrtcServer extends React.Component<IProps> {
   }
 
   public componentDidMount = async () => {
-    const { initWebrtcConnaction: initConnection, webrtc } = this.props
+    const { initWebrtcConnection: initConnection, webrtc } = this.props
     const offer = webrtc.offer || await webrtc.createOffer()
     const ws = new WebSocket(handshakeServerUrl)
 
@@ -86,4 +86,4 @@ class WebrtcServer extends React.Component<IProps> {
   }
 }
 
-export default connect( (state: any) => ({ webrtc: state.webrtc.webrtc }), { initWebrtcConnaction } )(WebrtcServer)
+export default connect( (state: any) => ({ webrtc: state.webrtc.webrtc }), { initWebrtcConnection } )(WebrtcServer)
