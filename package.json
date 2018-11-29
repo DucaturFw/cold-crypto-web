@@ -1,6 +1,9 @@
 {
-  "name": "hello-tsx",
-  "version": "0.1.0",
+  "name": "cold-crypto-web",
+  "version": "0.0.1",
+  "repository": "git@github.com:zlumer/cold-crypto-web.git",
+  "author": "Ducatur",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "@types/jest": "^23.3.10",
