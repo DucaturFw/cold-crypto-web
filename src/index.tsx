@@ -1,12 +1,29 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import './index.css'
-import App from './App'
-// import * as serviceWorker from './serviceWorker'
+import { routerMiddleware, ConnectedRouter } from 'connected-react-router'
+import { ThemeProvider } from 'emotion-theming'
+import { createBrowserHistory } from 'history'
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { applyMiddleware, compose, createStore } from 'redux'
+import { theme } from './config/emotion'
+import rootReducer from './reducers'
+import Routes from './routes'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+const history = createBrowserHistory()
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-// serviceWorker.unregister()
+const enhancers = [applyMiddleware(routerMiddleware(history))]
+const composeEnhancer: typeof compose =
+  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+const store = createStore(rootReducer(history), composeEnhancer(...enhancers))
+
+ReactDOM.render(
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <ThemeProvider theme={theme}>
+        <Routes />
+      </ThemeProvider>
+    </ConnectedRouter>
+  </Provider>,
+  document.getElementById('root') as HTMLElement
+)
