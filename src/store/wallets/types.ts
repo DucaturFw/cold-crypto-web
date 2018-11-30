@@ -20,16 +20,10 @@ export enum WalletsActionTypes {
   ADD = '@@wallets/ADD',
 }
 
-// Declare state types with `readonly` modifier to get compile time immutability.
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
 export interface IWalletsState {
   readonly item: IWalletEth | IWalletEos
   readonly items: IWalletEth[] | IWalletEos[]
   readonly errors?: string
   readonly loading: boolean
-}
-
-export enum WalletsActionType {
-  ADD_WALLET,
-  REMOVE_WALLET,
 }

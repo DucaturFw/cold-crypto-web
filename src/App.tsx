@@ -6,7 +6,7 @@ import { History } from 'history'
 import { ThemeProvider } from 'emotion-theming'
 
 import Routes from './routes'
-import { ApplicationState } from './store'
+import { IApplicationState } from './store'
 import { theme } from './styles/theme'
 import './styles'
 
@@ -15,7 +15,7 @@ interface IPropsFromDispatch {
 }
 
 interface IOwnProps {
-  store: Store<ApplicationState>
+  store: Store<IApplicationState>
   history: History
 }
 

@@ -1,14 +1,18 @@
 import { combineReducers, Dispatch, Action, AnyAction } from 'redux'
 import { all, fork } from 'redux-saga/effects'
+import { connectRouter, RouterState } from 'connected-react-router'
 
 import walletsSaga from './wallets/sagas'
 import { walletsReducer } from './wallets/reducer'
 import { IWalletsState } from './wallets/types'
-import { connectRouter, RouterState } from 'connected-react-router'
+
+import { authReducer } from './auth/reducer'
+import { IAuthState } from './auth/types'
 
 // top-level state
-export interface ApplicationState {
+export interface IApplicationState {
   wallets: IWalletsState
+  auth: IAuthState
   router: RouterState
 }
 
@@ -17,8 +21,9 @@ export interface ConnectedReduxProps<A extends Action = AnyAction> {
 }
 
 export const rootReducer = (history: any) =>
-  combineReducers<ApplicationState>({
+  combineReducers<IApplicationState>({
     wallets: walletsReducer,
+    auth: authReducer,
     router: connectRouter(history),
   })
 
