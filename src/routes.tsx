@@ -3,7 +3,7 @@ import { Switch, Redirect } from 'react-router-dom'
 import { DefaultLayout, MainLayout } from './components/layouts'
 import { Login, Home, Wallet } from './pages'
 
-const Routes: React.StatelessComponent<{}> = () => {
+const Routes: React.SFC = () => {
   return (
     <Switch>
       <DefaultLayout exact path="/" component={Home} />>

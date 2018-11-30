@@ -1,29 +1,20 @@
-import { routerMiddleware, ConnectedRouter } from 'connected-react-router'
-import { ThemeProvider } from 'emotion-theming'
-import { createBrowserHistory } from 'history'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import { applyMiddleware, compose, createStore } from 'redux'
-import { theme } from './config/emotion'
-import rootReducer from './reducers'
-import Routes from './routes'
+import { createHashHistory } from 'history'
 
-const history = createBrowserHistory()
+import { App } from './App'
+import * as serviceWorker from './serviceWorker'
+import configureStore from './configureStore'
 
-const enhancers = [applyMiddleware(routerMiddleware(history))]
-const composeEnhancer: typeof compose =
-  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const history = createHashHistory()
 
-const store = createStore(rootReducer(history), composeEnhancer(...enhancers))
+const initialState = window.initialReduxState
+const store = configureStore(history, initialState)
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <ThemeProvider theme={theme}>
-        <Routes />
-      </ThemeProvider>
-    </ConnectedRouter>
-  </Provider>,
-  document.getElementById('root') as HTMLElement
+  <App store={store} history={history} />,
+  document.getElementById('root')
 )
+
+// unregister() or register()
+serviceWorker.unregister()
