@@ -1,4 +1,6 @@
 import * as React from 'react'
+import QRCode from 'qrcode.react'
+import QrReader from 'react-qr-reader'
 import {
   Row,
   H2,
@@ -28,11 +30,9 @@ export const Login: React.SFC<{}> = () => (
           <H2>Scan QR Code</H2>
         </Centered>
         <Centered style={{ display: 'flex' }}>
-          {/* <QRCode
-          value={ getWalletList() }
-          renderAs='svg'
-          style={{width: '30vh', height: '30vh'}}
-        /> */}
+          <div style={{ height: '30vh', width: '30vh' }}>
+            <QRCode value={'test'} renderAs="svg" />
+          </div>
         </Centered>
       </Column>
       <Column style={{ width: '50%' }}>
@@ -40,12 +40,12 @@ export const Login: React.SFC<{}> = () => (
           <H2>Show QR Code</H2>
         </Centered>
         <Centered style={{ display: 'flex' }}>
-          {/* <QrReader
-          delay={300}
-          onScan={(result: string) => result && props.scanWallets(parseJsonString(result.substr(3)))}
-          onError={(error: string) => props.scanWallets(Error(error))}
-          style={{ width: '30vh' }}
-        /> */}
+          <QrReader
+            delay={300}
+            onScan={(result: string | null) => result && console.log(result)}
+            onError={(error: string) => console.log(error)}
+            style={{ width: '30vh' }}
+          />
         </Centered>
       </Column>
     </Row>
