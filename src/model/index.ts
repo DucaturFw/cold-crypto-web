@@ -1,13 +1,8 @@
-export interface IWallet {
-  id: number
-}
-
 export interface IAuth {
   isAuth: boolean
 }
 
 export enum ActionType {
-  ADD_WALLET,
   SUCCESS_AUTH,
 }
 

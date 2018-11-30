@@ -10,8 +10,9 @@ import {
   Centered,
   Hr,
 } from '../components/atoms'
+import { connect } from 'react-redux'
 
-export const Login: React.SFC<{}> = () => (
+const LoginPage: React.SFC<{}> = () => (
   <React.Fragment>
     <Row>
       <Column>
@@ -51,3 +52,8 @@ export const Login: React.SFC<{}> = () => (
     </Row>
   </React.Fragment>
 )
+
+export const Login = connect(
+  null,
+  null
+)(LoginPage)

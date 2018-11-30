@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux'
-import { IWallet } from '../model'
 import * as wallet from './wallet'
 import * as auth from './auth'
 import { RouterState, connectRouter } from 'connected-react-router'
+import { IWalletsState } from '../model/wallets'
 
 export interface IRootState {
-  wallet: IWallet
+  wallet: IWalletsState
   router: RouterState
 }
 
