@@ -4,7 +4,7 @@ export default function callApi(
   path: string,
   data?: any
 ) {
-  return fetch(url + '/api' + path, {
+  return fetch(url + path, {
     method,
     headers: {
       Accept: 'application/json',

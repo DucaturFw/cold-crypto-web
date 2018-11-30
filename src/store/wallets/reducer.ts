@@ -19,10 +19,13 @@ const reducer: Reducer<IWalletsState> = (state = initialState, action) => {
       return { ...state, loading: true }
     }
     case WalletsActionTypes.FETCH_SUCCESS: {
-      return { ...state, loading: false, data: action.payload }
+      return { ...state, loading: false, item: action.payload }
     }
     case WalletsActionTypes.FETCH_ERROR: {
       return { ...state, loading: false, errors: action.payload }
+    }
+    case WalletsActionTypes.ADD_WALLET: {
+      return { ...state, item: action.payload }
     }
     default: {
       return state

@@ -9,14 +9,19 @@ import { IWalletsState } from './wallets/types'
 import { authReducer } from './auth/reducer'
 import { IAuthState } from './auth/types'
 
+import qrcodeSaga from './qrcode/sagas'
+import { qrcodeReducer } from './qrcode/reducer'
+import { IQrcodeState } from './qrcode/types'
+
 // top-level state
 export interface IApplicationState {
   wallets: IWalletsState
   auth: IAuthState
+  qrcode: IQrcodeState
   router: RouterState
 }
 
-export interface ConnectedReduxProps<A extends Action = AnyAction> {
+export interface IConnectedReduxProps<A extends Action = AnyAction> {
   dispatch: Dispatch<A>
 }
 
@@ -24,9 +29,10 @@ export const rootReducer = (history: any) =>
   combineReducers<IApplicationState>({
     wallets: walletsReducer,
     auth: authReducer,
+    qrcode: qrcodeReducer,
     router: connectRouter(history),
   })
 
 export function* rootSaga() {
-  yield all([fork(walletsSaga)])
+  yield all([fork(walletsSaga), fork(qrcodeSaga)])
 }

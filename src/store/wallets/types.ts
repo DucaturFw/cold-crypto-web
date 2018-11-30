@@ -17,7 +17,8 @@ export enum WalletsActionTypes {
   FETCH_REQUEST = '@@wallets/FETCH_DATA_REQUEST',
   FETCH_SUCCESS = '@@wallets/FETCH_DATA_SUCCESS',
   FETCH_ERROR = '@@wallets/FETCH_DATA_ERROR',
-  ADD = '@@wallets/ADD',
+  ADD_WALLET = '@@wallets/ADD_WALLET',
+  UPDATE_WALLET = '@@wallets/UPDATE_WALLET',
 }
 
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability

@@ -8,7 +8,7 @@ const Routes: React.SFC = () => {
     <Switch>
       <DefaultLayout exact path="/" component={Home} />>
       <DefaultLayout path="/login" component={Login} />
-      <MainLayout path="/wallet" component={Wallet} />
+      <MainLayout path="/wallets/:id" component={Wallet} />
       {/* <DefaultLayout path="/create/tx/:address" component={CreateTransaction} /> */}
       {/* <DefaultLayout path="/create/contract/:address" component={CreateContract} /> */}
       <Redirect to="/" />
