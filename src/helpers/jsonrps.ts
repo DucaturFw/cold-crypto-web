@@ -12,10 +12,10 @@ export const getSignTransferTxCommand = async (
   wallet: IWalletEth
 ) => {
   const tx = {
-    gasPrice: Web3.utils.toWei(data.gasPrice, 'gwei'),
+    gasPrice: Web3.utils.toWei(data.gasPrice.toString(), 'gwei'),
     nonce: wallet.nonce,
     to: data.to,
-    value: Web3.utils.toWei(data.amount),
+    value: Web3.utils.toWei(data.amount.toString()),
   }
 
   return `signTransferTx|3|${JSON.stringify({ wallet, tx })}`
