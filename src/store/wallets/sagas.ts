@@ -54,10 +54,16 @@ function* handleSetWallet(action: ReturnType<typeof addWallet>) {
 function* handleCreateSignedData(action: ReturnType<typeof createWalletTx>) {
   // get wallet from store
   const wallet = yield select((state: IApplicationState) => state.wallets.item)
+
   try {
     const txFormData = action.payload
 
-    const signedData = yield getSignTransferTxCommand(txFormData, wallet)
+    const signedData = yield getSignTransferTxCommand(txFormData, {
+      blockchain: wallet.blockchain,
+      chainId: wallet.chainId,
+      address: wallet.address,
+      nonce: wallet.nonce,
+    })
 
     yield put(setSignQrcodeData(signedData))
 

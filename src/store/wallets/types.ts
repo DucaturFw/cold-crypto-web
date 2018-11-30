@@ -7,7 +7,7 @@ export interface IWalletBase extends ApiResponse {
 
 export interface IWalletEth extends IWalletBase {
   nonce: number
-  txs: IEthTx[]
+  txs?: IEthTx[]
 }
 
 // TODO: autogenrate, validate this !!!!
