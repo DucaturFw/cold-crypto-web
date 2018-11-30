@@ -1,1 +1,2 @@
-export { LoginLayout } from './LoginLayout'
+export { DefaultLayout } from './DefaultLayout'
+export { MainLayout } from './MainLayout'

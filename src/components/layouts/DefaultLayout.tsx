@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'react-emotion'
 import { Route } from 'react-router-dom'
 
-import Header from './Header'
+import { Header } from './Header'
 
 const Root = styled('div')({
   background: 'rgb(0, 74, 124)',
@@ -23,28 +23,13 @@ const Modal = styled('div')({
   padding: '2rem',
 })
 
-// interface IMainLayout {
-//   children: React.ReactNode
-// }
-
-// export const LoginLayout: React.SFC<IMainLayout> = ({ children }) => (
-//   <Root>
-//     <Header to="/" />
-//     <Main>
-//       <Modal>
-//       <Component {...matchProps} />
-//       </Modal>
-//     </Main>
-//   </Root>
-// )
-
 interface IDefaultProps {
   component: any
   path?: string
   exact?: boolean
 }
 
-export const LoginLayout: React.SFC<IDefaultProps> = props => {
+export const DefaultLayout: React.SFC<IDefaultProps> = props => {
   const { component: Component, ...rest } = props
   return (
     <Route

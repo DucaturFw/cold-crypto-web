@@ -19,7 +19,7 @@ const Logo = styled(H1)({
   },
 } as any)
 
-export default ({ to }: { to: string }) => (
+export const Header = ({ to }: { to: string }) => (
   <Root>
     <Link to={to}>
       <Logo>

@@ -1,13 +1,14 @@
 import * as React from 'react'
 import { Switch } from 'react-router-dom'
-import { LoginLayout } from './components/layouts'
-import { Login, Home } from './pages'
+import { DefaultLayout, MainLayout } from './components/layouts'
+import { Login, Home, Wallet } from './pages'
 
 const Routes: React.StatelessComponent<{}> = () => {
   return (
     <Switch>
-      <LoginLayout exact path="/" component={Home} />>
-      <LoginLayout path="/login" component={Login} />
+      <DefaultLayout exact path="/" component={Home} />>
+      <DefaultLayout path="/login" component={Login} />
+      <MainLayout path="/wallet" component={Wallet} />
     </Switch>
   )
 }
