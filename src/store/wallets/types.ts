@@ -7,10 +7,34 @@ export interface IWalletBase extends ApiResponse {
 
 export interface IWalletEth extends IWalletBase {
   nonce: number
+  txs: IEthTx[]
+}
+
+// TODO: autogenrate, validate this !!!!
+export interface IEthTx {
+  blockHash: string
+  blockNumber: string
+  confirmations: string
+  contractAddress: string
+  cumulativeGasUsed: string
+  from: string
+  gas: string
+  gasPrice: string
+  gasUsed: string
+  hash: string
+  input: string
+  isError: string
+  nonce: string
+  timeStamp: number
+  to: string
+  transactionIndex: string
+  txreceipt_status: string
+  value: string
 }
 
 export interface IWalletEos extends IWalletBase {}
 
+export type IWallet = IWalletBase | IWalletEos | IWalletEth
 export type ApiResponse = Record<string, any>
 
 export enum WalletsActionTypes {
@@ -18,7 +42,7 @@ export enum WalletsActionTypes {
   FETCH_SUCCESS = '@@wallets/FETCH_DATA_SUCCESS',
   FETCH_ERROR = '@@wallets/FETCH_DATA_ERROR',
   ADD_WALLET = '@@wallets/ADD_WALLET',
-  UPDATE_WALLET = '@@wallets/UPDATE_WALLET',
+  CREATE_WALLET_TX = '@@wallets/CREATE_WALLET_TX',
 }
 
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
@@ -27,4 +51,11 @@ export interface IWalletsState {
   readonly items: IWalletEth[] | IWalletEos[]
   readonly errors?: string
   readonly loading: boolean
+}
+
+export interface IEthTxFormValues {
+  to: string
+  gasPrice: number
+  data: string
+  amount: number
 }

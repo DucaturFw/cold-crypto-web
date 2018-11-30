@@ -1,26 +1,38 @@
 import * as React from 'react'
 import styled from 'react-emotion'
 import { Row, H2, Column, ButtonBase, H1, Hr } from '../components/atoms'
+import { Loader } from '../components/Spinner'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
+import { IApplicationState, IConnectedReduxProps } from '../store'
+import { IWallet, IEthTx, IWalletEth } from '../store/wallets/types'
 
-export const Wallet: React.SFC<{}> = () => (
+interface IPropsFromState {
+  loading: boolean
+  wallet: IWallet
+}
+
+interface IPropsFromDispatch {}
+
+type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
+
+const WalletPage: React.SFC<AllProps> = ({ wallet, loading }) => (
   <React.Fragment>
     <Column>
       <Row>
         <Column style={{ flexBasis: '15rem', marginRight: '2rem' }}>
-          <Link to={`/create/tx/0x000`}>
+          <Link to={`/wallets/${wallet.address}/tx/create`}>
             <ButtonBase>Create New Tx</ButtonBase>
           </Link>
-          <Link to={`/create/contract/0x0000000`}>
+          <Link to={`/wallets/${wallet.address}/contract/create`}>
             <ButtonBase>Call Contract</ButtonBase>
           </Link>
         </Column>
         <Column>
-          {/* <H1>{blockchain} Wallet</H1> */}
-          <H1>Eth Wallet</H1>
+          <H1>{wallet.blockchain} Wallet</H1>
           <H2>
-            {/* <Address>{address}</Address> */}
-            <Address>0x000000000000000000</Address>
+            <Address>{wallet.address}</Address>
           </H2>
         </Column>
       </Row>
@@ -34,27 +46,47 @@ export const Wallet: React.SFC<{}> = () => (
             <th>Value</th>
           </tr>
         </thead>
-        <tbody>
-          {/* {txs.map((v, index) => (
-            <tr key={index}>
-              <td>{new Date(v.timeStamp * 1000).toLocaleString()}</td>
-              <OverflowTd>
-                <a
-                  target="_blank"
-                  href={`https://rinkeby.etherscan.io/tx/${v.hash}`}
-                >
-                  {v.hash}
-                </a>
-              </OverflowTd>
-              <OverflowTd>{v.from}</OverflowTd>
-              <td>{v.value}</td>
-            </tr>
-          ))} */}
-        </tbody>
+        <tbody>{renderTxs(wallet.txs)}</tbody>
       </Table>
+      {loading && <Loader />}
     </Column>
   </React.Fragment>
 )
+
+const renderTxs = (txs: IWalletEth) => {
+  if (!txs) return
+  return (
+    <React.Fragment>
+      {txs.map((item: IEthTx, index: number) => (
+        <tr key={index}>
+          <td>{new Date(item.timeStamp * 1000).toLocaleString()}</td>
+          <OverflowTd>
+            <a
+              target="_blank"
+              // TODO: make genrator explorer url for blockchains
+              href={`https://rinkeby.etherscan.io/tx/${item.hash}`}
+            >
+              {item.hash}
+            </a>
+          </OverflowTd>
+          <OverflowTd>{item.from}</OverflowTd>
+          <td>{item.value}</td>
+        </tr>
+      ))}
+    </React.Fragment>
+  )
+}
+const mapStateToProps = ({ wallets }: IApplicationState) => ({
+  loading: wallets.loading,
+  wallet: wallets.item,
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({})
+
+export const Wallet = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(WalletPage)
 
 export const Table = styled('table')({
   borderCollapse: 'collapse',
@@ -73,11 +105,11 @@ export const Table = styled('table')({
   width: '100%',
 })
 
-// const OverflowTd = styled('td')({
-//   maxWidth: '20vw',
-//   overflow: 'hidden',
-//   textOverflow: 'ellipsis',
-// })
+const OverflowTd = styled('td')({
+  maxWidth: '20vw',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+})
 
 const Address = styled('div')({
   fontSize: '.8rem',

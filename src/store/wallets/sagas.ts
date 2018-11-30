@@ -1,7 +1,18 @@
-import { all, call, fork, put, takeEvery } from 'redux-saga/effects'
+import { all, call, fork, put, takeEvery, select } from 'redux-saga/effects'
 import { WalletsActionTypes } from './types'
-import { fetchError, fetchSuccess, addWallet, fetchRequest } from './actions'
+import {
+  fetchError,
+  fetchSuccess,
+  addWallet,
+  fetchRequest,
+  createWalletTx,
+} from './actions'
+import { getSignTransferTxCommand } from '../../helpers/jsonrps'
 import callApi from '../../utils/callApi'
+import { IApplicationState } from '..'
+import { setSignQrcodeData } from '../qrcode/actions'
+import { push } from 'connected-react-router'
+import { getNonce } from '../../helpers/eth'
 
 // TODO: make blockchain config for explorer
 const API_ENDPOINT =
@@ -21,8 +32,10 @@ function* handleSetWallet(action: ReturnType<typeof addWallet>) {
         wallet.address
       }&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=YourApiKeyToken`
     )
+
+    const nonce = yield getNonce(wallet.address)
     // added txs history
-    wallet = { ...wallet, txs: res.result }
+    wallet = { ...wallet, txs: res.result, nonce }
 
     if (res.error) {
       yield put(fetchError(res.error))
@@ -38,12 +51,36 @@ function* handleSetWallet(action: ReturnType<typeof addWallet>) {
   }
 }
 
+function* handleCreateSignedData(action: ReturnType<typeof createWalletTx>) {
+  // get wallet from store
+  const wallet = yield select((state: IApplicationState) => state.wallets.item)
+  try {
+    const txFormData = action.payload
+
+    const signedData = yield getSignTransferTxCommand(txFormData, wallet)
+
+    yield put(setSignQrcodeData(signedData))
+
+    yield put(push(`/sign`))
+  } catch (err) {
+    if (err instanceof Error) {
+      yield put(fetchError(err.stack!))
+    } else {
+      yield put(fetchError('An unknown error occured.'))
+    }
+  }
+}
+
 function* watchFetchRequest() {
   yield takeEvery(WalletsActionTypes.ADD_WALLET, handleSetWallet)
 }
 
+function* watchCreateTxData() {
+  yield takeEvery(WalletsActionTypes.CREATE_WALLET_TX, handleCreateSignedData)
+}
+
 function* walletsSaga() {
-  yield all([fork(watchFetchRequest)])
+  yield all([fork(watchFetchRequest), fork(watchCreateTxData)])
 }
 
 export default walletsSaga
