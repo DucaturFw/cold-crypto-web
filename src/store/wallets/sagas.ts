@@ -8,15 +8,11 @@ import {
   createWalletTx,
 } from './actions'
 import { getSignTransferTxCommand } from '../../helpers/jsonrps'
-import callApi from '../../utils/callApi'
 import { IApplicationState } from '..'
 import { setSignQrcodeData } from '../qrcode/actions'
 import { push } from 'connected-react-router'
-import { getNonce } from '../../helpers/eth'
+import { getBcInfo } from '../../helpers/common'
 
-// TODO: make blockchain config for explorer
-const API_ENDPOINT =
-  process.env.REACT_APP_API_ENDPOINT || 'https://api-rinkeby.etherscan.io'
 
 function* handleSetWallet(action: ReturnType<typeof addWallet>) {
   try {
@@ -25,17 +21,12 @@ function* handleSetWallet(action: ReturnType<typeof addWallet>) {
     yield put(fetchRequest())
     // fetch wallets txs history
     const res = yield call(
-      callApi,
-      'get',
-      API_ENDPOINT,
-      `/api?module=account&action=txlist&address=${
-        wallet.address
-      }&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=YourApiKeyToken`
+      getBcInfo,
+      wallet
     )
 
-    const nonce = yield getNonce(wallet.address)
     // added txs history
-    wallet = { ...wallet, txs: res.result, nonce }
+    wallet = { ...wallet, ...res }
 
     if (res.error) {
       yield put(fetchError(res.error))
