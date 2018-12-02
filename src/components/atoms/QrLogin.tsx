@@ -8,6 +8,7 @@ interface IPropsFromDispatch {
   value: string
   onScan: (data: string) => void
   onError?: (e: Error) => void
+  readonly?: boolean
 }
 
 type AllProps = IPropsFromDispatch
@@ -17,6 +18,7 @@ export const QrLogin: React.SFC<AllProps> = ({
   value,
   onScan,
   onError,
+  readonly,
 }) => {
   const errorHandle = onError || ((error: Error) => console.error(error))
 
@@ -41,19 +43,21 @@ export const QrLogin: React.SFC<AllProps> = ({
             <QRCode value={value} renderAs="svg" />
           </Centered>
         </Column>
-        <Column style={{ width: '50%' }}>
-          <Centered>
-            <H2>Show QR Code</H2>
-          </Centered>
-          <Centered style={{ display: 'flex' }}>
-            <QrReader
-              delay={300}
-              onScan={result => result && onScan(result)}
-              onError={error => errorHandle(error)}
-              style={{ width: '30vh' }}
-            />
-          </Centered>
-        </Column>
+        {!readonly && (
+          <Column style={{ width: '50%' }}>
+            <Centered>
+              <H2>Show QR Code</H2>
+            </Centered>
+            <Centered style={{ display: 'flex' }}>
+              <QrReader
+                delay={300}
+                onScan={result => result && onScan(result)}
+                onError={error => errorHandle(error)}
+                style={{ width: '30vh' }}
+              />
+            </Centered>
+          </Column>
+        )}
       </Row>
     </React.Fragment>
   )

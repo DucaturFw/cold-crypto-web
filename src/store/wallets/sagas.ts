@@ -1,17 +1,7 @@
-import { all, call, fork, put, takeEvery, select } from 'redux-saga/effects'
+import { all, call, fork, put, takeEvery } from 'redux-saga/effects'
 import { WalletsActionTypes } from './types'
-import {
-  fetchError,
-  fetchSuccess,
-  addWallet,
-  fetchRequest,
-  createWalletTx,
-} from './actions'
-import { getSignTransferTxCommand } from '../../helpers/jsonrps'
+import { fetchError, fetchSuccess, addWallet, fetchRequest } from './actions'
 import callApi from '../../utils/callApi'
-import { IApplicationState } from '..'
-import { setSignQrcodeData } from '../qrcode/actions'
-import { push } from 'connected-react-router'
 import { getNonce } from '../../helpers/eth'
 
 // TODO: make blockchain config for explorer
@@ -51,42 +41,12 @@ function* handleSetWallet(action: ReturnType<typeof addWallet>) {
   }
 }
 
-function* handleCreateSignedData(action: ReturnType<typeof createWalletTx>) {
-  // get wallet from store
-  const wallet = yield select((state: IApplicationState) => state.wallets.item)
-
-  try {
-    const txFormData = action.payload
-
-    const signedData = yield getSignTransferTxCommand(txFormData, {
-      blockchain: wallet.blockchain,
-      chainId: wallet.chainId,
-      address: wallet.address,
-      nonce: wallet.nonce,
-    })
-
-    yield put(setSignQrcodeData(signedData))
-
-    yield put(push(`/sign`))
-  } catch (err) {
-    if (err instanceof Error) {
-      yield put(fetchError(err.stack!))
-    } else {
-      yield put(fetchError('An unknown error occured.'))
-    }
-  }
-}
-
 function* watchFetchRequest() {
   yield takeEvery(WalletsActionTypes.ADD_WALLET, handleSetWallet)
 }
 
-function* watchCreateTxData() {
-  yield takeEvery(WalletsActionTypes.CREATE_WALLET_TX, handleCreateSignedData)
-}
-
 function* walletsSaga() {
-  yield all([fork(watchFetchRequest), fork(watchCreateTxData)])
+  yield all([fork(watchFetchRequest)])
 }
 
 export default walletsSaga

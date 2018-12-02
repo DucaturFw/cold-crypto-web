@@ -9,15 +9,15 @@ import { IWalletsState } from './wallets/types'
 import { authReducer } from './auth/reducer'
 import { IAuthState } from './auth/types'
 
-import qrcodeSaga from './qrcode/sagas'
-import { qrcodeReducer } from './qrcode/reducer'
-import { IQrcodeState } from './qrcode/types'
+import transportSaga from './transport/sagas'
+import { transportReducer } from './transport/reducer'
+import { ITransportState } from './transport/types'
 
 // top-level state
 export interface IApplicationState {
   wallets: IWalletsState
   auth: IAuthState
-  qrcode: IQrcodeState
+  transport: ITransportState
   router: RouterState
 }
 
@@ -29,10 +29,10 @@ export const rootReducer = (history: any) =>
   combineReducers<IApplicationState>({
     wallets: walletsReducer,
     auth: authReducer,
-    qrcode: qrcodeReducer,
+    transport: transportReducer,
     router: connectRouter(history),
   })
 
 export function* rootSaga() {
-  yield all([fork(walletsSaga), fork(qrcodeSaga)])
+  yield all([fork(walletsSaga), fork(transportSaga)])
 }

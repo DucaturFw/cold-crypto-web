@@ -4,35 +4,44 @@ import { QrLogin } from '../components/atoms'
 import { getWalletListCommand } from '../helpers/jsonrps'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { scanLoginSuccess } from '../store/qrcode/actions'
-import { IConnectedReduxProps } from '../store'
+import { login } from '../store/transport/actions'
+import { IConnectedReduxProps, IApplicationState } from '../store'
 
 // TODO: map errorfrom qrcode state and show if we will have it
-interface IPropsFromState {}
+interface IPropsFromState {
+  search: string
+}
 
 interface IPropsFromDispatch {
-  scanLoginData: typeof scanLoginSuccess
+  scanLoginData: typeof login
 }
 
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
-const LoginPage: React.SFC<AllProps> = ({ scanLoginData }) => {
+const LoginPage: React.SFC<AllProps> = ({ scanLoginData, search }) => {
+  const isRtc = new URLSearchParams(search).get('rtc') as any
+
   return (
     <React.Fragment>
       <QrLogin
         title={'Mobile Login'}
         value={getWalletListCommand()}
         onScan={scanLoginData}
+        readonly={isRtc}
       />
     </React.Fragment>
   )
 }
 
+const mapStateToProps = ({ router }: IApplicationState) => ({
+  search: router.location.search,
+})
+
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  scanLoginData: (data: string) => dispatch(scanLoginSuccess(data)),
+  scanLoginData: (data: string) => dispatch(login(data)),
 })
 
 export const Login = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(LoginPage)
