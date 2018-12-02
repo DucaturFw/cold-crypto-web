@@ -22,9 +22,10 @@ type AllProps = IPropsFromState &
   RouteComponentProps
 
 const LoginPage: React.SFC<AllProps> = props => {
-  const { scanLoginData, location } = props
+  const { scanLoginData } = props
 
   // TODO: add back url to push
+  // const { location } = props
   // let pathname: string
   // if (location && location.state && location.state.from) {
   //   pathname = location.state.from.pathname
