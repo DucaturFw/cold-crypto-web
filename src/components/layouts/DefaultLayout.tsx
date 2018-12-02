@@ -31,7 +31,6 @@ interface IDefaultProps {
 
 export class DefaultLayout extends React.Component<IDefaultProps, any> {
   public render() {
-    console.log(this)
     const { component: Component, ...rest } = this.props
     return (
       <Route
