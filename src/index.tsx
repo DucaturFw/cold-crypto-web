@@ -1,12 +1,12 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { createHashHistory } from 'history'
+import { createBrowserHistory } from 'history'
 
 import { App } from './App'
 import * as serviceWorker from './serviceWorker'
 import configureStore from './configureStore'
 
-const history = createHashHistory()
+const history = createBrowserHistory()
 
 const initialState = window.initialReduxState
 const store = configureStore(history, initialState)
