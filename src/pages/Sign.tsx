@@ -16,13 +16,11 @@ interface IPropsFromDispatch {
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
 const SignPage: React.SFC<AllProps> = ({ signData, sendTx }) => (
-  <React.Fragment>
-    <QrLogin
-      title={'Sign Transaction By Mobile'}
-      value={signData || ''}
-      onScan={sendTx}
-    />
-  </React.Fragment>
+  <QrLogin
+    title={'Sign Transaction By Mobile'}
+    value={signData || ''}
+    onScan={sendTx}
+  />
 )
 
 const mapStateToProps = ({ qrcode }: IApplicationState) => ({

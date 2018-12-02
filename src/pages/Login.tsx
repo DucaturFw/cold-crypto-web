@@ -1,9 +1,11 @@
 import * as React from 'react'
+import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
+import { RouteComponentProps } from 'react-router-dom'
+
 import { QrLogin } from '../components/atoms'
 
 import { getWalletListCommand } from '../helpers/jsonrps'
-import { connect } from 'react-redux'
-import { Dispatch } from 'redux'
 import { scanLoginSuccess } from '../store/qrcode/actions'
 import { IConnectedReduxProps } from '../store'
 
@@ -14,17 +16,26 @@ interface IPropsFromDispatch {
   scanLoginData: typeof scanLoginSuccess
 }
 
-type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
+type AllProps = IPropsFromState &
+  IPropsFromDispatch &
+  IConnectedReduxProps &
+  RouteComponentProps
 
-const LoginPage: React.SFC<AllProps> = ({ scanLoginData }) => {
+const LoginPage: React.SFC<AllProps> = props => {
+  const { scanLoginData } = props
+
+  // TODO: add back url to push
+  // const { location } = props
+  // let pathname: string
+  // if (location && location.state && location.state.from) {
+  //   pathname = location.state.from.pathname
+  // }
   return (
-    <React.Fragment>
-      <QrLogin
-        title={'Mobile Login'}
-        value={getWalletListCommand()}
-        onScan={scanLoginData}
-      />
-    </React.Fragment>
+    <QrLogin
+      title={'Mobile Login'}
+      value={getWalletListCommand()}
+      onScan={data => scanLoginData(data)}
+    />
   )
 }
 
