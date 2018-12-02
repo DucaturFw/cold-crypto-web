@@ -18,13 +18,11 @@ type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
 const LoginPage: React.SFC<AllProps> = ({ scanLoginData }) => {
   return (
-    <React.Fragment>
-      <QrLogin
-        title={'Mobile Login'}
-        value={getWalletListCommand()}
-        onScan={scanLoginData}
-      />
-    </React.Fragment>
+    <QrLogin
+      title={'Mobile Login'}
+      value={getWalletListCommand()}
+      onScan={scanLoginData}
+    />
   )
 }
 
