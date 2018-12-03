@@ -1,5 +1,7 @@
 import jsqr from "jsqr"
 
+import { parseHostMessage, IHCSimple } from "../../src/helpers/webrtc/hostproto"
+
 describe('login test', () =>
 {
 	function showQr(elemSelector: string, qrName: string)
@@ -45,16 +47,21 @@ describe('login test', () =>
 			loader.src = 'data:image/svg+xml,' + encodeURIComponent(new XMLSerializer().serializeToString(svg))
 		})
 	}
-	function checkShownQr(text: string | RegExp)
+	function checkShownQr(text: string | RegExp): Promise<string>
 	{
-		cy.get('svg').should(async (elem) =>
+		return new Promise((res, rej) =>
 		{
-			let qr = await getQrData(elem)
-			// console.log(`qr: ${qr}`)
-			if (typeof text === "string")
-				expect(qr).eq(text)
-			else
-				expect(qr).match(text)
+			cy.get('svg').should(async (elem) =>
+			{
+				let qr = await getQrData(elem)
+				console.log(`qr: ${qr}`)
+				if (typeof text === "string")
+					expect(qr).eq(text)
+				else
+					expect(qr).match(text)
+				
+				res(qr)
+			})
 		})
 	}
 	it('should render login page correctly', () =>
@@ -89,7 +96,20 @@ describe('login test', () =>
 		cy.contains('0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0')
 	})
 
-	it('should open webrtc login page', () =>
+	async function checkWebrtcQr()
+	{
+		cy.get('video').should('not.exist')
+
+		let qr = await checkShownQr(/^webrtcLogin\|\d\|.*$/)
+		let msg = parseHostMessage(qr) as IHCSimple<{sid: string}, { url: string }>
+		expect(msg.method).eq('webrtcLogin')
+		expect(msg.id).match(/\d+/)
+		expect(msg.params).not.null
+		let [sid, url] = Array.isArray(msg.params) ? msg.params : [msg.params.sid, msg.params.url]
+		expect(sid).match(/^session0\.\d+$/)
+		expect(url).eq('wss://duxi.io/shake')
+	}
+	it('should open webrtc login page', async () =>
 	{
 		cy.visit('/')
 		// cy.contains('WebRTC login').click()
@@ -97,7 +117,13 @@ describe('login test', () =>
 
 		cy.url().should('match', /[\/webrtc|\/login\?rtc=true]/)
 
-		checkShownQr(/^webrtcLogin.*$/)
+		await checkWebrtcQr()
+	})
+	it('should navigate directly to webrtc login page', async () =>
+	{
+		cy.visit('/login?webrtc=true')
+
+		await checkWebrtcQr()
 	})
 	
 	it.skip('should login with qr multiple wallets', () =>
