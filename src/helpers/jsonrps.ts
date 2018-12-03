@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-// import { getTxHeaders } from './eos-tx-helpers';
+import { getTxHeaders } from './eos-tx-helpers';
 import { IEthTxFormValues, IWalletEth, IEosTxFormValues } from '../store/wallets/types'
 
 // TODO: mobile app ignore blockchain array
@@ -23,11 +23,11 @@ export const getSignTransferTxCommand = async (
   }
 
   if (wallet.blockchain === 'eos') {
-    // const txHeaders = await getTxHeaders(wallet.chainId as string)
+    const txHeaders = await getTxHeaders(wallet.chainId as string)
     tx = {
       method: "transfer(from:name,to:name,quantity:asset,memo:string)",
       transaction: {
-        // ...txHeaders,
+        ...txHeaders,
         actions: [
           {
             name: "transfer",
