@@ -11,12 +11,12 @@ import {
   LabelAtop,
   TextArea,
   ButtonBase,
-} from '../components/atoms'
+} from '../../components/atoms'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { IApplicationState, IConnectedReduxProps } from '../store'
-import { IWallet, IEthTxFormValues } from '../store/wallets/types'
-import { createTransaction } from '../store/transport/actions'
+import { IApplicationState } from '../../store'
+import { IWallet, IEosTxFormValues } from '../../store/wallets/types'
+// import { createTransaction } from '../../store/transport/actions'
 
 import styled from 'react-emotion'
 
@@ -24,13 +24,15 @@ interface IPropsFromState {
   wallet: IWallet
 }
 
-interface IPropsFromDispatch {
-  createTx: typeof createTransaction
-}
+// interface IPropsFromDispatch {
+//   createTx: typeof createTransaction
+// }
 
-type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
+type AllProps = IPropsFromState
 
-const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
+const handle = (value: any) => console.log(value)
+
+const CreateTxPage: React.SFC<AllProps> = ({ wallet }) => (
   <React.Fragment>
     <Row>
       <H1>Send {wallet.blockchain}</H1>
@@ -38,15 +40,15 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
     </Row>
     <Hr />
     <Formik
-      initialValues={{ to: '', gasPrice: 3, data: '', amount: 0 }}
-      onSubmit={(values: IEthTxFormValues) => createTx(values)}
-      render={(formikBag: FormikProps<IEthTxFormValues>) => (
+      initialValues={{ to: '', memo: '', amount: 0 }}
+      onSubmit={(values: IEosTxFormValues) => handle(values)}
+      render={(formikBag: FormikProps<IEosTxFormValues>) => (
         <Form>
           <Column>
             <Label>To:</Label>
             <Field
               name="to"
-              render={({ field, form }: FieldProps<IEthTxFormValues>) => (
+              render={({ field, form }: FieldProps<IEosTxFormValues>) => (
                 <TextInput type="text" placeholder="Address" {...field} />
               )}
             />
@@ -60,11 +62,11 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
                       render={({
                         field,
                         form,
-                      }: FieldProps<IEthTxFormValues>) => (
+                      }: FieldProps<IEosTxFormValues>) => (
                         <TextInput
                           type="number"
                           min="0"
-                          step={(1e-18).toFixed(20)}
+                          step={(1e-4).toFixed(4)}
                           {...field}
                         />
                       )}
@@ -76,13 +78,13 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
                       render={({
                         field,
                         form,
-                      }: FieldProps<IEthTxFormValues>) => (
+                      }: FieldProps<IEosTxFormValues>) => (
                         <TextInput
                           type="number"
                           readOnly
-                          step={(1e-18).toFixed(20)}
+                          step={(1e-4).toFixed(4)}
                           value={field.value}
-                          //TODO: add totalPrice
+                          // TODO: add totalPrice
                           // value={totalPrice}
                         />
                       )}
@@ -95,29 +97,11 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
               <Column>
                 <Label>Description:</Label>
                 <Field
-                  name="data"
-                  render={({ field, form }: FieldProps<IEthTxFormValues>) => (
+                  name="memo"
+                  render={({ field, form }: FieldProps<IEosTxFormValues>) => (
                     <TextArea {...field} />
                   )}
                 />
-              </Column>
-            </RowMargined>
-            <RowMargined>
-              <Column>
-                <Field
-                  name="gasPrice"
-                  render={({ field, form }: FieldProps<IEthTxFormValues>) => (
-                    <React.Fragment>
-                      <Label>Gas price {field.value} GWEI</Label>
-                      <TextInput type="range" min="1" max="7" {...field} />
-                    </React.Fragment>
-                  )}
-                />
-                <Row>
-                  {/* // TODO: Calca gasprice and await time */}
-                  <span>gweiPrice</span>
-                  <span> {`< awaitTime min`}</span>
-                </Row>
               </Column>
             </RowMargined>
             <ButtonBase type="submit">Continue</ButtonBase>
@@ -133,10 +117,10 @@ const mapStateToProps = ({ wallets }: IApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: IEthTxFormValues) => dispatch(createTransaction(data)),
+  // createTx: (data: IEthTxFormValues) => dispatch(createTransaction(data)),
 })
 
-export const CreateTx = connect(
+export const CreateEosTx = connect(
   mapStateToProps,
   mapDispatchToProps
 )(CreateTxPage)
