@@ -139,7 +139,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 export const CreateEthTx = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateTxPage)
+)(CreateTxPage as any)
 
 const RowMargined = styled(Row)({
   margin: '1rem 0',

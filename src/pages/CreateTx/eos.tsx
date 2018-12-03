@@ -16,7 +16,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IApplicationState } from '../../store'
 import { IWallet, IEosTxFormValues } from '../../store/wallets/types'
-// import { createTransaction } from '../../store/transport/actions'
+import { createTransaction } from '../../store/transport/actions'
 
 import styled from 'react-emotion'
 
@@ -24,15 +24,13 @@ interface IPropsFromState {
   wallet: IWallet
 }
 
-// interface IPropsFromDispatch {
-//   createTx: typeof createTransaction
-// }
+interface IPropsFromDispatch {
+  createTx: typeof createTransaction
+}
 
-type AllProps = IPropsFromState
+type AllProps = IPropsFromState & IPropsFromDispatch
 
-const handle = (value: any) => console.log(value)
-
-const CreateTxPage: React.SFC<AllProps> = ({ wallet }) => (
+const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
   <React.Fragment>
     <Row>
       <H1>Send {wallet.blockchain}</H1>
@@ -41,7 +39,7 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet }) => (
     <Hr />
     <Formik
       initialValues={{ to: '', memo: '', amount: 0 }}
-      onSubmit={(values: IEosTxFormValues) => handle(values)}
+      onSubmit={(values: IEosTxFormValues) => createTx(values)}
       render={(formikBag: FormikProps<IEosTxFormValues>) => (
         <Form>
           <Column>
@@ -117,13 +115,13 @@ const mapStateToProps = ({ wallets }: IApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  // createTx: (data: IEthTxFormValues) => dispatch(createTransaction(data)),
+  createTx: (data: IEosTxFormValues) => dispatch(createTransaction(data)),
 })
 
 export const CreateEosTx = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateTxPage)
+)(CreateTxPage as any)
 
 const RowMargined = styled(Row)({
   margin: '1rem 0',

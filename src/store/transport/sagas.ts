@@ -39,6 +39,7 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
       address: wallet.address,
       nonce: wallet.nonce,
     })
+    console.log(signedData);
 
     if (connected) {
       // TODO: create action from webrtc store
