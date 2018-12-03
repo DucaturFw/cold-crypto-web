@@ -10,16 +10,13 @@ import { IApplicationState } from './store'
 import { theme } from './styles/theme'
 import './styles'
 
-interface IPropsFromDispatch {
-  [key: string]: any
-}
 
 interface IOwnProps {
   store: Store<IApplicationState>
   history: History
 }
 
-type AllProps = IPropsFromDispatch & IOwnProps
+type AllProps = IOwnProps
 
 export class App extends React.Component<AllProps> {
   public render() {

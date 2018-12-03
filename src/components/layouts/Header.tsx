@@ -16,8 +16,8 @@ const Logo = styled(H1)({
     fontSize: '.8rem',
     textTransform: 'lowercase',
     verticalAlign: 'super',
-  },
-} as any)
+  } as any,
+})
 
 export const Header = ({ to }: { to: string }) => (
   <Root>
