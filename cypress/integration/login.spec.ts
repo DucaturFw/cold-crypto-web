@@ -1,16 +1,15 @@
 describe('login test', () =>
 {
-	let URL = "http://localhost:3000/"
-	it('Should render Login page correctly', () =>
+	it('should render login page correctly', () =>
 	{
-		cy.visit(URL)
+		cy.visit('/')
 		cy.contains('Login using QR code').click()
 		cy.url().should('include', '/login')
 	})
 	
-	it('Should login by QR correctly', () =>
+	it.skip('should login with qr multiple wallets', () =>
 	{
-		cy.visit(URL)
+		cy.visit('/')
 		cy.contains('Login using QR code').click()
 		cy.wait(800) // TODO: hack, remove it
 	
@@ -35,4 +34,4 @@ describe('login test', () =>
 			})
 		})
 	})
-	})
+})
