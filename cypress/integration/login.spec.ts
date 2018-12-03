@@ -1,6 +1,8 @@
 import jsqr from "jsqr"
 
-import { parseHostMessage, IHCSimple } from "../../src/helpers/webrtc/hostproto"
+import { parseHostMessage, IHCSimple, IHostResult, allToObj } from "../../src/helpers/webrtc/hostproto"
+import { JsonRpc } from "../../src/helpers/webrtc/jsonrpc"
+import { singleton as webrtc } from "../../src/helpers/webrtc/webrtcsingleton"
 
 describe('login test', () =>
 {
@@ -108,6 +110,7 @@ describe('login test', () =>
 		let [sid, url] = Array.isArray(msg.params) ? msg.params : [msg.params.sid, msg.params.url]
 		expect(sid).match(/^session0\.\d+$/)
 		expect(url).eq('wss://duxi.io/shake')
+		return { sid, url }
 	}
 	it('should open webrtc login page', async () =>
 	{
@@ -124,6 +127,37 @@ describe('login test', () =>
 		cy.visit('/login?webrtc=true')
 
 		await checkWebrtcQr()
+	})
+
+	async function connectWebrtc()
+	{
+		let { sid, url } = await checkWebrtcQr()
+		let ws = new WebSocket(url)
+		let ice = [] as any[]
+		
+		let jrpc = new JsonRpc(msg => ws.send(msg), (json, cb) =>
+		{
+			expect(json.method).eq('ice')
+			let cand = allToObj(json, ["ice"]).ice
+			ice.push(cand)
+		})
+		ws.addEventListener('message', ev => jrpc.onMessage(ev.data.toString()))
+		ws.addEventListener('open', async () =>
+		{
+			let offer = await jrpc.callRaw("join", { sid }) as IHostResult<string>
+			assert.isString(offer.result)
+			let answer = await webrtc.rtc.pushOffer({ sdp: offer.result, type: "offer" })
+			await jrpc.callRaw("answer", { answer })
+			webrtc.rtc.candidates.map(ice => jrpc.callRaw('ice', { ice }))
+		})
+		return webrtc.rtc.waitConnection()
+	}
+	it('should connect webrtc', async () =>
+	{
+		cy.visit('/')
+		cy.contains(/WebRTC login/i).click()
+		
+		await connectWebrtc()
 	})
 	
 	it.skip('should login with qr multiple wallets', () =>
