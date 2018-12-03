@@ -4,12 +4,12 @@ import { createBrowserHistory } from 'history'
 
 import { App } from './App'
 import * as serviceWorker from './serviceWorker'
-import configureStore from './configureStore'
+import configureStore, { subscriber } from './configureStore'
 
 const history = createBrowserHistory()
 
-const initialState = window.initialReduxState
-const store = configureStore(history, initialState)
+const store = configureStore(history)
+store.subscribe(subscriber(store))
 
 ReactDOM.render(
   <App store={store} history={history} />,
