@@ -1,4 +1,4 @@
-import { Store, createStore, applyMiddleware } from 'redux'
+import { Store, createStore, applyMiddleware, AnyAction } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { routerMiddleware } from 'connected-react-router'
 import { composeWithDevTools } from 'redux-devtools-extension'
@@ -28,6 +28,6 @@ export default function configureStore(
   return store
 }
 
-export const subscriber = (store) => () => {
+export const subscriber = (store: Store<IApplicationState, AnyAction>) => () => {
   window.localStorage.setItem('state', JSON.stringify(store.getState()))
 };
