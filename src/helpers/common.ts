@@ -10,6 +10,7 @@ export const getBcInfo = async (wallet: IWallet) => {
 
   if (wallet.blockchain === 'eos') {
     return eosInfo(wallet.address)
+      .then(result => ({ txs: result.actions }))
   }
 
   return null

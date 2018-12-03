@@ -6,110 +6,72 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
-import { IWallet, IEthTx, IWalletEth } from '../store/wallets/types'
+import { addWallet } from '../store/wallets/actions'
+import { IWallet, IWalletBase } from '../store/wallets/types'
+
+import { TXList } from './TXList'
 
 interface IPropsFromState {
   loading: boolean
   wallet: IWallet
 }
 
-interface IPropsFromDispatch {}
+interface IPropsFromDispatch {
+  addWallet: typeof addWallet
+}
 
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
-const WalletPage: React.SFC<AllProps> = ({ wallet, loading }) => (
-  <React.Fragment>
-    <Column>
-      <Row>
-        <Column style={{ flexBasis: '15rem', marginRight: '2rem' }}>
-          <Link to={`/wallets/${wallet.address}/tx/create`}>
-            <ButtonBase>Create New Tx</ButtonBase>
-          </Link>
-          <Link to={`/wallets/${wallet.address}/contract/create`}>
-            <ButtonBase>Call Contract</ButtonBase>
-          </Link>
-        </Column>
-        <Column>
-          <H1>{wallet.blockchain} Wallet</H1>
-          <H2>
-            <Address>{wallet.address}</Address>
-          </H2>
-        </Column>
-      </Row>
-      <Hr />
-      <Table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>TxHash</th>
-            <th>Address</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>{renderTxs(wallet.txs)}</tbody>
-      </Table>
-      {loading && <Loader />}
-    </Column>
-  </React.Fragment>
-)
+class WalletPage extends React.Component<AllProps, any> {
+  public componentDidMount() {
+    const { wallet, addWallet: addWalletDispatch } = this.props
 
-const renderTxs = (txs: IWalletEth) => {
-  if (!txs) return
-  return (
-    <React.Fragment>
-      {txs.map((item: IEthTx, index: number) => (
-        <tr key={index}>
-          <td>{new Date(item.timeStamp * 1000).toLocaleString()}</td>
-          <OverflowTd>
-            <a
-              target="_blank"
-              // TODO: make genrator explorer url for blockchains
-              href={`https://rinkeby.etherscan.io/tx/${item.hash}`}
-            >
-              {item.hash}
-            </a>
-          </OverflowTd>
-          <OverflowTd>{item.from}</OverflowTd>
-          <td>{item.value}</td>
-        </tr>
-      ))}
-    </React.Fragment>
-  )
+    addWalletDispatch(wallet)
+  }
+
+  public render() {
+    const { wallet, loading } = this.props
+    return (
+      <React.Fragment>
+        <Column>
+          <Row>
+            <Column style={{ flexBasis: '15rem', marginRight: '2rem' }}>
+              <Link to={`/wallets/${wallet.address}/tx/create`}>
+                <ButtonBase>Create New Tx</ButtonBase>
+              </Link>
+              <Link to={`/wallets/${wallet.address}/contract/create`}>
+                <ButtonBase>Call Contract</ButtonBase>
+              </Link>
+            </Column>
+            <Column>
+              <H1>{wallet.blockchain} Wallet</H1>
+              <H2>
+                <Address>{wallet.address}</Address>
+              </H2>
+            </Column>
+          </Row>
+          <Hr />
+          <TXList wallet={wallet} />
+          {loading && <Loader />}
+        </Column>
+      </React.Fragment>
+    )
+  }
 }
+
 const mapStateToProps = ({ wallets }: IApplicationState) => ({
   loading: wallets.loading,
   wallet: wallets.item,
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({})
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  addWallet: (wallet: IWalletBase) => dispatch(addWallet(wallet)),
+})
 
 export const Wallet = connect(
   mapStateToProps,
   mapDispatchToProps
 )(WalletPage)
-
-export const Table = styled('table')({
-  borderCollapse: 'collapse',
-  borderSpacing: 0,
-  td: {
-    color: '#2e3d3f',
-    padding: '1rem .5rem',
-  },
-  th: {
-    color: '#457b9d',
-    padding: '.5rem',
-  },
-  tr: {
-    borderBottom: '1px solid #b2bcb9',
-  },
-  width: '100%',
-})
-
-const OverflowTd = styled('td')({
-  maxWidth: '20vw',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-})
 
 const Address = styled('div')({
   fontSize: '.8rem',

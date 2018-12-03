@@ -32,6 +32,11 @@ export interface IEthTx {
   value: string
 }
 
+export interface IEosTx {
+  act: any;
+  createdAt: string;
+}
+
 export interface IWalletEos extends IWalletBase {}
 
 export type IWallet = IWalletBase | IWalletEos | IWalletEth
