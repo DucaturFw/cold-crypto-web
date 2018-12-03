@@ -13,3 +13,6 @@ export const sendTransaction = (tx: string) =>
 
 export const login = (message: string) =>
   action(TransportActionTypes.LOGIN, message)
+
+export const setRtcSid = (sid: string) =>
+  action(TransportActionTypes.SET_RTC_SID, sid)

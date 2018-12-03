@@ -10,6 +10,7 @@ import { IConnectedReduxProps, IApplicationState } from '../store'
 // TODO: map errorfrom qrcode state and show if we will have it
 interface IPropsFromState {
   search: string
+  qrcodeData: string
 }
 
 interface IPropsFromDispatch {
@@ -18,23 +19,28 @@ interface IPropsFromDispatch {
 
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
-const LoginPage: React.SFC<AllProps> = ({ scanLoginData, search }) => {
-  const isRtc = new URLSearchParams(search).get('rtc') as any
+class LoginPage extends React.Component<AllProps> {
+  render() {
+    const { search, scanLoginData, qrcodeData } = this.props
 
-  return (
-    <React.Fragment>
-      <QrLogin
-        title={'Mobile Login'}
-        value={getWalletListCommand()}
-        onScan={scanLoginData}
-        readonly={isRtc}
-      />
-    </React.Fragment>
-  )
+    const isRtc = new URLSearchParams(search).get('rtc') as any
+    const value = isRtc ? qrcodeData : getWalletListCommand()
+    return (
+      <React.Fragment>
+        <QrLogin
+          title={'Mobile Login'}
+          value={value}
+          onScan={scanLoginData}
+          readonly={isRtc}
+        />
+      </React.Fragment>
+    )
+  }
 }
 
-const mapStateToProps = ({ router }: IApplicationState) => ({
+const mapStateToProps = ({ router, transport }: IApplicationState) => ({
   search: router.location.search,
+  qrcodeData: transport.qrcodeData,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
