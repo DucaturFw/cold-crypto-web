@@ -1,7 +1,7 @@
 // TODO: make prod and dev url
-const url =  "139.59.184.152"
+// const url =  "139.59.184.152"
 
-export const handshakeServerUrl = `ws://${url}:3077`
+export const handshakeServerUrl = `wss://duxi.io/shake`
 
 export enum RTCCommands {
   webrtcLogin = 1,
