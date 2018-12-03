@@ -42,6 +42,19 @@ export type IHCSimple<
   T1 & T2 & T3 & T4 & T5 & T6 & T7
 >
 
+export function isMethodCall(json: IJsonRpcMessage): json is IHostCommand<unknown[], unknown>
+{
+  return "method" in json
+}
+export function isResult(json: IJsonRpcMessage): json is IHostResult<unknown>
+{
+  return "result" in json
+}
+export function isError(json: IJsonRpcMessage): json is IHostError
+{
+  return "error" in json
+}
+
 export function parseHostMessage(msg: string): IJsonRpcMessage | undefined {
   if (!msg) return undefined // empty message
 
