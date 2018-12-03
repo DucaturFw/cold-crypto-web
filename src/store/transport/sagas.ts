@@ -8,6 +8,7 @@ import parseMessage from '../../utils/parseMessage'
 import { sendTx } from '../../helpers/eth'
 import { setSignTx, addWallet } from '../wallets/actions'
 import { authSuccess } from '../auth/actions'
+import { setStatus } from '../webrtc/actions'
 
 function* handleLogin(action: ReturnType<typeof login>) {
   try {
@@ -41,6 +42,7 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
 
     if (connected) {
       // TODO: create action from webrtc store
+      yield all([put(setStatus('Verification')), put(push('/status'))])
       rtc.dataChannel.send(signedData)
     } else {
       yield put(setSignTx(signedData))

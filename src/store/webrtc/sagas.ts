@@ -7,6 +7,7 @@ import { RTCCommands } from '../../constants'
 import { login, sendTransaction } from '../transport/actions'
 import { WebrtcActionTypes } from './types'
 import { IApplicationState } from '..'
+import { setStatus } from './actions'
 
 function createDataChannel(dataChannel: any) {
   return eventChannel(emit => {
@@ -32,6 +33,7 @@ function* watchDataChannel() {
         yield put(login(message))
         break
       case RTCCommands.signTransferTx:
+        yield put(setStatus('Sending'))
         yield put(sendTransaction(message))
         break
       default:
