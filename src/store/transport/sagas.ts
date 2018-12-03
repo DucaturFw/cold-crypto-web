@@ -40,7 +40,14 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
       nonce: wallet.nonce,
     })
 
-    yield put(setSendingTxData({ signTx: signedData, formData: txFormData }))
+    yield put(
+      setSendingTxData({
+        signTx: signedData,
+        formData: txFormData,
+        error: '',
+        hash: '',
+      })
+    )
 
     if (connected) {
       // TODO: create action from webrtc store
@@ -59,11 +66,16 @@ function* handleSendTx(action: ReturnType<typeof sendTransaction>) {
     const { result } = parseMessage(action.payload)
 
     const txHash = yield sendTx(result)
-    yield put(push(`/tx/${txHash}`))
-    console.log('====================================')
-    console.log(txHash)
-    console.log('====================================')
+
+    yield all([
+      put(setSendingTxData({ hash: txHash.transactionHash })),
+      put(push(`/tx/${txHash.transactionHash}`)),
+    ])
   } catch (err) {
+    yield all([
+      put(setSendingTxData({ error: err.message })),
+      put(push(`/tx/error`)),
+    ])
     console.log('handleSendTx error', err)
   }
 }

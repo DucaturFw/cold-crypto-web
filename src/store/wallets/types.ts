@@ -62,6 +62,7 @@ export interface ISendingTxData {
   signTx?: string
   hash?: string
   formData?: IEthTxFormValues
+  error?: string
 }
 
 export interface IEthTxFormValues {

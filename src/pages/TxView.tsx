@@ -1,5 +1,4 @@
-import { Header } from '../components/layouts/Header'
-import { Centered, Column, H1, H2 } from '../components/atoms'
+import { H1, H2, Row, ButtonClose, Hr } from '../components/atoms'
 import styled from 'react-emotion'
 import * as React from 'react'
 import { connect } from 'react-redux'
@@ -13,30 +12,28 @@ interface IPropsFromState {
 type AllProps = IPropsFromState & IConnectedReduxProps
 
 const TxViewPage: React.SFC<AllProps> = ({
-  sendingData: { formData, hash },
-}) => (
-  <React.Fragment>
-    <Header to="/" />
-    <Container>
-      <Centered>
-        <Column>
-          <H1>Tx sent result</H1>
-          {/* {error ? (
-            <H2>{error}</H2>
-          ) : ( */}
-          <>
-            {formData!.to && <H2>To : {formData!.to}</H2>}
-            <H2>Tx hash : {hash}</H2>
-            <a target="_blank" href={`https://rinkeby.etherscan.io/tx/${hash}`}>
-              {hash}
-            </a>
-          </>
-          {/* )} */}
-        </Column>
-      </Centered>
-    </Container>
-  </React.Fragment>
-)
+  sendingData: { formData, hash, error },
+}) => {
+  return (
+    <React.Fragment>
+      <Row>
+        <H1>Tx sent result</H1>
+        <ButtonClose />
+      </Row>
+      <Hr />
+      {error ? (
+        <H2>Error : {error}</H2>
+      ) : (
+        <div>
+          <H2>To : {formData!.to}</H2>
+          <a target="_blank" href={`https://ropsten.etherscan.io/tx/${hash}`}>
+            {hash}
+          </a>
+        </div>
+      )}
+    </React.Fragment>
+  )
+}
 
 const mapStateToProps = ({ wallets }: IApplicationState) => ({
   sendingData: wallets.sendingTxData,

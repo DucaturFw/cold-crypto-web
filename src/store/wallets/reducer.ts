@@ -11,9 +11,10 @@ const initialState: IWalletsState = {
   item: {} as IWalletEth | IWalletEos,
   items: [],
   sendingTxData: {
-    signTx: '' as string,
+    signTx: '',
     hash: '',
     formData: {} as IEthTxFormValues,
+    error: '',
   },
   errors: undefined,
   loading: false,
