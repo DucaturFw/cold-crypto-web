@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'react-emotion'
-import { Route } from 'react-router-dom'
+// import { Route } from 'react-router-dom'
 
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
@@ -25,26 +25,13 @@ const Main = styled('main')({
   padding: '2rem',
 })
 
-interface IDefaultProps {
-  component: any
-  path?: string
-  exact?: boolean
-}
-
-export const MainLayout: React.SFC<IDefaultProps> = props => {
-  const { component: Component, ...rest } = props
+export const MainLayout: React.SFC = props => {
+  const { children } = props
   return (
-    <Route
-      {...rest}
-      render={matchProps => (
-        <Container>
-          <Header to="/" />
-          <Main>
-            <Component {...matchProps} />
-          </Main>
-          <Sidebar />
-        </Container>
-      )}
-    />
+    <Container>
+      <Header to="/" />
+      <Main>{children}</Main>
+      <Sidebar />
+    </Container>
   )
 }

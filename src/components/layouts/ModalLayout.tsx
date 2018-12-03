@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'react-emotion'
 import { Route } from 'react-router-dom'
+// import { History } from 'history'
 
 const Root = styled('header')({
   alignItems: 'center',
@@ -40,16 +41,17 @@ export const ModalLayout: React.SFC<IDefaultProps> = props => {
   return (
     <Route
       {...rest}
-      render={matchProps => (
-        // TODO: need go to back for Root
-        <Root>
-          <Main onClick={e => e.stopPropagation()}>
-            <Container>
-              <Component {...matchProps} />
-            </Container>
-          </Main>
-        </Root>
-      )}
+      render={matchProps => {
+        return (
+          <Root onClick={matchProps.history.goBack}>
+            <Main onClick={e => e.stopPropagation()}>
+              <Container>
+                <Component {...matchProps} />
+              </Container>
+            </Main>
+          </Root>
+        )
+      }}
     />
   )
 }
