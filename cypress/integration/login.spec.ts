@@ -1,3 +1,5 @@
+import jsqr from "jsqr"
+
 describe('login test', () =>
 {
 	function showQr(elemSelector: string, qrName: string)
@@ -19,6 +21,40 @@ describe('login test', () =>
 		})
 		cy.wait(600)
 	}
+	function getQrData(elem: JQuery<HTMLElement>): Promise<string>
+	{
+		return new Promise((res, rej) =>
+		{
+			let svg = elem[0] as unknown as SVGSVGElement
+		
+			let canvas = document.createElement('canvas')
+			
+			let ctx = canvas.getContext('2d')!
+			let loader = new Image()
+			loader.width = canvas.width = 200
+			loader.height = canvas.height = 200
+			loader.onload = () =>
+			{
+				ctx.drawImage(loader, 0, 0, loader.width, loader.height)
+				let data = ctx.getImageData(0, 0, canvas.width, canvas.height)
+				let qr = jsqr(data.data, data.width, data.height)
+				expect(qr).not.null
+				res(qr!.data)
+			}
+			loader.src = 'data:image/svg+xml,' + encodeURIComponent(new XMLSerializer().serializeToString(svg))
+		})
+	}
+	function checkShownQr(text: string | RegExp)
+	{
+		cy.get('svg').should(async (elem) =>
+		{
+			let qr = await getQrData(elem)
+			if (typeof text === "string")
+				expect(qr).eq(text)
+			else
+				expect(qr).match(text)
+		})
+	}
 	it('should render login page correctly', () =>
 	{
 		cy.visit('/')
@@ -31,9 +67,23 @@ describe('login test', () =>
 		cy.visit('/')
 		cy.contains('Login using QR code').click()
 
+		checkShownQr(/getWalletList\|\d+\|{"blockchains":\["eth","eos"\]}/)
 		showQr('video', 'login_single_eth_wallet')
 
 		cy.url().should('include', '/wallets')
+		cy.contains(/eth wallet/i)
+		cy.contains('0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0')
+	})
+
+	it('should login directly on /login', () =>
+	{
+		cy.visit('/login')
+
+		checkShownQr(/getWalletList\|\d+\|{"blockchains":\["eth","eos"\]}/)
+		showQr('video', 'login_single_eth_wallet')
+		
+		cy.url().should('include', '/wallets')
+		cy.contains(/eth wallet/i)
 		cy.contains('0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0')
 	})
 	
