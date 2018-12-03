@@ -4,6 +4,7 @@ import {
   IWalletEth,
   IWalletEos,
   IWalletBase,
+  ISendingTxData,
 } from './types'
 
 export const fetchRequest = () => action(WalletsActionTypes.FETCH_REQUEST)
@@ -15,5 +16,5 @@ export const fetchError = (message: string) =>
 export const addWallet = (wallet: IWalletBase) =>
   action(WalletsActionTypes.ADD_WALLET, wallet)
 
-export const setSignTx = (data: string) =>
-  action(WalletsActionTypes.SET_SIGN_TX, data)
+export const setSendingTxData = (data: ISendingTxData) =>
+  action(WalletsActionTypes.SET_SENDING_TX_DATA, data)

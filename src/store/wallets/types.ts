@@ -47,16 +47,22 @@ export enum WalletsActionTypes {
   FETCH_SUCCESS = '@@wallets/FETCH_DATA_SUCCESS',
   FETCH_ERROR = '@@wallets/FETCH_DATA_ERROR',
   ADD_WALLET = '@@wallets/ADD_WALLET',
-  SET_SIGN_TX = '@@wallets/SET_SIGN_TX',
+  SET_SENDING_TX_DATA = '@@wallets/SET_SENDING_TX_DATA',
 }
 
-// https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
 export interface IWalletsState {
   readonly item: IWalletEth | IWalletEos
   readonly items: IWalletEth[] | IWalletEos[]
-  readonly signTx: string
+  readonly sendingTxData: ISendingTxData
   readonly errors?: string
   readonly loading: boolean
+}
+
+export interface ISendingTxData {
+  signTx?: string
+  hash?: string
+  formData?: IEthTxFormValues | IEosTxFormValues
+  error?: string
 }
 
 export interface IEthTxFormValues {

@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'react-emotion'
+import styled, { css } from 'react-emotion'
 import { H1, Link } from '../atoms'
 
 const Root = styled('header')({
@@ -11,12 +11,6 @@ const Root = styled('header')({
 const Logo = styled(H1)`
   color: #fff;
   padding: 1rem;
-  sup: {
-    color: #f2494d;
-    font-size: 0.8rem;
-    text-transform: lowercase;
-    vertical-align: super;
-  }
 `
 
 export const Header = ({ to }: { to: string }) => (
@@ -24,7 +18,16 @@ export const Header = ({ to }: { to: string }) => (
     <Link to={to}>
       <Logo>
         Cold Crypto
-        <sup>beta mode</sup>
+        <sup
+          className={css`
+            color: #f2494d;
+            font-size: 0.8rem;
+            text-transform: lowercase;
+            vertical-align: super;
+          `}
+        >
+          beta mode
+        </sup>
       </Logo>
     </Link>
   </Root>

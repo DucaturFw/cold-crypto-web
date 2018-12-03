@@ -4,12 +4,18 @@ import {
   WalletsActionTypes,
   IWalletEth,
   IWalletEos,
+  IEthTxFormValues,
 } from './types'
 
 const initialState: IWalletsState = {
   item: {} as IWalletEth | IWalletEos,
   items: [],
-  signTx: '' as string,
+  sendingTxData: {
+    signTx: '',
+    hash: '',
+    formData: {} as IEthTxFormValues,
+    error: '',
+  },
   errors: undefined,
   loading: false,
 }
@@ -28,8 +34,11 @@ const reducer: Reducer<IWalletsState> = (state = initialState, action) => {
     case WalletsActionTypes.ADD_WALLET: {
       return { ...state, item: action.payload }
     }
-    case WalletsActionTypes.SET_SIGN_TX: {
-      return { ...state, signTx: action.payload }
+    case WalletsActionTypes.SET_SENDING_TX_DATA: {
+      return {
+        ...state,
+        sendingTxData: { ...state.sendingTxData, ...action.payload },
+      }
     }
     default: {
       return state

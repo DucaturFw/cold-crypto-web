@@ -26,7 +26,7 @@ const SignPage: React.SFC<AllProps> = ({ signTx, sendTx }) => (
 )
 
 const mapStateToProps = ({ wallets }: IApplicationState) => ({
-  signTx: wallets.signTx,
+  signTx: wallets.sendingTxData.signTx!,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
