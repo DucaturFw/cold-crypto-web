@@ -58,6 +58,8 @@ function* handleSendTx(action: ReturnType<typeof sendTransaction>) {
   try {
     const { result } = parseMessage(action.payload)
 
+    console.log(result);
+
     // TODO: fix this hack - result[0] ohohoho
     const txHash = yield sendTx(result)
 
