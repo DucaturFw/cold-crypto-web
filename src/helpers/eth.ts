@@ -22,7 +22,7 @@ export async function sendTx(tx: string) {
   })
 }
 
-export async function getTx(address) {
+export async function getTx(address: string) {
   return callApi(
     'get',
     API_ENDPOINT,
