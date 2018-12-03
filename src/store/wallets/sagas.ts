@@ -1,12 +1,7 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects'
 import { WalletsActionTypes } from './types'
 import { fetchError, fetchSuccess, addWallet, fetchRequest } from './actions'
-import callApi from '../../utils/callApi'
-import { getNonce } from '../../helpers/eth'
-
-// TODO: make blockchain config for explorer
-const API_ENDPOINT =
-  process.env.REACT_APP_API_ENDPOINT || 'https://api-rinkeby.etherscan.io'
+import { getBcInfo } from '../../helpers/common'
 
 function* handleSetWallet(action: ReturnType<typeof addWallet>) {
   try {
@@ -14,18 +9,10 @@ function* handleSetWallet(action: ReturnType<typeof addWallet>) {
     // start fetch request for update wallet data
     yield put(fetchRequest())
     // fetch wallets txs history
-    const res = yield call(
-      callApi,
-      'get',
-      API_ENDPOINT,
-      `/api?module=account&action=txlist&address=${
-        wallet.address
-      }&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=YourApiKeyToken`
-    )
+    const res = yield call(getBcInfo, wallet)
 
-    const nonce = yield getNonce(wallet.address)
     // added txs history
-    wallet = { ...wallet, txs: res.result, nonce }
+    wallet = { ...wallet, ...res }
 
     if (res.error) {
       yield put(fetchError(res.error))

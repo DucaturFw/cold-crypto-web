@@ -1,9 +1,11 @@
 import * as React from 'react'
+import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
+import { RouteComponentProps } from 'react-router-dom'
+
 import { QrLogin } from '../components/atoms'
 
 import { getWalletListCommand } from '../helpers/jsonrps'
-import { connect } from 'react-redux'
-import { Dispatch } from 'redux'
 import { login } from '../store/transport/actions'
 import { IConnectedReduxProps, IApplicationState } from '../store'
 
@@ -17,7 +19,10 @@ interface IPropsFromDispatch {
   scanLoginData: typeof login
 }
 
-type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
+type AllProps = IPropsFromState &
+  IPropsFromDispatch &
+  IConnectedReduxProps &
+  RouteComponentProps
 
 class LoginPage extends React.Component<AllProps> {
   render() {
@@ -25,6 +30,12 @@ class LoginPage extends React.Component<AllProps> {
 
     const isRtc = new URLSearchParams(search).get('rtc') as any
     const value = isRtc ? qrcodeData : getWalletListCommand()
+    // TODO: add back url to push
+    // const { location } = props
+    // let pathname: string
+    // if (location && location.state && location.state.from) {
+    //   pathname = location.state.from.pathname
+    // }
     return (
       <React.Fragment>
         <QrLogin

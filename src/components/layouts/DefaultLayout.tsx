@@ -29,21 +29,23 @@ interface IDefaultProps {
   exact?: boolean
 }
 
-export const DefaultLayout: React.SFC<IDefaultProps> = props => {
-  const { component: Component, ...rest } = props
-  return (
-    <Route
-      {...rest}
-      render={matchProps => (
-        <Root>
-          <Header to="/" />
-          <Main>
-            <Modal>
-              <Component {...matchProps} />
-            </Modal>
-          </Main>
-        </Root>
-      )}
-    />
-  )
+export class DefaultLayout extends React.Component<IDefaultProps, any> {
+  public render() {
+    const { component: Component, ...rest } = this.props
+    return (
+      <Route
+        {...rest}
+        render={matchProps => (
+          <Root>
+            <Header to="/" />
+            <Main>
+              <Modal>
+                <Component {...matchProps} />
+              </Modal>
+            </Main>
+          </Root>
+        )}
+      />
+    )
+  }
 }
