@@ -10,7 +10,7 @@ export const getWalletListCommand = () => {
 export const getSignTransferTxCommand = async (
   data: IEthTxFormValues,
   wallet: IWalletEth
-) => {
+): Promise<string> => {
   const tx = {
     gasPrice: Web3.utils.toWei(data.gasPrice.toString(), 'gwei'),
     nonce: wallet.nonce,

@@ -6,7 +6,7 @@ import { push } from 'connected-react-router'
 import { getSignTransferTxCommand } from '../../helpers/jsonrps'
 import parseMessage from '../../utils/parseMessage'
 import { sendTx } from '../../helpers/eth'
-import { setSignTx, fetchSuccess } from '../wallets/actions'
+import { setSendingTxData, fetchSuccess } from '../wallets/actions'
 import { authSuccess } from '../auth/actions'
 import { setStatus } from '../webrtc/actions'
 
@@ -14,7 +14,7 @@ function* handleLogin(action: ReturnType<typeof login>) {
   try {
     // TODO: check correct message id
     const { result: wallets } = parseMessage(action.payload)
-    const wallet = wallets[0];
+    const wallet = wallets[0]
 
     // call addWallet and authSuccess after success read and parse qrcode from login page
     yield put(authSuccess())
@@ -40,12 +40,13 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
       nonce: wallet.nonce,
     })
 
+    yield put(setSendingTxData({ signTx: signedData, formData: txFormData }))
+
     if (connected) {
       // TODO: create action from webrtc store
       yield all([put(setStatus('Verification')), put(push('/status'))])
       rtc.dataChannel.send(signedData)
     } else {
-      yield put(setSignTx(signedData))
       yield put(push(`/sign`))
     }
   } catch (err) {
@@ -57,9 +58,8 @@ function* handleSendTx(action: ReturnType<typeof sendTransaction>) {
   try {
     const { result } = parseMessage(action.payload)
 
-    // TODO: fix this hack - result[0] ohohoho
     const txHash = yield sendTx(result)
-
+    yield put(push(`/tx/${txHash}`))
     console.log('====================================')
     console.log(txHash)
     console.log('====================================')
