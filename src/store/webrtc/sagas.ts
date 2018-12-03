@@ -1,5 +1,5 @@
 import { fork, all, take, cancel, select, call, put } from 'redux-saga/effects'
-import { eventChannel, takeEvery } from 'redux-saga'
+import { eventChannel, takeEvery, delay } from 'redux-saga'
 
 import connectTask from './connectSaga'
 import parseMessage from '../../utils/parseMessage'
@@ -7,7 +7,7 @@ import { RTCCommands } from '../../constants'
 import { login, sendTransaction } from '../transport/actions'
 import { WebrtcActionTypes } from './types'
 import { IApplicationState } from '..'
-import { setStatus } from './actions'
+import { setStatus, connectionClosing } from './actions'
 
 function createDataChannel(dataChannel: any) {
   return eventChannel(emit => {
@@ -39,21 +39,38 @@ function* watchDataChannel() {
       default:
         break
     }
-
-    // TODO: make pong for datachenel
   }
+}
+
+function* handleOpeningConnection() {
+  const rtc = yield select((state: IApplicationState) => state.webrtc.rtc)
+
+  while (true) {
+    yield delay(3000)
+    if (rtc.dataChannel.readyState === 'closing') yield put(connectionClosing())
+  }
+}
+
+function* watchStatusConnection() {
+  yield takeEvery(WebrtcActionTypes.CONNECTION_OPEN, handleOpeningConnection)
+  yield takeEvery(WebrtcActionTypes.CONNECTION_OPEN, handleOpeningConnection)
 }
 
 function* watchConnection() {
   const bgConectionTask = yield fork(connectTask)
 
-  yield takeEvery(WebrtcActionTypes.CONNECTION_SUCCESS, function*() {
+  // dispose connection task
+  yield takeEvery(WebrtcActionTypes.CONNECTION_OPEN, function*() {
     yield cancel(bgConectionTask)
   })
 }
 
 function* webrtcSaga() {
-  yield all([fork(watchConnection), fork(watchDataChannel)])
+  yield all([
+    fork(watchConnection),
+    fork(watchDataChannel),
+    fork(watchStatusConnection),
+  ])
 }
 
 export default webrtcSaga

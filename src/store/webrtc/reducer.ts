@@ -10,8 +10,11 @@ const initialState: IWebrtcState = {
 
 const reducer: Reducer<IWebrtcState> = (state = initialState, action) => {
   switch (action.type) {
-    case WebrtcActionTypes.CONNECTION_SUCCESS: {
+    case WebrtcActionTypes.CONNECTION_OPEN: {
       return { ...state, connected: true }
+    }
+    case WebrtcActionTypes.CONNECTION_CLOSE: {
+      return { ...state, connected: false }
     }
     case WebrtcActionTypes.SET_STATUS: {
       return { ...state, status: action.payload }
