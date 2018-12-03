@@ -9,9 +9,9 @@ import { WebrtcActionTypes } from './types'
 import { IApplicationState } from '..'
 import { setStatus, connectionClosing } from './actions'
 
-function createDataChannel(dataChannel: any) {
+function createDataChannel(dataChannel: RTCDataChannel) {
   return eventChannel(emit => {
-    dataChannel.onmessage = (message: any) => emit(message.data)
+    dataChannel.onmessage = (message: MessageEvent) => emit(message.data)
 
     const unsubscribe = () => {
       dataChannel.close()

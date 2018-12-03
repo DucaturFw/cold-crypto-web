@@ -1,3 +1,5 @@
+import { RTCHelper } from '../../helpers/webrtc/webrtc'
+
 export enum WebrtcActionTypes {
   CONNECTION_OPEN = '@@Webrtc/CONNECTION_OPEN',
   CONNECTION_CLOSE = '@@Webrtc/CONNECTION_CLOSE',
@@ -6,7 +8,7 @@ export enum WebrtcActionTypes {
 }
 
 export interface IWebrtcState {
-  readonly rtc: any
+  readonly rtc: RTCHelper
   readonly connected: boolean
   readonly status: string
 }

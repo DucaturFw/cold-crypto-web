@@ -30,7 +30,7 @@ const mapStateToProps = ({ wallets }: IApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  sendTx: (data: any) => dispatch(sendTransaction(data)),
+  sendTx: (data: string) => dispatch(sendTransaction(data)),
 })
 
 export const Sign = connect(

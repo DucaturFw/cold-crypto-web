@@ -133,7 +133,7 @@ const mapStateToProps = ({ wallets }: IApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: any) => dispatch(createTransaction(data)),
+  createTx: (data: IEthTxFormValues) => dispatch(createTransaction(data)),
 })
 
 export const CreateTx = connect(

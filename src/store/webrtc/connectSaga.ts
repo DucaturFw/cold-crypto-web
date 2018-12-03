@@ -6,11 +6,12 @@ import { connectionReady } from './actions'
 import { getWalletListCommand } from '../../helpers/jsonrps'
 import { setRtcSid } from '../transport/actions'
 import { IApplicationState } from '..'
+import { RTCHelper } from '../../helpers/webrtc/webrtc'
 
 const makeOfferRequest = (offer: string) =>
   JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'offer', params: { offer } })
 
-const makeIceRequest = (ice: string) =>
+const makeIceRequest = (ice: RTCIceCandidate) =>
   JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'ice', params: { ice } })
 
 const onOpenChannel = (ws: WebSocket) =>
@@ -26,14 +27,14 @@ const onMessageChannel = (ws: WebSocket) =>
     return () => ws.removeEventListener('message', emit)
   })
 
-function* answerSaga(ws: WebSocket, rtc: any, answer: string) {
-  const sendIce = (ice: any) => ws.send(makeIceRequest(ice)) // TODO: Add typings
+function* answerSaga(ws: WebSocket, rtc: RTCHelper, answer: string) {
+  const sendIce = (ice: RTCIceCandidate) => ws.send(makeIceRequest(ice)) // TODO: Add typings
   rtc.candidates.map(sendIce)
   rtc.on('ice', sendIce)
-  yield call(rtc.pushAnswer, { type: 'answer', sdp: answer })
+  yield call(() => rtc.pushAnswer, { type: 'answer', sdp: answer })
   yield call(rtc.waitConnection)
 
-  rtc.dataChannel.send(getWalletListCommand())
+  rtc.dataChannel!.send(getWalletListCommand())
   yield put(connectionReady())
   return ws.close()
 }

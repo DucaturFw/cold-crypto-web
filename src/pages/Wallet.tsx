@@ -22,7 +22,7 @@ interface IPropsFromDispatch {
 
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
-class WalletPage extends React.Component<AllProps, any> {
+class WalletPage extends React.Component<AllProps> {
   public componentDidMount() {
     const { wallet, addWallet: addWalletDispatch } = this.props
 

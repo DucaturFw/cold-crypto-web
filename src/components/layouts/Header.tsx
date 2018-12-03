@@ -8,16 +8,16 @@ const Root = styled('header')({
   height: '4rem',
 })
 
-const Logo = styled(H1)({
-  color: '#fff',
-  padding: '1rem',
+const Logo = styled(H1)`
+  color: #fff;
+  padding: 1rem;
   sup: {
-    color: '#f2494d',
-    fontSize: '.8rem',
-    textTransform: 'lowercase',
-    verticalAlign: 'super',
-  } as any,
-})
+    color: #f2494d;
+    font-size: 0.8rem;
+    text-transform: lowercase;
+    vertical-align: super;
+  }
+`
 
 export const Header = ({ to }: { to: string }) => (
   <Root>

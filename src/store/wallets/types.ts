@@ -33,8 +33,8 @@ export interface IEthTx {
 }
 
 export interface IEosTx {
-  act: any;
-  createdAt: string;
+  act: any
+  createdAt: string
 }
 
 export interface IWalletEos extends IWalletBase {}

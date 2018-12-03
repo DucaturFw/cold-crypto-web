@@ -3,8 +3,6 @@ import * as React from 'react'
 import { Table } from './common'
 import { IEosTx } from '../../store/wallets/types'
 
-// const API_URL = 'https://ropsten.etherscan.io/tx'
-
 export const EosTX = (txs: IEosTx[]) => {
   return (
     <Table>

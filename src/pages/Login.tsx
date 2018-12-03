@@ -28,7 +28,7 @@ class LoginPage extends React.Component<AllProps> {
   render() {
     const { search, scanLoginData, qrcodeData } = this.props
 
-    const isRtc = new URLSearchParams(search).get('rtc') as any
+    const isRtc = new URLSearchParams(search).get('rtc') === 'true'
     const value = isRtc ? qrcodeData : getWalletListCommand()
     // TODO: add back url to push
     // const { location } = props
