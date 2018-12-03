@@ -39,6 +39,7 @@ describe('login test', () =>
 				let data = ctx.getImageData(0, 0, canvas.width, canvas.height)
 				let qr = jsqr(data.data, data.width, data.height)
 				expect(qr).not.null
+				// console.log(qr)
 				res(qr!.data)
 			}
 			loader.src = 'data:image/svg+xml,' + encodeURIComponent(new XMLSerializer().serializeToString(svg))
@@ -49,6 +50,7 @@ describe('login test', () =>
 		cy.get('svg').should(async (elem) =>
 		{
 			let qr = await getQrData(elem)
+			// console.log(`qr: ${qr}`)
 			if (typeof text === "string")
 				expect(qr).eq(text)
 			else
@@ -79,12 +81,23 @@ describe('login test', () =>
 	{
 		cy.visit('/login')
 
-		checkShownQr(/getWalletList\|\d+\|{"blockchains":\["eth","eos"\]}/)
+		checkShownQr(/^getWalletList\|\d+\|{"blockchains":\["eth","eos"\]}$/)
 		showQr('video', 'login_single_eth_wallet')
 		
 		cy.url().should('include', '/wallets')
 		cy.contains(/eth wallet/i)
 		cy.contains('0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0')
+	})
+
+	it('should open webrtc login page', () =>
+	{
+		cy.visit('/')
+		// cy.contains('WebRTC login').click()
+		cy.contains(/WebRTC login/i).click()
+
+		cy.url().should('match', /[\/webrtc|\/login\?rtc=true]/)
+
+		checkShownQr(/^webrtcLogin.*$/)
 	})
 	
 	it.skip('should login with qr multiple wallets', () =>
