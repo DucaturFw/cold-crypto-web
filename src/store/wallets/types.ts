@@ -61,7 +61,7 @@ export interface IWalletsState {
 export interface ISendingTxData {
   signTx?: string
   hash?: string
-  formData?: IEthTxFormValues
+  formData?: IEthTxFormValues | IEosTxFormValues
   error?: string
 }
 
