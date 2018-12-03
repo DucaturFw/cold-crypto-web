@@ -40,6 +40,7 @@
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer build/static/js/main.*",
     "lint": "tslint 'src/**/*.{ts, tsx}'",
+    "test:cypress": "yarn test:qrs-gen && yarn cypress run",
     "test:qrs-gen": "(cd cypress/fixtures && exec node generate_qr_codes.js)",
     "test:tsc": "tsc --noEmit"
   },
