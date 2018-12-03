@@ -18,7 +18,6 @@ function* handleLogin(action: ReturnType<typeof login>) {
 
     // call addWallet and authSuccess after success read and parse qrcode from login page
     yield put(authSuccess())
-    // TODO: fix this hack - result[0] ohohoho
     yield put(fetchSuccess(wallet))
     yield put(push(`/wallets/${wallet.address}`))
   } catch (err) {

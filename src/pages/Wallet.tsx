@@ -7,12 +7,9 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
 import { addWallet } from '../store/wallets/actions'
-import {
-  IWallet,
-  IEthTx,
-  IWalletEth,
-  IWalletBase,
-} from '../store/wallets/types'
+import { IWallet, IWalletBase } from '../store/wallets/types'
+
+import { TXList } from './TXList'
 
 interface IPropsFromState {
   loading: boolean
@@ -63,7 +60,9 @@ class WalletPage extends React.Component<AllProps, any> {
                 <th>Value</th>
               </tr>
             </thead>
-            <tbody>{renderTxs(wallet.txs)}</tbody>
+            <tbody>
+              <TXList wallet={wallet} />
+            </tbody>
           </Table>
           {loading && <Loader />}
         </Column>
@@ -72,29 +71,6 @@ class WalletPage extends React.Component<AllProps, any> {
   }
 }
 
-const renderTxs = (txs: IWalletEth) => {
-  if (!txs) return
-  return (
-    <React.Fragment>
-      {txs.map((item: IEthTx, index: number) => (
-        <tr key={index}>
-          <td>{new Date(item.timeStamp * 1000).toLocaleString()}</td>
-          <OverflowTd>
-            <a
-              target="_blank"
-              // TODO: make genrator explorer url for blockchains
-              href={`https://rinkeby.etherscan.io/tx/${item.hash}`}
-            >
-              {item.hash}
-            </a>
-          </OverflowTd>
-          <OverflowTd>{item.from}</OverflowTd>
-          <td>{item.value}</td>
-        </tr>
-      ))}
-    </React.Fragment>
-  )
-}
 const mapStateToProps = ({ wallets }: IApplicationState) => ({
   loading: wallets.loading,
   wallet: wallets.item,
@@ -124,12 +100,6 @@ export const Table = styled('table')({
     borderBottom: '1px solid #b2bcb9',
   },
   width: '100%',
-})
-
-const OverflowTd = styled('td')({
-  maxWidth: '20vw',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
 })
 
 const Address = styled('div')({
