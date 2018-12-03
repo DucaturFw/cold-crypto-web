@@ -39,6 +39,7 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
       address: wallet.address,
       nonce: wallet.nonce,
     })
+    console.log(signedData);
 
     if (connected) {
       // TODO: create action from webrtc store
@@ -56,6 +57,8 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
 function* handleSendTx(action: ReturnType<typeof sendTransaction>) {
   try {
     const { result } = parseMessage(action.payload)
+
+    console.log(result);
 
     // TODO: fix this hack - result[0] ohohoho
     const txHash = yield sendTx(result)
