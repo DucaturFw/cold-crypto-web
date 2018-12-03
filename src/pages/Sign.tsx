@@ -3,10 +3,10 @@ import { QrLogin } from '../components/atoms'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
-import { sendTransaction } from '../store/qrcode/actions'
+import { sendTransaction } from '../store/transport/actions'
 
 interface IPropsFromState {
-  signData: string
+  signTx: string
 }
 
 interface IPropsFromDispatch {
@@ -15,16 +15,18 @@ interface IPropsFromDispatch {
 
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
-const SignPage: React.SFC<AllProps> = ({ signData, sendTx }) => (
-  <QrLogin
-    title={'Sign Transaction By Mobile'}
-    value={signData || ''}
-    onScan={sendTx}
-  />
+const SignPage: React.SFC<AllProps> = ({ signTx, sendTx }) => (
+  <React.Fragment>
+    <QrLogin
+      title={'Sign Transaction By Mobile'}
+      value={signTx || ''}
+      onScan={sendTx}
+    />
+  </React.Fragment>
 )
 
-const mapStateToProps = ({ qrcode }: IApplicationState) => ({
-  signData: qrcode.signData,
+const mapStateToProps = ({ wallets }: IApplicationState) => ({
+  signTx: wallets.signTx,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

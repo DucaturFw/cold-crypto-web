@@ -6,14 +6,17 @@ import { RouteComponentProps } from 'react-router-dom'
 import { QrLogin } from '../components/atoms'
 
 import { getWalletListCommand } from '../helpers/jsonrps'
-import { scanLoginSuccess } from '../store/qrcode/actions'
-import { IConnectedReduxProps } from '../store'
+import { login } from '../store/transport/actions'
+import { IConnectedReduxProps, IApplicationState } from '../store'
 
 // TODO: map errorfrom qrcode state and show if we will have it
-interface IPropsFromState {}
+interface IPropsFromState {
+  search: string
+  qrcodeData: string
+}
 
 interface IPropsFromDispatch {
-  scanLoginData: typeof scanLoginSuccess
+  scanLoginData: typeof login
 }
 
 type AllProps = IPropsFromState &
@@ -21,29 +24,41 @@ type AllProps = IPropsFromState &
   IConnectedReduxProps &
   RouteComponentProps
 
-const LoginPage: React.SFC<AllProps> = props => {
-  const { scanLoginData } = props
+class LoginPage extends React.Component<AllProps> {
+  render() {
+    const { search, scanLoginData, qrcodeData } = this.props
 
-  // TODO: add back url to push
-  // const { location } = props
-  // let pathname: string
-  // if (location && location.state && location.state.from) {
-  //   pathname = location.state.from.pathname
-  // }
-  return (
-    <QrLogin
-      title={'Mobile Login'}
-      value={getWalletListCommand()}
-      onScan={data => scanLoginData(data)}
-    />
-  )
+    const isRtc = new URLSearchParams(search).get('rtc') as any
+    const value = isRtc ? qrcodeData : getWalletListCommand()
+    // TODO: add back url to push
+    // const { location } = props
+    // let pathname: string
+    // if (location && location.state && location.state.from) {
+    //   pathname = location.state.from.pathname
+    // }
+    return (
+      <React.Fragment>
+        <QrLogin
+          title={'Mobile Login'}
+          value={value}
+          onScan={scanLoginData}
+          readonly={isRtc}
+        />
+      </React.Fragment>
+    )
+  }
 }
 
+const mapStateToProps = ({ router, transport }: IApplicationState) => ({
+  search: router.location.search,
+  qrcodeData: transport.qrcodeData,
+})
+
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  scanLoginData: (data: string) => dispatch(scanLoginSuccess(data)),
+  scanLoginData: (data: string) => dispatch(login(data)),
 })
 
 export const Login = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(LoginPage)
