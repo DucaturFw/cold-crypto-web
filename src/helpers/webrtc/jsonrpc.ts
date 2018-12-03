@@ -1,3 +1,5 @@
+import { parseHostMessage, isMethodCall, isError } from "./hostproto"
+
 export type Id = string | number | null
 
 export function notify(
@@ -56,7 +58,7 @@ export function jrpcs<
 }
 
 export type RequestHandler = (
-  json: { id: number; method: string; params: any[] | any },
+  json: { id: Id; method: string; params: any[] | any },
   callback: (err: any, result: any) => void
 ) => void
 
@@ -72,25 +74,32 @@ export class JsonRpc {
     this.send = send
     this.onRequest = onRequest
   }
-  public onMessage = (data: string) => {
-    let json = JSON.parse(data)
-    // console.log(json)
-    let id = json.id
-    if (json.method) {
-      this.onRequest(json, (error, result) =>
-        this.send(
-          JSON.stringify({
-            id,
-            jsonrpc: '2.0',
-            ...(error ? { error } : { result }),
-          })
+  public onMessage = (data: string) =>
+  {
+      let json = parseHostMessage(data)
+      if (!json)
+        return console.error(`JsonRpc: error parsing data!\n${data}`)
+      
+      let id = json.id as number
+      if (isMethodCall(json))
+      {
+        this.onRequest(json, (error, result) =>
+          this.send(
+            JSON.stringify({
+              id,
+              jsonrpc: '2.0',
+              ...(error ? { error } : { result }),
+            })
+          )
         )
-      )
-    } else if (this.listeners[id]) {
-      let m = this.listeners[id]
-      delete this.listeners[id]
-      m(json.error, json.result)
-    }
+      } else if (this.listeners[id]) {
+        let m = this.listeners[id]
+        delete this.listeners[id]
+        if (isError(json))
+          m(json.error, undefined)
+        else
+          m(undefined, json.result)
+      }
   }
   public async ping() {
     let response = await this.call('ping')

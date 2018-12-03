@@ -71,3 +71,9 @@ export interface IEthTxFormValues {
   data: string
   amount: number
 }
+
+export interface IEosTxFormValues {
+  to: string
+  memo: string
+  amount: number
+}
