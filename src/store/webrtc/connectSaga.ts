@@ -32,21 +32,20 @@ function* answerSaga(ws: WebSocket, rtc: any, answer: string) {
   rtc.on('ice', sendIce)
   yield call(rtc.pushAnswer, { type: 'answer', sdp: answer })
   yield call(rtc.waitConnection)
-  yield put(connectionReady())
 
   rtc.dataChannel.send(getWalletListCommand())
+  yield put(connectionReady())
   return ws.close()
 }
 
 export default function* connectSaga() {
   const rtc = yield select((state: IApplicationState) => state.webrtc.rtc)
   const offerPromise = yield call(rtc.createOffer)
-
   const ws = new WebSocket(handshakeServerUrl)
   const openChan = onOpenChannel(ws)
   const messageChan = onMessageChannel(ws)
   yield take(openChan)
-  // const offer = yield call(offerPromise)
+
   ws.send(makeOfferRequest(offerPromise.sdp))
 
   while (true)

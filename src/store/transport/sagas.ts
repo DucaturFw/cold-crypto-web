@@ -25,8 +25,10 @@ function* handleLogin(action: ReturnType<typeof login>) {
 }
 
 function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
-  // get wallet from store
   const wallet = yield select((state: IApplicationState) => state.wallets.item)
+  const { connected, rtc } = yield select(
+    (state: IApplicationState) => state.webrtc
+  )
   try {
     const txFormData = action.payload
 
@@ -37,9 +39,13 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
       nonce: wallet.nonce,
     })
 
-    // it's for qrcode
-    yield put(setSignTx(signedData))
-    yield put(push(`/sign`))
+    if (connected) {
+      // TODO: create action from webrtc store
+      rtc.dataChannel.send(signedData)
+    } else {
+      yield put(setSignTx(signedData))
+      yield put(push(`/sign`))
+    }
   } catch (err) {
     console.log('handleCreateTx error', err)
   }

@@ -1,5 +1,5 @@
 export enum WebrtcActionTypes {
-  Webrtc_SUCCESS = '@@Webrtc/Webrtc_SUCCESS',
+  CONNECTION_SUCCESS = '@@Webrtc/CONNECTION_SUCCESS',
   SET_CONNECTION_SID = '@@Webrtc/SET_CONNECTION_SID',
 }
 
