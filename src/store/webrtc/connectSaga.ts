@@ -31,7 +31,7 @@ function* answerSaga(ws: WebSocket, rtc: RTCHelper, answer: string) {
   const sendIce = (ice: RTCIceCandidate) => ws.send(makeIceRequest(ice)) // TODO: Add typings
   rtc.candidates.map(sendIce)
   rtc.on('ice', sendIce)
-  yield call(() => rtc.pushAnswer, { type: 'answer', sdp: answer })
+  yield call(rtc.pushAnswer, { type: 'answer' as RTCSdpType, sdp: answer })
   yield call(rtc.waitConnection)
 
   rtc.dataChannel!.send(getWalletListCommand())

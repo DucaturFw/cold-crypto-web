@@ -1,4 +1,4 @@
-export const handshakeServerUrl = `wss://duxi.io/shake:3077`
+export const handshakeServerUrl = `wss://duxi.io/shake`
 
 export enum RTCCommands {
   webrtcLogin = 1,
