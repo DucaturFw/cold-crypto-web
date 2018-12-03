@@ -13,6 +13,7 @@
     "emotion-theming": "^10.0.0",
     "formik": "^1.3.2",
     "history": "^4.7.2",
+    "qrcode": "^1.3.2",
     "qrcode.react": "^0.8.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
@@ -25,6 +26,7 @@
     "redux-devtools-extension": "^2.13.7",
     "redux-saga": "^0.16.2",
     "typesafe-actions": "^2.0.4",
+    "videoshow": "^0.1.11",
     "web3": "^1.0.0-beta.36"
   },
   "scripts": {
@@ -34,6 +36,7 @@
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer build/static/js/main.*",
     "lint": "tslint 'src/**/*.{ts, tsx}'",
+    "test:qrs-gen": "(cd cypress/fixtures && exec node generate_qr_codes.js)",
     "test:tsc": "tsc --noEmit"
   },
   "eslintConfig": {

@@ -16,7 +16,7 @@ describe('login test', () =>
 	
 		cy.document().then(doc =>
 		{
-			cy.fixture('login_qr_video.mov', 'base64').then(mov =>
+			cy.fixture('qr/login_qr_video.mp4', 'base64').then(mov =>
 			{
 				let uri = `data:video/mp4;base64,${mov}`
 				let el = doc.querySelector('video')
