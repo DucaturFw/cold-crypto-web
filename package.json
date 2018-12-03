@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@cypress/webpack-preprocessor": "^4.0.2",
     "@emotion/core": "^10.0.0",
     "connected-react-router": "^5.0.1",
     "create-emotion": "^9.2.6",
@@ -25,6 +26,7 @@
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.7",
     "redux-saga": "^0.16.2",
+    "ts-loader": "^5.3.1",
     "typesafe-actions": "^2.0.4",
     "videoshow": "^0.1.11",
     "web3": "^1.0.0-beta.36"
