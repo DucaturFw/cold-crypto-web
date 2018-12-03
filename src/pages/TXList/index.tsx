@@ -9,6 +9,8 @@ interface IProps {
 }
 
 export const TXList: React.SFC<IProps> = ({ wallet }) => {
+  if (!wallet.txs) return <div />
+
   if (wallet.blockchain === 'eth') {
     return EthTx(wallet.txs)
   }
