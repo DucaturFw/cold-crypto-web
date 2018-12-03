@@ -6,7 +6,7 @@ import { push } from 'connected-react-router'
 import { getSignTransferTxCommand } from '../../helpers/jsonrps'
 import parseMessage from '../../utils/parseMessage'
 import { sendTx } from '../../helpers/eth'
-import { setSignTx, addWallet } from '../wallets/actions'
+import { setSignTx } from '../wallets/actions'
 import { authSuccess } from '../auth/actions'
 import { setStatus } from '../webrtc/actions'
 
@@ -19,7 +19,6 @@ function* handleLogin(action: ReturnType<typeof login>) {
     yield put(authSuccess())
     // TODO: fix this hack - result[0] ohohoho
     yield put(push(`/wallets/${result[0].address}`))
-    yield put(addWallet(result[0]))
   } catch (err) {
     console.log('handleLogin error', err)
   }

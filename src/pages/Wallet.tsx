@@ -6,52 +6,71 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
-import { IWallet, IEthTx, IWalletEth } from '../store/wallets/types'
+import { addWallet } from '../store/wallets/actions'
+import {
+  IWallet,
+  IEthTx,
+  IWalletEth,
+  IWalletBase,
+} from '../store/wallets/types'
 
 interface IPropsFromState {
   loading: boolean
   wallet: IWallet
 }
 
-interface IPropsFromDispatch {}
+interface IPropsFromDispatch {
+  addWallet: typeof addWallet
+}
 
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
-const WalletPage: React.SFC<AllProps> = ({ wallet, loading }) => (
-  <React.Fragment>
-    <Column>
-      <Row>
-        <Column style={{ flexBasis: '15rem', marginRight: '2rem' }}>
-          <Link to={`/wallets/${wallet.address}/tx/create`}>
-            <ButtonBase>Create New Tx</ButtonBase>
-          </Link>
-          <Link to={`/wallets/${wallet.address}/contract/create`}>
-            <ButtonBase>Call Contract</ButtonBase>
-          </Link>
-        </Column>
+class WalletPage extends React.Component<AllProps, any> {
+  public componentDidMount() {
+    const { wallet, addWallet: addWalletDispatch } = this.props
+
+    addWalletDispatch(wallet)
+  }
+
+  public render() {
+    const { wallet, loading } = this.props
+    return (
+      <React.Fragment>
         <Column>
-          <H1>{wallet.blockchain} Wallet</H1>
-          <H2>
-            <Address>{wallet.address}</Address>
-          </H2>
+          <Row>
+            <Column style={{ flexBasis: '15rem', marginRight: '2rem' }}>
+              <Link to={`/wallets/${wallet.address}/tx/create`}>
+                <ButtonBase>Create New Tx</ButtonBase>
+              </Link>
+              <Link to={`/wallets/${wallet.address}/contract/create`}>
+                <ButtonBase>Call Contract</ButtonBase>
+              </Link>
+            </Column>
+            <Column>
+              <H1>{wallet.blockchain} Wallet</H1>
+              <H2>
+                <Address>{wallet.address}</Address>
+              </H2>
+            </Column>
+          </Row>
+          <Hr />
+          <Table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>TxHash</th>
+                <th>Address</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>{renderTxs(wallet.txs)}</tbody>
+          </Table>
+          {loading && <Loader />}
         </Column>
-      </Row>
-      <Hr />
-      <Table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>TxHash</th>
-            <th>Address</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>{renderTxs(wallet.txs)}</tbody>
-      </Table>
-      {loading && <Loader />}
-    </Column>
-  </React.Fragment>
-)
+      </React.Fragment>
+    )
+  }
+}
 
 const renderTxs = (txs: IWalletEth) => {
   if (!txs) return
@@ -81,7 +100,9 @@ const mapStateToProps = ({ wallets }: IApplicationState) => ({
   wallet: wallets.item,
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({})
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  addWallet: (wallet: IWalletBase) => dispatch(addWallet(wallet)),
+})
 
 export const Wallet = connect(
   mapStateToProps,
