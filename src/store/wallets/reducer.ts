@@ -9,6 +9,7 @@ import {
 const initialState: IWalletsState = {
   item: {} as IWalletEth | IWalletEos,
   items: [],
+  signTx: '' as string,
   errors: undefined,
   loading: false,
 }
@@ -26,6 +27,9 @@ const reducer: Reducer<IWalletsState> = (state = initialState, action) => {
     }
     case WalletsActionTypes.ADD_WALLET: {
       return { ...state, item: action.payload }
+    }
+    case WalletsActionTypes.SET_SIGN_TX: {
+      return { ...state, signTx: action.payload }
     }
     default: {
       return state

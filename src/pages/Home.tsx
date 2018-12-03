@@ -33,7 +33,7 @@ export const Home: React.SFC<{}> = () => (
           </Link>
         </Row>
         <Row>
-          <Link to="/webrtc">
+          <Link to="/login?rtc=true">
             <ButtonSecondary>Webrtc login</ButtonSecondary>
           </Link>
         </Row>

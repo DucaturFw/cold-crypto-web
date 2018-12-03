@@ -5,7 +5,7 @@ import { Store } from 'redux'
 import { History } from 'history'
 import { ThemeProvider } from 'emotion-theming'
 
-import Routes from './routes'
+import { Routes } from './routes'
 import { IApplicationState } from './store'
 import { theme } from './styles/theme'
 import './styles'

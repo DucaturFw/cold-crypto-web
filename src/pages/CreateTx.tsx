@@ -16,7 +16,8 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
 import { IWallet, IEthTxFormValues } from '../store/wallets/types'
-import { createWalletTx } from '../store/wallets/actions'
+import { createTransaction } from '../store/transport/actions'
+
 import styled from 'react-emotion'
 
 interface IPropsFromState {
@@ -24,7 +25,7 @@ interface IPropsFromState {
 }
 
 interface IPropsFromDispatch {
-  createTx: typeof createWalletTx
+  createTx: typeof createTransaction
 }
 
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
@@ -132,7 +133,7 @@ const mapStateToProps = ({ wallets }: IApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: any) => dispatch(createWalletTx(data)),
+  createTx: (data: any) => dispatch(createTransaction(data)),
 })
 
 export const CreateTx = connect(
