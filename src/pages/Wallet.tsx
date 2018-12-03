@@ -51,19 +51,7 @@ class WalletPage extends React.Component<AllProps, any> {
             </Column>
           </Row>
           <Hr />
-          <Table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>TxHash</th>
-                <th>Address</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <TXList wallet={wallet} />
-            </tbody>
-          </Table>
+          <TXList wallet={wallet} />
           {loading && <Loader />}
         </Column>
       </React.Fragment>
@@ -84,23 +72,6 @@ export const Wallet = connect(
   mapStateToProps,
   mapDispatchToProps
 )(WalletPage)
-
-export const Table = styled('table')({
-  borderCollapse: 'collapse',
-  borderSpacing: 0,
-  td: {
-    color: '#2e3d3f',
-    padding: '1rem .5rem',
-  },
-  th: {
-    color: '#457b9d',
-    padding: '.5rem',
-  },
-  tr: {
-    borderBottom: '1px solid #b2bcb9',
-  },
-  width: '100%',
-})
 
 const Address = styled('div')({
   fontSize: '.8rem',
