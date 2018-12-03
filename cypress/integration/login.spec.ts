@@ -97,6 +97,62 @@ describe('login test', () =>
 		cy.contains(/eth wallet/i)
 		cy.contains('0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0')
 	})
+	function fillForm()
+	{
+		cy.url().should('include', '/tx/create')
+		cy.contains('To:').next('input').type('0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0')
+		cy.contains('Enter amount:').next('div').children('strong').children('input').as("ethvalinput")
+		cy.get('@ethvalinput').first().type('45.012345')
+		cy.get('@ethvalinput').last().its('attr').should((attr) => parseInt(attr('value') + "").toString() == attr('value'))
+	}
+	it('should open tx creation window', () =>
+	{
+		cy.visit('/login')
+
+		showQr('video', 'login_single_eth_wallet')
+		cy.contains(/create new tx/i).click()
+
+		fillForm()
+
+		cy.contains('Continue').click()
+	})
+	interface IEthTransaction
+	{
+		to: string
+		value: string
+		nonce: number
+		gasPrice: string
+	}
+	interface IWallet
+	{
+		blockchain: "eth" | "eos"
+		address: string
+		chainId: string | number
+	}
+	it('should generate tx request', async () =>
+	{
+		cy.visit('/login')
+
+		showQr('video', 'login_single_eth_wallet')
+		cy.contains(/create new tx/i).click()
+		fillForm()
+		cy.contains('Continue').click()
+
+		let qr = await checkShownQr(/^signTransferTx\|\d+\|.+$/)
+		let msg = parseHostMessage(qr) as IHCSimple<{ tx: IEthTransaction }, { wallet: IWallet }>
+		expect(msg.method).eq('signTransferTx')
+		expect(msg.params).not.null
+		let [tx, wallet] = Array.isArray(msg.params) ? msg.params : [msg.params.tx, msg.params.wallet]
+		
+		expect(wallet.address.toLowerCase()).eq('0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0'.toLowerCase())
+		expect(wallet.blockchain).eq('eth')
+		expect(wallet.chainId.toString()).eq('4')
+
+		expect(tx.value).eq('45012345000000000000')
+		assert.isNumber(tx.nonce)
+		expect(tx.gasPrice).match(/^[^0]\d+00000000$/)
+		expect(tx.to.toLowerCase()).eq(wallet.address.toLowerCase())
+	})
 
 	async function checkWebrtcQr()
 	{
