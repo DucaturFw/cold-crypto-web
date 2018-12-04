@@ -4,6 +4,8 @@ node_js:
 cache: yarn
 services:
   - docker
+before_script:
+  - sudo apt-get install -y ffmpeg
 install:
   - yarn
 script:
