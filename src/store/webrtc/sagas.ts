@@ -25,19 +25,19 @@ function createDataChannel(dataChannel: RTCDataChannel) {
 
 function* watchDataChannel() {
   const rtc = yield select((state: IApplicationState) => state.webrtc.rtc)
-  const wallet = yield select((state: IApplicationState) => state.wallets.item)
   const channelMessage = yield call(createDataChannel, rtc.dataChannel)
 
   while (true) {
     const message = yield take(channelMessage)
     const { id } = parseMessage(message)
+
     switch (id) {
       case RTCCommands.getWalletList:
         yield put(login(message))
         break
       case RTCCommands.signTransferTx:
         yield put(setStatus('Sending'))
-        yield put(sendTransaction(message, wallet))
+        yield put(sendTransaction(message))
         break
       default:
         break

@@ -63,15 +63,13 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
 }
 
 function* handleSendTx(action: ReturnType<typeof sendTransaction>) {
+  const wallet = yield select((state: IApplicationState) => state.wallets.item)
   try {
-    const { result } = parseMessage(action.payload.tx)
+    const { result } = parseMessage(action.payload)
+    console.log('handleSendTx', action)
+    const hash = yield sendTx(result, wallet)
 
-    const hash = yield sendTx(result, action.payload.wallet)
-
-    yield all([
-      put(setSendingTxData({ hash })),
-      put(push(`/tx/${hash}`)),
-    ])
+    yield all([put(setSendingTxData({ hash })), put(push(`/tx/${hash}`))])
   } catch (err) {
     yield all([
       put(setSendingTxData({ error: err.message })),

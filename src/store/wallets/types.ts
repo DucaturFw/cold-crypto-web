@@ -1,3 +1,5 @@
+import { IHostCommand } from '../../helpers/webrtc/hostproto'
+
 export interface IWalletBase extends ApiResponse {
   blockchain: string
   address: string
@@ -59,7 +61,7 @@ export interface IWalletsState {
 }
 
 export interface ISendingTxData {
-  signTx?: string
+  signTx?: IHostCommand<unknown[], unknown>
   hash?: string
   formData?: IEthTxFormValues | IEosTxFormValues
   error?: string

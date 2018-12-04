@@ -5,6 +5,7 @@ import {
   IWalletEth,
   IEosTxFormValues,
 } from '../store/wallets/types'
+import { IHostCommand } from './webrtc/hostproto'
 
 // TODO: mobile app ignore blockchain array
 export const getWalletListCommand = () => {
@@ -19,7 +20,7 @@ export const getWalletListCommand = () => {
 export const getSignTransferTxCommand = async (
   data: IEthTxFormValues | IEosTxFormValues,
   wallet: IWalletEth
-): Promise<string> => {
+): Promise<IHostCommand<unknown[], unknown>> => {
   let tx
   if (wallet.blockchain === 'eth') {
     tx = {
@@ -61,5 +62,5 @@ export const getSignTransferTxCommand = async (
     }
   }
 
-  return `signTransferTx|3|${JSON.stringify({ wallet, tx })}`
+  return { id: 3, method: 'signTransferTx', params: { wallet, tx } }
 }
