@@ -2,7 +2,7 @@ import { call, take, put, cancelled, select } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 
 import { handshakeServerUrl } from '../../constants'
-import { connectionReady } from './actions'
+import { connectionReady, sendCommand } from './actions'
 import { getWalletListCommand } from '../../helpers/jsonrps'
 import { setRtcSid } from '../transport/actions'
 import { IApplicationState } from '..'
@@ -34,7 +34,7 @@ function* answerSaga(ws: WebSocket, rtc: RTCHelper, answer: string) {
   yield call(rtc.pushAnswer, { type: 'answer' as RTCSdpType, sdp: answer })
   yield call(rtc.waitConnection)
 
-  rtc.dataChannel!.send(getWalletListCommand())
+  yield put(sendCommand(getWalletListCommand()))
   yield put(connectionReady())
   return ws.close()
 }

@@ -8,6 +8,7 @@ import { QrLogin } from '../components/atoms'
 import { getWalletListCommand } from '../helpers/jsonrps'
 import { login } from '../store/transport/actions'
 import { IConnectedReduxProps, IApplicationState } from '../store'
+import { call as prepareCall } from '../helpers/webrtc/jsonrpc'
 
 // TODO: map errorfrom qrcode state and show if we will have it
 interface IPropsFromState {
@@ -29,7 +30,10 @@ class LoginPage extends React.Component<AllProps> {
     const { search, scanLoginData, qrcodeData } = this.props
 
     const isRtc = new URLSearchParams(search).get('rtc') === 'true'
-    const value = isRtc ? qrcodeData : getWalletListCommand()
+    let cmd = getWalletListCommand()
+    const value = isRtc
+      ? qrcodeData
+      : prepareCall(cmd.method, cmd.id, cmd.params, true)
     // TODO: add back url to push
     // const { location } = props
     // let pathname: string

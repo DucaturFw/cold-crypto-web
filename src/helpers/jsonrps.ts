@@ -9,7 +9,11 @@ import {
 // TODO: mobile app ignore blockchain array
 export const getWalletListCommand = () => {
   const params = { blockchains: ['eth', 'eos'] }
-  return `getWalletList|2|${JSON.stringify(params)}`
+  return {
+    id: 2,
+    method: 'getWalletList',
+    params,
+  }
 }
 
 export const getSignTransferTxCommand = async (
