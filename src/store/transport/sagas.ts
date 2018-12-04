@@ -66,11 +66,11 @@ function* handleSendTx(action: ReturnType<typeof sendTransaction>) {
   try {
     const { result } = parseMessage(action.payload.tx)
 
-    const txHash = yield sendTx(result, action.payload.wallet)
+    const hash = yield sendTx(result, action.payload.wallet)
 
     yield all([
-      put(setSendingTxData({ hash: txHash.transactionHash })),
-      put(push(`/tx/${txHash.transactionHash}`)),
+      put(setSendingTxData({ hash })),
+      put(push(`/tx/${hash}`)),
     ])
   } catch (err) {
     yield all([

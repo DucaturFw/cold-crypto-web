@@ -3,16 +3,29 @@ import styled from 'react-emotion'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
-import { ISendingTxData } from '../store/wallets/types'
+import { ISendingTxData, IWalletBase } from '../store/wallets/types'
 
 interface IPropsFromState {
   sendingData: ISendingTxData
+  wallet: IWalletBase
 }
 
 type AllProps = IPropsFromState & IConnectedReduxProps
 
+const getExplrUrl = (bc: string, hash: string | undefined) => {
+  switch (bc) {
+    case 'eth':
+      return `https://ropsten.etherscan.io/tx/${hash}`
+    case 'eos':
+      return `https://jungle.eospark.com/tx/${hash}`
+    default:
+      return ''
+  }
+}
+
 const TxViewPage: React.SFC<AllProps> = ({
   sendingData: { formData, hash, error },
+  wallet,
 }) => {
   return (
     <React.Fragment>
@@ -26,7 +39,7 @@ const TxViewPage: React.SFC<AllProps> = ({
       ) : (
         <div>
           <H2>To : {formData!.to}</H2>
-          <a target="_blank" href={`https://ropsten.etherscan.io/tx/${hash}`}>
+          <a target="_blank" href={getExplrUrl(wallet.blockchain, hash)}>
             {hash}
           </a>
         </div>
@@ -37,6 +50,7 @@ const TxViewPage: React.SFC<AllProps> = ({
 
 const mapStateToProps = ({ wallets }: IApplicationState) => ({
   sendingData: wallets.sendingTxData,
+  wallet: wallets.item,
 })
 
 export const TxView = connect(mapStateToProps)(TxViewPage)
