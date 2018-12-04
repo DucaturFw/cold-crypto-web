@@ -1,7 +1,10 @@
 language: node_js
 node_js:
   - "node"
-cache: yarn
+cache:
+  - yarn
+  directories:
+    - ~/.cache
 services:
   - docker
 before_script:
