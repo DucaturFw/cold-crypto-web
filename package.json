@@ -55,7 +55,6 @@
     "@types/react-qr-reader": "^2.1.1",
     "@types/react-redux": "^6.0.10",
     "@types/react-router-dom": "^4.3.1",
-    "@types/redux": "^3.6.0",
     "@types/web3": "^1.0.12",
     "prettier": "^1.15.2",
     "source-map-explorer": "^1.6.0",
