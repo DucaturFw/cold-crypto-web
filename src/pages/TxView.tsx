@@ -15,7 +15,7 @@ type AllProps = IPropsFromState & IConnectedReduxProps
 const getExplrUrl = (bc: string, hash: string | undefined) => {
   switch (bc) {
     case 'eth':
-      return `https://ropsten.etherscan.io/tx/${hash}`
+      return `https://rinkeby.etherscan.io/tx/${hash}`
     case 'eos':
       return `https://jungle.eospark.com/tx/${hash}`
     default:
