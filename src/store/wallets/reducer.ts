@@ -1,4 +1,6 @@
 import { Reducer } from 'redux'
+import { ActionType } from 'typesafe-actions'
+import * as wallets from './actions'
 import {
   IWalletsState,
   WalletsActionTypes,
@@ -6,12 +8,13 @@ import {
   IWalletEos,
   IEthTxFormValues,
 } from './types'
+import { IHostCommand } from '../../helpers/webrtc/hostproto'
 
 const initialState: IWalletsState = {
   item: {} as IWalletEth | IWalletEos,
   items: [],
   sendingTxData: {
-    signTx: '',
+    signTx: {} as IHostCommand<unknown[], unknown>,
     hash: '',
     formData: {} as IEthTxFormValues,
     error: '',
@@ -20,7 +23,12 @@ const initialState: IWalletsState = {
   loading: false,
 }
 
-const reducer: Reducer<IWalletsState> = (state = initialState, action) => {
+export type WalletsAction = ActionType<typeof wallets>
+
+const reducer: Reducer<IWalletsState, WalletsAction> = (
+  state = initialState,
+  action
+) => {
   switch (action.type) {
     case WalletsActionTypes.FETCH_REQUEST: {
       return { ...state, loading: true }

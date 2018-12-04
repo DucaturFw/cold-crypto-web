@@ -8,7 +8,7 @@ import parseMessage from '../../utils/parseMessage'
 import { sendTx } from '../../helpers/sendtx'
 import { setSendingTxData, fetchSuccess } from '../wallets/actions'
 import { authSuccess } from '../auth/actions'
-import { setStatus } from '../webrtc/actions'
+import { setStatus, sendCommand } from '../webrtc/actions'
 
 function* handleLogin(action: ReturnType<typeof login>) {
   try {
@@ -27,9 +27,7 @@ function* handleLogin(action: ReturnType<typeof login>) {
 
 function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
   const wallet = yield select((state: IApplicationState) => state.wallets.item)
-  const { connected, rtc } = yield select(
-    (state: IApplicationState) => state.webrtc
-  )
+  const { connected } = yield select((state: IApplicationState) => state.webrtc)
   try {
     const txFormData = action.payload
 
@@ -51,9 +49,11 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
     )
 
     if (connected) {
-      // TODO: create action from webrtc store
-      yield all([put(setStatus('Verification')), put(push('/status'))])
-      rtc.dataChannel.send(signedData)
+      yield all([
+        put(setStatus('Verification')),
+        put(push('/status')),
+        put(sendCommand(signedData)),
+      ])
     } else {
       yield put(push(`/wallets/${wallet.address}/tx/sign`))
     }
@@ -63,15 +63,13 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
 }
 
 function* handleSendTx(action: ReturnType<typeof sendTransaction>) {
+  const wallet = yield select((state: IApplicationState) => state.wallets.item)
   try {
-    const { result } = parseMessage(action.payload.tx)
+    const { result } = parseMessage(action.payload)
+    console.log('handleSendTx', action)
+    const hash = yield sendTx(result, wallet)
 
-    const hash = yield sendTx(result, action.payload.wallet)
-
-    yield all([
-      put(setSendingTxData({ hash })),
-      put(push(`/tx/${hash}`)),
-    ])
+    yield all([put(setSendingTxData({ hash })), put(push(`/tx/${hash}`))])
   } catch (err) {
     yield all([
       put(setSendingTxData({ error: err.message })),
