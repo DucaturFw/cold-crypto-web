@@ -55,7 +55,7 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
       yield all([put(setStatus('Verification')), put(push('/status'))])
       rtc.dataChannel.send(signedData)
     } else {
-      yield put(push(`/sign`))
+      yield put(push(`/wallets/${wallet.address}/tx/sign`))
     }
   } catch (err) {
     console.log('handleCreateTx error', err)
