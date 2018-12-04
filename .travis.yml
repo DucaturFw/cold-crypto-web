@@ -5,7 +5,7 @@ cache: yarn
 services:
   - docker
 before_script:
-  - sudo apt-get install -y ffmpeg
+  - ./travis-install.sh
 install:
   - yarn
 script:
