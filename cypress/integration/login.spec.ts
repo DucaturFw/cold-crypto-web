@@ -130,7 +130,7 @@ describe('login test', () =>
 		
 		await connectWebrtc()
 	})
-	it('should sign webrtc tx', async () =>
+	it('should generate webrtc tx', async () =>
 	{
 		cy.visit('/')
 		cy.contains(/WebRTC login/i).click()
