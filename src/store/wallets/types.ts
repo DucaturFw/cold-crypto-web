@@ -1,4 +1,5 @@
 import { IHostCommand } from '../../helpers/webrtc/hostproto'
+import { IAbiEntry, IAbiArgument } from '../../helpers/eth/eth-contracts';
 
 export interface IWalletBase extends ApiResponse {
   blockchain: string
@@ -76,8 +77,11 @@ export interface IEthTxFormValues {
 
 export interface IEthContractFormValues {
   to: string
-  abi: string
+  abi: IAbiEntry[]
   method: string
+  gasPrice: string
+  args: IAbiArgument[]
+  gasLimit: string
 }
 
 export interface IEosTxFormValues {
