@@ -13,6 +13,8 @@ else if (location.pathname.includes('/cold'))
   basename = '/cold'
 else
   basename = '/'
+
+console.log(`using basename ${basename}`)
 const history = createBrowserHistory({ basename })
 
 const store = configureStore(history)
