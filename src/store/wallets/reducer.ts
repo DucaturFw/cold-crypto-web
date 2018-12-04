@@ -1,4 +1,6 @@
 import { Reducer } from 'redux'
+import { ActionType } from 'typesafe-actions'
+import * as wallets from './actions'
 import {
   IWalletsState,
   WalletsActionTypes,
@@ -20,7 +22,12 @@ const initialState: IWalletsState = {
   loading: false,
 }
 
-const reducer: Reducer<IWalletsState> = (state = initialState, action) => {
+export type WalletsAction = ActionType<typeof wallets>
+
+const reducer: Reducer<IWalletsState, WalletsAction> = (
+  state = initialState,
+  action
+) => {
   switch (action.type) {
     case WalletsActionTypes.FETCH_REQUEST: {
       return { ...state, loading: true }
