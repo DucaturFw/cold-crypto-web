@@ -6,7 +6,7 @@ import { App } from './App'
 import * as serviceWorker from './serviceWorker'
 import configureStore, { subscriber } from './configureStore'
 
-const history = createBrowserHistory()
+const history = createBrowserHistory({ basename: '/cold' })
 
 const store = configureStore(history)
 store.subscribe(subscriber(store))
