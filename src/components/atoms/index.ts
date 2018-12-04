@@ -15,5 +15,6 @@ export { Select } from './Select'
 export { Label } from './Label'
 export { LabelAtop } from './LabelAtop'
 export { TextArea } from './TextArea'
+export { Wrap } from './Wrap'
 
 export { QrLogin } from './QrLogin'
