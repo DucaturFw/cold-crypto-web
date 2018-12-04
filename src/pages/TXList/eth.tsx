@@ -3,7 +3,7 @@ import * as React from 'react'
 import { OverflowTd, Table } from './common'
 import { IEthTx } from '../../store/wallets/types'
 
-const API_URL = 'https://ropsten.etherscan.io/tx'
+const API_URL = 'https://rinkeby.etherscan.io/tx'
 
 export const EthTx = (txs: IEthTx[]) => {
   return (
