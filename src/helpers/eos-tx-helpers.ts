@@ -3,7 +3,7 @@ import Eos from "eosjs"
 export async function getTxHeaders(chainId: string)
 {
   const eos = Eos({
-    httpEndpoint: 'https://jungle2.cryptolions.io:80', // jungle2.cryptolions.io:9876
+    httpEndpoint: 'https://jungle2.cryptolions.io', // jungle2.cryptolions.io:9876
     chainId,
   })
 
