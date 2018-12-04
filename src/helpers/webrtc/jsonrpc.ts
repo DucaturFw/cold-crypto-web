@@ -1,4 +1,4 @@
-import { parseHostMessage, isMethodCall, isError } from "./hostproto"
+import { parseHostMessage, isMethodCall, isError, IHostCommand } from "./hostproto"
 
 export type Id = string | number | null
 
@@ -62,6 +62,9 @@ export type RequestHandler = (
   callback: (err: any, result: any) => void
 ) => void
 
+export type RequestHandlerTuple<TCmd extends IHostCommand<unknown[], unknown>, TRes> = [TCmd, (err: any, result: TRes) => void]
+type RequestHandlerTupleU = RequestHandlerTuple<IHostCommand<unknown[], unknown>, unknown>
+
 export class JsonRpc {
   public send: (msg: string) => void
   public onRequest: RequestHandler
@@ -73,6 +76,31 @@ export class JsonRpc {
   constructor(send: (msg: string) => void, onRequest: RequestHandler) {
     this.send = send
     this.onRequest = onRequest
+  }
+
+  private _callbacksQueue = [] as RequestHandler[]
+  private _messageQueue = [] as RequestHandlerTupleU[]
+  public switchToQueueMode()
+  {
+    this.onRequest = (json, cb) =>
+    {
+      if (this._callbacksQueue.length)
+      {
+        let m = this._callbacksQueue.shift()!
+        m(json, cb)
+      }
+      else
+      {
+        this._messageQueue.push([json, cb])
+      }
+    }
+  }
+  public async nextMessage(): Promise<RequestHandlerTupleU>
+  {
+    if (this._messageQueue.length)
+      return Promise.resolve(this._messageQueue.shift()!)
+    else
+      return new Promise<RequestHandlerTupleU>((res, rej) => this._callbacksQueue.push((..._) => res(_)))
   }
   public onMessage = (data: string) =>
   {
