@@ -5,7 +5,8 @@ cache: yarn
 services:
   - docker
 before_script:
-  - ./travis-install.sh
+  - chmod +x ./travis-install.sh
+  - sudo ./travis-install.sh
 install:
   - yarn
 script:
