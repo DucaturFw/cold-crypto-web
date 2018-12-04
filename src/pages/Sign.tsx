@@ -4,9 +4,11 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
 import { sendTransaction } from '../store/transport/actions'
+import { IWalletBase } from '../store/wallets/types'
 
 interface IPropsFromState {
   signTx: string
+  wallet: IWalletBase
 }
 
 interface IPropsFromDispatch {
@@ -15,22 +17,28 @@ interface IPropsFromDispatch {
 
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
-const SignPage: React.SFC<AllProps> = ({ signTx, sendTx }) => (
-  <React.Fragment>
-    <QrLogin
-      title={'Sign Transaction By Mobile'}
-      value={signTx || ''}
-      onScan={sendTx}
-    />
-  </React.Fragment>
-)
+const SignPage: React.SFC<AllProps> = ({ signTx, sendTx, wallet }) => {
+  const handleScan = (result: string) => sendTx(result, wallet)
+
+  return (
+    <React.Fragment>
+      <QrLogin
+        title={'Sign Transaction By Mobile'}
+        value={signTx || ''}
+        onScan={handleScan}
+      />
+    </React.Fragment>
+  )
+}
 
 const mapStateToProps = ({ wallets }: IApplicationState) => ({
   signTx: wallets.sendingTxData.signTx!,
+  wallet: wallets.item,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  sendTx: (data: string) => dispatch(sendTransaction(data)),
+  sendTx: (data: string, wallet: IWalletBase) =>
+    dispatch(sendTransaction(data, wallet)),
 })
 
 export const Sign = connect(

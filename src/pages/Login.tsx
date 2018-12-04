@@ -25,10 +25,10 @@ type AllProps = IPropsFromState &
   RouteComponentProps
 
 class LoginPage extends React.Component<AllProps> {
-  render() {
+  public render() {
     const { search, scanLoginData, qrcodeData } = this.props
 
-    const isRtc = new URLSearchParams(search).get('rtc') === 'true'
+    const isRtc: boolean = new URLSearchParams(search).get('rtc') === 'true'
     const value = isRtc ? qrcodeData : getWalletListCommand()
     // TODO: add back url to push
     // const { location } = props

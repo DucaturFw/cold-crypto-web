@@ -5,7 +5,7 @@ import { IApplicationState } from '..'
 import { push } from 'connected-react-router'
 import { getSignTransferTxCommand } from '../../helpers/jsonrps'
 import parseMessage from '../../utils/parseMessage'
-import { sendTx } from '../../helpers/eth'
+import { sendTx } from '../../helpers/sendtx'
 import { setSendingTxData, fetchSuccess } from '../wallets/actions'
 import { authSuccess } from '../auth/actions'
 import { setStatus } from '../webrtc/actions'
@@ -64,13 +64,13 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
 
 function* handleSendTx(action: ReturnType<typeof sendTransaction>) {
   try {
-    const { result } = parseMessage(action.payload)
+    const { result } = parseMessage(action.payload.tx)
 
-    const txHash = yield sendTx(result)
+    const hash = yield sendTx(result, action.payload.wallet)
 
     yield all([
-      put(setSendingTxData({ hash: txHash.transactionHash })),
-      put(push(`/tx/${txHash.transactionHash}`)),
+      put(setSendingTxData({ hash })),
+      put(push(`/tx/${hash}`)),
     ])
   } catch (err) {
     yield all([

@@ -23,7 +23,7 @@ const eos = Eos({
   chainId: chain.jungle,
 });
 
-export const sendEOSTx = async (signedTx: string) => {
+export const sendTx = async (signedTx: string) => {
   const txHash = await eos.pushTransaction(signedTx);
   console.log('txHash:', txHash)
 
