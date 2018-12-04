@@ -41,7 +41,7 @@ export async function connectWebrtc()
 		await Promise.all(iice.map(cand => webrtc.rtc.pushIceCandidate(cand)))
 		// console.log('#### 8')
 	})
-	let gotRequest = new Promise((res, rej) =>
+	let gotRequest = new Promise<(err: any, res: any) => void>((res, rej) =>
 	{
 		webrtc.jrpc.onRequest = (json, cb) =>
 		{
@@ -52,12 +52,12 @@ export async function connectWebrtc()
 			else
 				expect(json.params).eql({blockchains:['eth','eos']})
 			
-			res()
+			res(cb)
 		}
 	})
 	// console.log("^^^ 1")
 	await webrtc.rtc.waitConnection()
 	// console.log("^^^ 2")
-	await gotRequest
+	return await gotRequest
 	// console.log("^^^ 3")
 }
