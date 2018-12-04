@@ -15,7 +15,7 @@ export async function getNonce(address: string): Promise<number> {
 
 export async function sendTx(tx: string): Promise<string> {
   const result = await web3.eth.sendSignedTransaction(tx)
-   
+
   return result.transactionHash
 }
 
