@@ -67,6 +67,7 @@ function* handleSendTx(action: ReturnType<typeof sendTransaction>) {
     const { result } = parseMessage(action.payload.tx)
 
     const hash = yield sendTx(result, action.payload.wallet)
+    console.log(hash);
 
     yield all([
       put(setSendingTxData({ hash })),

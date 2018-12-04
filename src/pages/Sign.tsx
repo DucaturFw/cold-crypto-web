@@ -18,7 +18,13 @@ interface IPropsFromDispatch {
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
 const SignPage: React.SFC<AllProps> = ({ signTx, sendTx, wallet }) => {
-  const handleScan = (result: string) => sendTx(result, wallet)
+  let scaned = false
+  const handleScan = (result: string) => {
+    if (!scaned) {
+      scaned = true
+      sendTx(result, wallet)
+    }
+  }
 
   return (
     <React.Fragment>
