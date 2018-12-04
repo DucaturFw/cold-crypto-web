@@ -5,6 +5,11 @@ import { connectWebrtc } from "./interact_webrtc"
 
 describe('login test', () =>
 {
+	beforeEach(async (done) =>
+	{
+		resetWebrtc()
+		done()
+	})
 	it('should render login page correctly', () =>
 	{
 		cy.visit('/')
@@ -54,23 +59,19 @@ describe('login test', () =>
 		await checkWebrtcQr()
 	})
 
-	it('should connect webrtc', async () =>
+	it('should connect webrtc', async (done) =>
 	{
 		cy.visit('/')
 		cy.contains(/WebRTC login/i).click()
 		
-		resetWebrtc()
-		
-		await connectWebrtc()
+		connectWebrtc().then(() => done).catch(err => done(err))
 	})
-	it('should connect webrtc 2nd time', async () =>
+	it('should connect webrtc 2nd time', async (done) =>
 	{
 		cy.visit('/')
 		cy.contains(/WebRTC login/i).click()
-
-		resetWebrtc()
 		
-		await connectWebrtc()
+		connectWebrtc().then(() => done).catch(err => done(err))
 	})
 	
 	it.skip('should login with qr multiple wallets', () =>

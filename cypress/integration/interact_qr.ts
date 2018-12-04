@@ -37,7 +37,7 @@ export function getQrData(elem: JQuery<HTMLElement>): Promise<string>
 			ctx.drawImage(loader, 0, 0, loader.width, loader.height)
 			let data = ctx.getImageData(0, 0, canvas.width, canvas.height)
 			let qr = jsqr(data.data, data.width, data.height)
-			expect(qr).not.null
+			assert(qr, `getQrData(): qr is not defined!`)
 			// console.log(qr)
 			res(qr!.data)
 		}
@@ -53,9 +53,11 @@ export function checkShownQr(text: string | RegExp): Promise<string>
 			let qr = await getQrData(elem)
 			console.log(`qr: ${qr}`)
 			if (typeof text === "string")
-				expect(qr).eq(text)
+				if (qr != text)
+					return rej(`incorrect qr! expected: "${text}", got: "${qr}"`)
 			else
-				expect(qr).match(text)
+				if (!qr.match(text))
+					return rej(`incorrect qr! expected: to match "${text}", got: "${qr}"`)
 			
 			res(qr)
 		})
@@ -67,9 +69,10 @@ export async function checkWebrtcQr()
 
 	let qr = await checkShownQr(/^webrtcLogin\|\d\|.*$/)
 	let msg = parseHostMessage(qr) as IHCSimple<{sid: string}, { url: string }>
+	assert(msg, `checkWebrtcQr(): qr message is not defined!`)
 	expect(msg.method).eq('webrtcLogin')
 	expect(msg.id).match(/\d+/)
-	expect(msg.params).not.null
+	assert(msg.params, `checkWebrtcQr(): qr msg params are not defined!`)
 	let [sid, url] = Array.isArray(msg.params) ? msg.params : [msg.params.sid, msg.params.url]
 	expect(sid).match(/^session0\.\d+$/)
 	expect(url).eq('wss://duxi.io/shake')

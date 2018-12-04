@@ -12,6 +12,7 @@ export async function connectWebrtc()
 	let jrpc = new JsonRpc(msg => (/* console.log('OUT>',msg), */ws.send(msg)), (json, cb) =>
 	{
 		// console.log('<IN', json)
+		assert(json, `connectWebrtc(): jrpc msg is not defined!`)
 		expect(json.method).eq('ice')
 		let [cand] = Array.isArray(json.params) ? json.params : [json.params.ice]
 		ice ? ice.push(cand) : webrtc.rtc.pushIceCandidate(cand)
@@ -46,6 +47,7 @@ export async function connectWebrtc()
 		webrtc.jrpc.onRequest = (json, cb) =>
 		{
 			// console.log(`$request`, json)
+			assert(json, `connectWebrtc(): webrtc.jrpc.onRequest json is not defined!`)
 			expect(json.method).eq("getWalletList")
 			if (Array.isArray(json.params))
 				expect(json.params).eql([['eth','eos']])
