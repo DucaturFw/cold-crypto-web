@@ -15,6 +15,7 @@ export async function getNonce(address: string): Promise<number> {
 }
 
 export async function sendTx(tx: string): Promise<TransactionReceipt> {
+  // console.log(tx);
   return web3.eth.sendSignedTransaction(tx)
 }
 

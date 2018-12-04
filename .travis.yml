@@ -1,0 +1,30 @@
+language: node_js
+node_js:
+  - "node"
+cache: yarn
+services:
+  - docker
+before_script:
+  - chmod +x ./travis-install.sh
+  - sudo ./travis-install.sh
+install:
+  - yarn
+script:
+  - yarn build
+after_success:
+  - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh success $WEBHOOK_URL
+after_failure:
+  - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh failure $WEBHOOK_URL
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep-history: true
+  target-branch: gh-pages
+  local-dir: build
+  on:
+    branch: master
