@@ -4,10 +4,10 @@ import { TransactionReceipt } from 'web3/types'
 const web3 = new Web3()
 
 const API_ENDPOINT =
-  process.env.REACT_APP_API_ENDPOINT || 'https://api-ropsten.etherscan.io'
+  process.env.REACT_APP_API_ENDPOINT || 'https://api-rinkeby.etherscan.io'
 
 web3.setProvider(
-  new Web3.providers.WebsocketProvider('wss://ropsten.infura.io/ws')
+  new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws')
 )
 
 export async function getNonce(address: string): Promise<number> {
