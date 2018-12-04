@@ -6,7 +6,14 @@ import { App } from './App'
 import * as serviceWorker from './serviceWorker'
 import configureStore, { subscriber } from './configureStore'
 
-const history = createBrowserHistory({ basename: '/cold' })
+let basename
+if (location.pathname.includes('/cold-crypto-web'))
+  basename = '/cold-crypto-web'
+else if (location.pathname.includes('/cold'))
+  basename = '/cold'
+else
+  basename = '/'
+const history = createBrowserHistory({ basename })
 
 const store = configureStore(history)
 store.subscribe(subscriber(store))
