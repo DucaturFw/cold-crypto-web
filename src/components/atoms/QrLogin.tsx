@@ -40,7 +40,7 @@ export const QrLogin: React.SFC<AllProps> = ({
             <H2>Scan QR Code</H2>
           </Centered>
           <Centered style={{ display: 'flex' }}>
-            <QRCode value={value} renderAs="svg" />
+            { value && <QRCode value={value} renderAs="svg" /> }
           </Centered>
         </Column>
         {!readonly && (
