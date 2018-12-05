@@ -4,7 +4,7 @@ import { Dispatch } from 'redux'
 import { IConnectedReduxProps } from '../store'
 import { createTransaction } from '../store/transport/actions'
 import { Formik, FormikProps, Form, Field, FieldProps, FieldArray, ArrayHelpers } from 'formik'
-import { IEthContractFormValues } from '../store/wallets/types'
+import { IEthContractFormValues, FormValues } from '../store/wallets/types'
 import {
   Column,
   Label,
@@ -201,7 +201,7 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
   }
 }
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: IEthContractFormValues, txType: TxTypes) => dispatch(createTransaction(data, txType)),
+  createTx: (data: FormValues, txType: TxTypes) => dispatch(createTransaction(data, txType)),
 })
 
 export const CreateContract = connect(

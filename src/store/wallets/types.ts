@@ -1,4 +1,4 @@
-import { IHostCommand } from '../../helpers/webrtc/hostproto'
+import { IHostCommandU } from '../../helpers/webrtc/hostproto'
 import { IAbiEntry } from '../../helpers/eth/eth-contracts';
 
 export interface IWalletBase extends ApiResponse {
@@ -62,7 +62,7 @@ export interface IWalletsState {
 }
 
 export interface ISendingTxData {
-  command?: IHostCommand<unknown[], unknown>
+  command?: IHostCommandU
   hash?: string
   formData?: IEthTxFormValues | IEosTxFormValues | IEthContractFormValues
   error?: string

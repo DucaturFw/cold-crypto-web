@@ -5,10 +5,10 @@ import { Dispatch } from 'redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
 import { sendTransaction } from '../store/transport/actions'
 import { call as prepareCall } from '../helpers/webrtc/jsonrpc'
-import { IHostCommand } from '../helpers/webrtc/hostproto'
+import { IHostCommandU } from '../helpers/webrtc/hostproto'
 
 interface IPropsFromState {
-  command: IHostCommand<unknown[], unknown>
+  command: IHostCommandU
 }
 
 interface IPropsFromDispatch {

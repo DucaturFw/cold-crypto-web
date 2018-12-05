@@ -6,9 +6,11 @@ import {
   IEosTxFormValues,
   IEthContractFormValues,
   FormValues,
+  IWallet,
+  IWalletEos,
 } from '../store/wallets/types'
-import { IHostCommand } from './webrtc/hostproto'
-import { getContractData, convertParamsToEth } from './eth/eth';
+import { IHostCommandU } from './webrtc/hostproto'
+import { getContractData, convertParamsToEth } from './eth/eth'
 import { getArguments } from './eth/eth-contracts';
 
 export enum TxTypes {
@@ -26,35 +28,47 @@ export const getWalletListCommand = () => {
   }
 }
 
-export const getTxCommand = ( data: FormValues, wallet: IWalletEth, txType: TxTypes) => {
+export const getTxCommand = (data: FormValues, wallet: IWalletEos | IWalletEth, txType: TxTypes) =>
+{
   switch (txType) {
     case TxTypes.Transfer:
-      return getTransferTxCommand(data, wallet)
+      return getTransferTxCommand(data as IEthTxFormValues | IEosTxFormValues, wallet)
     case TxTypes.Contract:
-      return getContractCommand(data, wallet)
+      return getContractCommand(data as IEthContractFormValues, wallet as IWalletEth)
     default:
       throw new Error('tx type not found')
   }
-} 
+}
+
+function isEthTransfer(data: FormValues, wallet: IWallet): data is IEthTxFormValues | IEthContractFormValues
+{
+  return wallet.blockchain == 'eth'
+}
+function isEosTransfer(data: FormValues, wallet: IWallet): data is IEosTxFormValues
+{
+  return wallet.blockchain == 'eos'
+}
 
 const getTransferTxCommand = async (
   data: IEthTxFormValues | IEosTxFormValues,
-  wallet: IWalletEth
-): Promise<IHostCommand<unknown[], unknown>> => {
+  wallet: IWalletEth | IWalletEos
+): Promise<IHostCommandU> => {
   let tx
-  if (wallet.blockchain === 'eth') {
+  if (isEthTransfer(data, wallet))
+  {
+    let amount = ("amount" in data) ? data.amount : 0
     tx = {
       gasPrice: Web3.utils.toWei(
-        (data as IEthTxFormValues).gasPrice.toString(),
+        data.gasPrice.toString(),
         'gwei'
       ),
       nonce: wallet.nonce,
       to: data.to,
-      value: Web3.utils.toWei(data.amount.toString()),
+      value: Web3.utils.toWei(amount.toString()),
     }
   }
 
-  if (wallet.blockchain === 'eos') {
+  if (isEosTransfer(data, wallet)) {
     const txHeaders = await getTxHeaders(wallet.chainId as string)
     tx = {
       method: 'transfer(from:name,to:name,quantity:asset,memo:string)',
@@ -85,7 +99,7 @@ const getTransferTxCommand = async (
   return { id: 3, method: 'signTransferTx', params: { wallet, tx } }
 }
 
-const getContractCommand = async ( formData: IEthContractFormValues, wallet: IWalletEth ): Promise<IHostCommand<unknown[], unknown>> => {
+const getContractCommand = async ( formData: IEthContractFormValues, wallet: IWalletEth ): Promise<IHostCommandU> => {
    const tx  = {
       gasPrice: Web3.utils.toWei(formData.gasPrice.toString(), "gwei"),
       gasLimit: formData.gasLimit,

@@ -9,6 +9,7 @@ import { sendTx } from '../../helpers/sendtx'
 import { setSendingTxData, fetchSuccess } from '../wallets/actions'
 import { authSuccess } from '../auth/actions'
 import { setStatus, sendCommand } from '../webrtc/actions'
+import { IWallet } from '../wallets/types'
 
 function* handleLogin(action: ReturnType<typeof login>) {
   try {
@@ -32,7 +33,7 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
   try {
     const {formData, txType } = action.payload
 
-    const command = yield getTxCommand(formData, { blockchain: wallet.blockchain, chainId: wallet.chainId, address: wallet.address, nonce: wallet.nonce, }, txType)
+    const command = yield getTxCommand(formData, { ...wallet as IWallet }, txType)
 
     yield put(setSendingTxData({ command, formData, error: '', hash: '' }))
 

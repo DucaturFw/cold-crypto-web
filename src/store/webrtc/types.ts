@@ -1,5 +1,5 @@
 import { RTCHelper } from '../../helpers/webrtc/webrtc'
-import { IHostCommand } from '../../helpers/webrtc/hostproto'
+import { IHostCommandU } from '../../helpers/webrtc/hostproto'
 
 export enum WebrtcActionTypes {
   CONNECTION_OPEN = '@@Webrtc/CONNECTION_OPEN',
@@ -13,5 +13,5 @@ export interface IWebrtcState {
   readonly rtc: RTCHelper
   readonly connected: boolean
   readonly status: string
-  pushedMessages: IHostCommand<unknown[], unknown>[]
+  pushedMessages: IHostCommandU[]
 }

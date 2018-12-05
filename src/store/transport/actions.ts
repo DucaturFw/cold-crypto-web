@@ -1,7 +1,7 @@
 import { action } from 'typesafe-actions'
 import { TransportActionTypes } from './types'
 import { FormValues } from '../wallets/types'
-import { TxTypes } from '../../helpers/jsonrps';
+import { TxTypes } from '../../helpers/jsonrps'
 
 export const createTransaction = (formData: FormValues, txType: TxTypes) =>
   action(TransportActionTypes.CREATE_TX, {formData, txType})

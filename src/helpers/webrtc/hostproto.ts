@@ -8,6 +8,7 @@ export interface IHostCommand<
   id: Id
   params: TArr | TObj
 }
+export type IHostCommandU = IHostCommand<unknown[], unknown>
 export interface IHostError {
   id?: Id
   error: unknown
@@ -17,7 +18,7 @@ export interface IHostResult<T> {
   result: T
 }
 export type IJsonRpcMessage =
-  | IHostCommand<unknown[], unknown>
+  | IHostCommandU
   | IHostResult<unknown>
   | IHostError
 
@@ -42,7 +43,7 @@ export type IHCSimple<
   T1 & T2 & T3 & T4 & T5 & T6 & T7
 >
 
-export function isMethodCall(json: IJsonRpcMessage): json is IHostCommand<unknown[], unknown>
+export function isMethodCall(json: IJsonRpcMessage): json is IHostCommandU
 {
   return "method" in json
 }
