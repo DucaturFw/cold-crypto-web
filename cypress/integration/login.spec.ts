@@ -1,4 +1,4 @@
-import { reset as resetWebrtc } from "../../src/helpers/webrtc/webrtcsingleton"
+import { reset as resetWebrtc, getSingleton as getWebrtc } from "../../src/helpers/webrtc/webrtcsingleton"
 
 import { checkShownQr, showQr, checkWebrtcQr } from "./interact_qr"
 import { connectWebrtc } from "./interact_webrtc"
@@ -8,6 +8,7 @@ describe('login test', () =>
 	beforeEach(async (done) =>
 	{
 		resetWebrtc()
+		getWebrtc().jrpc.switchToQueueMode()
 		done()
 	})
 	it('should render login page correctly', () =>
@@ -59,19 +60,19 @@ describe('login test', () =>
 		await checkWebrtcQr()
 	})
 
-	it('should connect webrtc', async (done) =>
+	it('should connect webrtc', async () =>
 	{
 		cy.visit('/')
 		cy.contains(/WebRTC login/i).click()
 		
-		connectWebrtc().then(() => done).catch(err => done(err))
+		await connectWebrtc()
 	})
-	it('should connect webrtc 2nd time', async (done) =>
+	it('should connect webrtc 2nd time', async () =>
 	{
 		cy.visit('/')
 		cy.contains(/WebRTC login/i).click()
 		
-		connectWebrtc().then(() => done).catch(err => done(err))
+		await connectWebrtc()
 	})
 	
 	it.skip('should login with qr multiple wallets', () =>

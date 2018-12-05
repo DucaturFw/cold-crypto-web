@@ -93,11 +93,17 @@ export class JsonRpc {
   private _messageQueue = [] as RequestHandlerTupleU[]
   public switchToQueueMode() {
     this.onRequest = (json, cb) => {
+      // console.log('*** 1')
       if (this._callbacksQueue.length) {
+        // console.log('*** 2')
         let m = this._callbacksQueue.shift()!
+        // console.log('*** 3')
         m(json, cb)
+        // console.log('*** 4')
       } else {
+        // console.log('*** 5')
         this._messageQueue.push([json, cb])
+        // console.log('*** 6')
       }
     }
   }
@@ -110,25 +116,35 @@ export class JsonRpc {
       )
   }
   public onMessage = (data: string) => {
+    // console.log('%%%! 1')
     let json = parseHostMessage(data)
-    if (!json) return console.error(`JsonRpc: error parsing data!\n${data}`)
-
+    // console.log('%%%! 2')
+    if (!json)
+      return console.error(`JsonRpc: error parsing data!\n${data}`)
+    
+    // console.log('%%%! 3')
     let id = json.id as number
+    // console.log('%%%! 4')
     if (isMethodCall(json)) {
+      // console.log('%%%! 5')
       this.onRequest(json, (error, result) =>
+        (/* console.log('%%%! 6'),
+        console.log(this.send.toString()), */
         this.send(
           JSON.stringify({
             id,
             jsonrpc: '2.0',
             ...(error ? { error } : { result }),
           })
-        )
+        ))
       )
     } else if (this.listeners[id]) {
       let m = this.listeners[id]
       delete this.listeners[id]
-      if (isError(json)) m(json.error, undefined)
-      else m(undefined, json.result)
+      if (isError(json))
+        m(json.error, undefined)
+      else
+        m(undefined, json.result)
     }
   }
   public async ping() {

@@ -1,5 +1,5 @@
 import { parseHostMessage, IHCSimple } from "../../src/helpers/webrtc/hostproto"
-import { reset as resetWebrtc, singleton } from "../../src/helpers/webrtc/webrtcsingleton"
+import { reset as resetWebrtc, getSingleton as getWebrtc } from "../../src/helpers/webrtc/webrtcsingleton"
 import { RequestHandlerTuple } from "../../src/helpers/webrtc/jsonrpc"
 import { connectWebrtc } from "./interact_webrtc"
 import { showQr, checkShownQr } from "./interact_qr"
@@ -89,40 +89,57 @@ describe('tx generation', () =>
 		fillTx('0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0', 'uuu')
 		cy.contains('Continue').should('be.disabled')
 	})
-	it('should generate webrtc tx', async (done) =>
+	it('short', async () =>
 	{
 		resetWebrtc()
+		getWebrtc().jrpc.switchToQueueMode()
 
 		cy.visit('/')
-		cy.wait(400)
-		cy.url().should('not.contain', '/login')
 		cy.contains(/WebRTC login/i).click()
-		cy.wait(200)
+		cy.url().should('contain', '/login')
+	})
+	it('should generate webrtc tx', async () =>
+	{
+		resetWebrtc()
+		let webrtc = getWebrtc()
+		webrtc.jrpc.switchToQueueMode()
 
-		connectWebrtc().then(walletCb => (
-			singleton.jrpc.switchToQueueMode(),
-			walletCb(undefined, [{address: '0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0', chainId:4, blockchain:'eth'}])
-		)).catch(err => done(err))
+		cy.visit('/')
+		cy.contains(/WebRTC login/i).click()
+		cy.url().should('contain', '/login')
+
+		// console.log('((( 1')
+		connectWebrtc().then(walletCb => walletCb(undefined, [{address: '0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0', chainId:4, blockchain:'eth'}]))
+		// console.log('((( 2')
+		// console.log('((( 3')
 		
 		cy.url().should('match', /\/wallets/)
+		// console.log('((( 4')
 		cy.contains(/create new tx/i).click()
+		// console.log('((( 5')
 		fillTx('0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0', '45.012345')
+		// console.log('((( 6')
 		
 		cy.contains('Continue').click()
-
-		let [json, cb] = await singleton.jrpc.nextMessage() as RequestHandlerTuple<IHCSimple<{tx: IEthTransaction}, { wallet: IWallet }>, string>
+		// console.log('((( 7')
+		
+		let [json, cb] = await webrtc.jrpc.nextMessage() as RequestHandlerTuple<IHCSimple<{tx: IEthTransaction}, { wallet: IWallet }>, string>
+		// console.log('((( 8')
 		expect(json.method).eq('signTransferTx')
+		// console.log('((( 9')
 		let [tx, wallet] = Array.isArray(json.params) ? json.params : [json.params.tx, json.params.wallet]
+		// console.log('((( 10')
 		
 		expect(wallet.address.toLowerCase()).eq('0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0'.toLowerCase())
+		// console.log('((( 11')
 		expect(wallet.blockchain).eq('eth')
+		// console.log('((( 12')
 		expect(wallet.chainId.toString()).eq('4')
+		// console.log('((( 13')
 
 		expect(tx.value).eq('45012345000000000000')
 		assert.isNumber(tx.nonce)
 		expect(tx.gasPrice).match(/^[^0]\d+00000000$/)
 		expect(tx.to.toLowerCase()).eq(wallet.address.toLowerCase())
-		
-		done()
 	})
 })

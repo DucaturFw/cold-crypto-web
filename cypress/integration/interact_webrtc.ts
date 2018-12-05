@@ -1,10 +1,30 @@
 import { JsonRpc } from "../../src/helpers/webrtc/jsonrpc"
-import { singleton as webrtc } from "../../src/helpers/webrtc/webrtcsingleton"
+import { getSingleton as getWebrtc } from "../../src/helpers/webrtc/webrtcsingleton"
 
 import { checkWebrtcQr } from "./interact_qr"
 
 export async function connectWebrtc()
 {
+	let webrtc = getWebrtc()
+	let p = new Promise<(err: any, result: unknown) => void>((res, rej) =>
+	{
+		webrtc.jrpc.nextMessage().then(([json, cb]) =>
+		{
+			// console.log("^^^ 3")
+			assert(json, `connectWebrtc(): webrtc.jrpc.onRequest json should be defined`)
+			// console.log("^^^ 4")
+			expect(json.method).eq("getWalletList")
+			// console.log("^^^ 5")
+			if (Array.isArray(json.params))
+				expect(json.params).eql([['eth','eos']])
+			else
+				expect(json.params).eql({blockchains:['eth','eos']})
+			
+			// console.log("^^^ 8")
+			res(cb)
+		})
+	})
+
 	let { sid, url } = await checkWebrtcQr()
 	let ws = new WebSocket(url)
 	let ice = [] as any[]
@@ -12,7 +32,7 @@ export async function connectWebrtc()
 	let jrpc = new JsonRpc(msg => (/* console.log('OUT>',msg), */ws.send(msg)), (json, cb) =>
 	{
 		// console.log('<IN', json)
-		assert(json, `connectWebrtc(): jrpc msg is not defined!`)
+		assert(json, `connectWebrtc(): jrpc msg should be defined`)
 		expect(json.method).eq('ice')
 		let [cand] = Array.isArray(json.params) ? json.params : [json.params.ice]
 		ice ? ice.push(cand) : webrtc.rtc.pushIceCandidate(cand)
@@ -42,24 +62,8 @@ export async function connectWebrtc()
 		await Promise.all(iice.map(cand => webrtc.rtc.pushIceCandidate(cand)))
 		// console.log('#### 8')
 	})
-	let gotRequest = new Promise<(err: any, res: any) => void>((res, rej) =>
-	{
-		webrtc.jrpc.onRequest = (json, cb) =>
-		{
-			// console.log(`$request`, json)
-			assert(json, `connectWebrtc(): webrtc.jrpc.onRequest json is not defined!`)
-			expect(json.method).eq("getWalletList")
-			if (Array.isArray(json.params))
-				expect(json.params).eql([['eth','eos']])
-			else
-				expect(json.params).eql({blockchains:['eth','eos']})
-			
-			res(cb)
-		}
-	})
 	// console.log("^^^ 1")
-	await webrtc.rtc.waitConnection()
+	// await webrtc.rtc.waitConnection()
 	// console.log("^^^ 2")
-	return await gotRequest
-	// console.log("^^^ 3")
+	return p
 }
