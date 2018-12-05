@@ -16,17 +16,15 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IApplicationState } from '../../store'
 import { IWallet, IEthTxFormValues } from '../../store/wallets/types'
-import { createTransaction } from '../../store/transport/actions'
-
+import { createEthTransfer } from '../../store/transport/actions'
 import styled from 'react-emotion'
-import { TxTypes } from '../../helpers/jsonrps';
 
 interface IPropsFromState {
   wallet: IWallet
 }
 
 interface IPropsFromDispatch {
-  createTx: typeof createTransaction
+  createTx: typeof createEthTransfer
 }
 
 type AllProps = IPropsFromState & IPropsFromDispatch
@@ -40,7 +38,7 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
     <Hr />
     <Formik
       initialValues={{ to: '', gasPrice: 3, data: '', amount: 0 }}
-      onSubmit={(values: IEthTxFormValues) => createTx(values, TxTypes.Transfer)}
+      onSubmit={(values: IEthTxFormValues) => createTx(values)}
       render={(formikBag: FormikProps<IEthTxFormValues>) => (
         <Form>
           <Column>
@@ -134,13 +132,13 @@ const mapStateToProps = ({ wallets }: IApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: IEthTxFormValues, txType: TxTypes) => dispatch(createTransaction(data, txType)),
+  createTx: (data: IEthTxFormValues) => dispatch(createEthTransfer(data)),
 })
 
 export const CreateEthTx = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateTxPage as any)
+)(CreateTxPage)
 
 const RowMargined = styled(Row)({
   margin: '1rem 0',

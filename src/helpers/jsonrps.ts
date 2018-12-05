@@ -5,8 +5,6 @@ import {
   IWalletEth,
   IEosTxFormValues,
   IEthContractFormValues,
-  FormValues,
-  IWallet,
   IWalletEos,
 } from '../store/wallets/types'
 import { IHostCommandU } from './webrtc/hostproto'
@@ -28,11 +26,9 @@ export const getWalletListCommand = () => {
   }
 }
 
-export const getTxCommand = (data: FormValues, wallet: IWalletEos | IWalletEth, txType: TxTypes) =>
+export const getTxCommand = (data: any, wallet: IWalletEos | IWalletEth, txType: TxTypes) =>
 {
   switch (txType) {
-    case TxTypes.Transfer:
-      return getTransferTxCommand(data as IEthTxFormValues | IEosTxFormValues, wallet)
     case TxTypes.Contract:
       return getContractCommand(data as IEthContractFormValues, wallet as IWalletEth)
     default:
@@ -40,27 +36,17 @@ export const getTxCommand = (data: FormValues, wallet: IWalletEos | IWalletEth, 
   }
 }
 
-function isEthTransfer(data: FormValues, wallet: IWallet): data is IEthTxFormValues | IEthContractFormValues
-{
-  return wallet.blockchain == 'eth'
-}
-function isEosTransfer(data: FormValues, wallet: IWallet): data is IEosTxFormValues
-{
-  return wallet.blockchain == 'eos'
-}
 
 export async function getEthTransferTx(form: IEthTxFormValues, wallet: IWalletEth)
 {
   return Promise.resolve({
-    gasPrice: Web3.utils.toWei(
-      form.gasPrice.toString(),
-      'gwei'
-    ),
+    gasPrice: Web3.utils.toWei(form.gasPrice.toString(), 'gwei'),
     nonce: wallet.nonce,
     to: form.to,
     value: Web3.utils.toWei(form.amount.toString()),
   })
 }
+
 export async function getEosTransferTx(data: IEosTxFormValues, wallet: IWalletEos)
 {
   const txHeaders = await getTxHeaders(wallet.chainId as string)
