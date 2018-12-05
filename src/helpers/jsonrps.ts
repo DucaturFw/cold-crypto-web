@@ -4,8 +4,11 @@ import {
   IEthTxFormValues,
   IWalletEth,
   IEosTxFormValues,
+  IEthContractFormValues,
 } from '../store/wallets/types'
 import { IHostCommand } from './webrtc/hostproto'
+import { getContractData, convertParamsToEth } from './eth/eth';
+import { getArguments } from './eth/eth-contracts';
 
 // TODO: mobile app ignore blockchain array
 export const getWalletListCommand = () => {
@@ -64,3 +67,23 @@ export const getSignTransferTxCommand = async (
 
   return { id: 3, method: 'signTransferTx', params: { wallet, tx } }
 }
+
+
+export const getSignTransferContractCommand = async ( formData: IEthContractFormValues, wallet: IWalletEth ): Promise<IHostCommand<unknown[], unknown>> => {
+   const tx  = {
+      gasPrice: Web3.utils.toWei(formData.gasPrice.toString(), "gwei"),
+      gasLimit: formData.gasLimit,
+      nonce: wallet.nonce,
+      to: formData.to,
+      data: getContractData(formData.abi, formData.method, formData.args)
+    };
+
+    const argsTypes = getArguments(formData.abi, formData.method).map(
+      item => item.type
+    );
+    const args = convertParamsToEth(argsTypes, formData.args);
+
+    const abi = { method: formData.method, args };
+
+  return { id: 4, method: 'signContractCall', params: { abi, wallet, tx } }
+};

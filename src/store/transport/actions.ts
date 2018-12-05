@@ -1,6 +1,9 @@
 import { action } from 'typesafe-actions'
 import { TransportActionTypes } from './types'
-import { IEthTxFormValues, IEosTxFormValues } from '../wallets/types'
+import { IEthTxFormValues, IEosTxFormValues, IEthContractFormValues } from '../wallets/types'
+
+export const createContract = (contract: IEthContractFormValues) =>
+  action(TransportActionTypes.CREATE_CONTRACT, contract)
 
 export const createTransaction = (tx: IEthTxFormValues | IEosTxFormValues) =>
   action(TransportActionTypes.CREATE_TX, tx)

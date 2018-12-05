@@ -1,9 +1,9 @@
 import { all, fork, put, takeEvery, select } from 'redux-saga/effects'
-import { login, createTransaction, sendTransaction } from './actions'
+import { login, createTransaction, sendTransaction, createContract } from './actions'
 import { TransportActionTypes } from './types'
 import { IApplicationState } from '..'
 import { push } from 'connected-react-router'
-import { getSignTransferTxCommand } from '../../helpers/jsonrps'
+import { getSignTransferTxCommand, getSignTransferContractCommand } from '../../helpers/jsonrps'
 import parseMessage from '../../utils/parseMessage'
 import { sendTx } from '../../helpers/sendtx'
 import { setSendingTxData, fetchSuccess } from '../wallets/actions'
@@ -62,6 +62,42 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
   }
 }
 
+function* handleCreateContract(action: ReturnType<typeof createContract>) {
+  const wallet = yield select((state: IApplicationState) => state.wallets.item)
+  const { connected } = yield select((state: IApplicationState) => state.webrtc)
+  try {
+    const contractFormData = action.payload
+
+    const signedData = yield getSignTransferContractCommand(contractFormData, {
+      blockchain: wallet.blockchain,
+      chainId: wallet.chainId,
+      address: wallet.address,
+      nonce: wallet.nonce,
+    })
+
+    yield put(
+      setSendingTxData({
+        signTx: signedData,
+        formData: contractFormData,
+        error: '',
+        hash: '',
+      })
+    )
+
+    if (connected) {
+      yield all([
+        put(setStatus('Verification')),
+        put(push('/status')),
+        put(sendCommand(signedData)),
+      ])
+    } else {
+      yield put(push(`/wallets/${wallet.address}/tx/sign`))
+    }
+  } catch (err) {
+    console.log('handleCreateTx error', err)
+  }
+}
+
 function* handleSendTx(action: ReturnType<typeof sendTransaction>) {
   const wallet = yield select((state: IApplicationState) => state.wallets.item)
   try {
@@ -87,12 +123,16 @@ function* watchCreateTx() {
   yield takeEvery(TransportActionTypes.CREATE_TX, handleCreateTx)
 }
 
+function* watchCreateContract() {
+  yield takeEvery(TransportActionTypes.CREATE_CONTRACT, handleCreateContract)
+}
+
 function* watchLogin() {
   yield takeEvery(TransportActionTypes.LOGIN, handleLogin)
 }
 
 function* transportSaga() {
-  yield all([fork(watchLogin), fork(watchCreateTx), fork(watchSendTx)])
+  yield all([fork(watchLogin), fork(watchCreateTx), fork(watchSendTx), fork(watchCreateContract)])
 }
 
 export default transportSaga
