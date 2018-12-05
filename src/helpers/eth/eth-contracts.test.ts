@@ -1,5 +1,5 @@
 import "jest-extended"
-import { getPublicMethodNames,  isErc20 } from "./eth-contracts"
+import { isErc20 } from "./eth-contracts"
 
 describe('contract ABI processing', () =>
 {
