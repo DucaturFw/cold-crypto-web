@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { RouteComponentProps } from 'react-router-dom'
 
-import { QrLogin } from '../components/atoms'
+import { QrLogin } from '../components/organisms/QrLogin'
 
 import { getWalletListCommand } from '../helpers/jsonrps'
 import { login } from '../store/transport/actions'

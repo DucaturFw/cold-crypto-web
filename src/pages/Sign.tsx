@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { QrLogin } from '../components/atoms'
+import { QrLogin } from '../components/organisms/QrLogin'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'

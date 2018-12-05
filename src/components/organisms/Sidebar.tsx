@@ -3,7 +3,7 @@ import styled from 'react-emotion'
 import { Link } from '../atoms'
 
 const Root = styled('aside')({
-  background: 'rgb(245, 247, 249)',
+  background: '#fff',
   borderRight: '1px solid rgb(234, 234, 234)',
   gridArea: 'sidebar',
 })
@@ -11,10 +11,11 @@ const Root = styled('aside')({
 const items = [{ id: 'wallets', title: 'Wallets' }]
 
 const MenuLink = styled(Link)(({ selected }: { selected: boolean }) => ({
-  borderLeft: `4px solid ${selected ? 'rgb(53, 88, 168)' : 'transparent'}`,
-  color: selected ? 'rgb(53, 88, 168)' : 'rgb(84, 84, 86)',
+  color: selected ? '#00BCF9' : '#171933',
+  borderLeft: `3px solid ${selected ? '#00BCF9' : 'transparent'}`,
   fontWeight: selected ? 'bold' : 'normal',
   padding: '.75rem 1.5rem',
+  background: selected ? 'rgba(179, 236, 254, 0.6)' : 'transparent'
 }))
 
 const Container = styled('menu')({

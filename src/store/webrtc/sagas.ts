@@ -1,5 +1,5 @@
-import { fork, all, take, cancel, select, call, put } from 'redux-saga/effects'
-import { eventChannel, takeEvery, delay } from 'redux-saga'
+import { fork, all, take, cancel, select, call, put, takeEvery } from 'redux-saga/effects'
+import { eventChannel, delay } from 'redux-saga'
 
 import connectTask from './connectSaga'
 import parseMessage from '../../utils/parseMessage'

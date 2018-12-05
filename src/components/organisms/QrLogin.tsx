@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Row, Hr, ButtonClose, Column, H2, H3, Centered } from '.'
+import { Row, Hr, ButtonClose, Column, H2, H3, Centered } from '../atoms'
 import QrReader from 'react-qr-reader'
 import QRCode from 'qrcode.react'
 
