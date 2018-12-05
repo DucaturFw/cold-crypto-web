@@ -44,14 +44,13 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
     e: React.ChangeEvent<HTMLInputElement>,
     form: any
   ) => {
-    console.log(form)
     if (!e.target.files) {
       return
     }
 
     let file = e.target.files[0]
-    console.log(file)
     const reader = new FileReader()
+
     reader.readAsText(file)
     const result = (await new Promise(resolve => {
       reader.onload = () => {
@@ -173,9 +172,9 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
                   </Column>
                   <Column>
                     <Wrap horizontal={2}>
-                      <Label>Estimated GAS: WAAAAAT</Label>
+                      <Label>Estimated GAS: {formikBag.values.gasLimit}</Label>
                       <Wrap vertical={1} />
-                      <Label>GAS price: WAAAAAt GWEI</Label>
+                      <Label>GAS price: {formikBag.values.gasPrice} GWEI</Label>
                       <Field
                         name="gasPrice"
                         render={({
