@@ -2,7 +2,8 @@ import { action } from 'typesafe-actions'
 import { WebrtcActionTypes } from './types'
 import { IHostCommand } from '../../helpers/webrtc/hostproto'
 
-export const connectionReady = () => action(WebrtcActionTypes.CONNECTION_OPEN)
+export const connectionReady = () =>
+  action(WebrtcActionTypes.CONNECTION_OPEN)
 
 export const connectionClosing = () =>
   action(WebrtcActionTypes.CONNECTION_CLOSE)
