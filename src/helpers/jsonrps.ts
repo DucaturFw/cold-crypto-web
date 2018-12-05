@@ -49,28 +49,22 @@ function isEosTransfer(data: FormValues, wallet: IWallet): data is IEosTxFormVal
   return wallet.blockchain == 'eos'
 }
 
-const getTransferTxCommand = async (
-  data: IEthTxFormValues | IEosTxFormValues,
-  wallet: IWalletEth | IWalletEos
-): Promise<IHostCommandU> => {
-  let tx
-  if (isEthTransfer(data, wallet))
-  {
-    let amount = ("amount" in data) ? data.amount : 0
-    tx = {
-      gasPrice: Web3.utils.toWei(
-        data.gasPrice.toString(),
-        'gwei'
-      ),
-      nonce: wallet.nonce,
-      to: data.to,
-      value: Web3.utils.toWei(amount.toString()),
-    }
-  }
-
-  if (isEosTransfer(data, wallet)) {
-    const txHeaders = await getTxHeaders(wallet.chainId as string)
-    tx = {
+export async function getEthTransferTx(form: IEthTxFormValues, wallet: IWalletEth)
+{
+  return Promise.resolve({
+    gasPrice: Web3.utils.toWei(
+      form.gasPrice.toString(),
+      'gwei'
+    ),
+    nonce: wallet.nonce,
+    to: form.to,
+    value: Web3.utils.toWei(form.amount.toString()),
+  })
+}
+export async function getEosTransferTx(data: IEosTxFormValues, wallet: IWalletEos)
+{
+  const txHeaders = await getTxHeaders(wallet.chainId as string)
+  return {
       method: 'transfer(from:name,to:name,quantity:asset,memo:string)',
       transaction: {
         ...txHeaders,
@@ -94,9 +88,6 @@ const getTransferTxCommand = async (
         ],
       },
     }
-  }
-
-  return { id: 3, method: 'signTransferTx', params: { wallet, tx } }
 }
 
 const getContractCommand = async ( formData: IEthContractFormValues, wallet: IWalletEth ): Promise<IHostCommandU> => {
