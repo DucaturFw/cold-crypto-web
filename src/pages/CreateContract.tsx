@@ -2,9 +2,9 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IConnectedReduxProps } from '../store'
-import { createTransaction } from '../store/transport/actions'
+import { createEthContract } from '../store/transport/actions'
 import { Formik, FormikProps, Form, Field, FieldProps, FieldArray, ArrayHelpers } from 'formik'
-import { IEthContractFormValues, FormValues } from '../store/wallets/types'
+import { IEthContractFormValues } from '../store/wallets/types'
 import {
   Column,
   Label,
@@ -15,10 +15,9 @@ import {
   Select,
 } from '../components/atoms'
 import { getPublicMethodNames, IAbiEntry, getArguments, IAbiArgument } from '../helpers/eth/eth-contracts'
-import { TxTypes } from '../helpers/jsonrps';
 
 interface IPropsFromDispatch {
-  createTx: typeof createTransaction
+  createTx: typeof createEthContract
 }
 
 interface IStateProps {
@@ -69,7 +68,7 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
       <React.Fragment>
         <Formik
           initialValues={{ to: '', abi: [], method: '', gasPrice: '5', gasLimit: "300000", args: []}}
-          onSubmit={(values: IEthContractFormValues) => createTx(values, TxTypes.Contract)}
+          onSubmit={(values: IEthContractFormValues) => createTx(values)}
           render={(formikBag: FormikProps<IEthContractFormValues>) => (
             <Form>
               <Column>
@@ -201,7 +200,7 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
   }
 }
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: FormValues, txType: TxTypes) => dispatch(createTransaction(data, txType)),
+  createTx: (data: any) => dispatch(createEthContract(data)),
 })
 
 export const CreateContract = connect(

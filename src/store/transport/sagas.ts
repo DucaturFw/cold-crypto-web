@@ -1,15 +1,15 @@
 import { all, fork, put, takeEvery, select } from 'redux-saga/effects'
-import { login, createTransaction, sendTransaction, remoteSignTransferTx } from './actions'
+import { login, sendTransaction, remoteSignTransferTx, remoteSignContractTx } from './actions'
 import { TransportActionTypes } from './types'
 import { IApplicationState } from '..'
 import { push } from 'connected-react-router'
-import { getTxCommand, getEthTransferTx, getEosTransferTx } from '../../helpers/jsonrps'
+import { getEthTransferTx, getEosTransferTx, getEthContractParams } from '../../helpers/jsonrps'
 import parseMessage from '../../utils/parseMessage'
 import { sendTx } from '../../helpers/sendtx'
 import { setSendingTxData, fetchSuccess } from '../wallets/actions'
 import { authSuccess } from '../auth/actions'
-import { setStatus, sendCommand } from '../webrtc/actions'
-import { IWallet, IFormTransferData } from '../wallets/types'
+import { sendCommand } from '../webrtc/actions'
+import { IWallet, IFormContractData, IFormTransferData } from '../wallets/types'
 import { PayloadAction } from 'typesafe-actions/dist/types'
 
 function* handleLogin(action: ReturnType<typeof login>) {
@@ -27,7 +27,28 @@ function* handleLogin(action: ReturnType<typeof login>) {
   }
 }
 
-function createTransferHandler<TFormData extends IFormTransferData , TWallet extends IWallet>(getTransferTx: (form: TFormData, wallet: TWallet) => Promise<unknown>)
+
+
+function createContractHandler<TFormData extends IFormContractData, TWallet extends IWallet>(getContractParams: (form: TFormData, wallet: TWallet) => Promise<unknown>)
+{
+  return function* handleCreateTransfer(action: PayloadAction<TransportActionTypes, TFormData>)
+  {
+    const wallet = yield select((state: IApplicationState) => state.wallets.item)
+    delete wallet.txs
+
+    try
+    {
+      const params = yield getContractParams(action.payload, wallet)
+      yield put(handleRemoteSignContract(params))
+    }
+    catch(e)
+    {
+      console.error(e)
+    }
+  }
+}
+
+function createTransferHandler<TFormData extends IFormTransferData, TWallet extends IWallet>(getTransferTx: (form: TFormData, wallet: TWallet) => Promise<unknown>)
 {
   return function* handleCreateTransfer(action: PayloadAction<TransportActionTypes, TFormData>)
   {
@@ -48,33 +69,8 @@ function createTransferHandler<TFormData extends IFormTransferData , TWallet ext
 
 const handleCreateEthTransfer = createTransferHandler(getEthTransferTx)
 const handleCreateEosTransfer = createTransferHandler(getEosTransferTx)
-// const handleCreateEthContract = createContractHandler(getEthTransferTx)
+const handleCreateEthContract = createContractHandler(getEthContractParams)
 
-
-function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
-  const wallet = yield select((state: IApplicationState) => state.wallets.item)
-  const { connected } = yield select((state: IApplicationState) => state.webrtc)
-
-  try {
-    const {formData, txType } = action.payload
-
-    const command = yield getTxCommand(formData, { ...wallet as IWallet }, txType)
-
-    yield put(setSendingTxData({ command, formData, error: '', hash: '' }))
-
-    if (connected) {
-      yield all([
-        put(setStatus('Verification')),
-        put(push('/status')),
-        put(sendCommand(command)),
-      ])
-    } else {
-      yield put(push(`/wallets/${wallet.address}/tx/sign`))
-    }
-  } catch (err) {
-    console.log('handleCreateTx error', err)
-  }
-}
 function* handleRemoteSignTransfer(action: ReturnType<typeof remoteSignTransferTx>)
 {
   const wallet = yield select((state: IApplicationState) => state.wallets.item)
@@ -91,11 +87,26 @@ function* handleRemoteSignTransfer(action: ReturnType<typeof remoteSignTransferT
   }
 }
 
+function* handleRemoteSignContract(action: ReturnType<typeof remoteSignContractTx>)
+{
+  try
+  {
+    let cmd = { id: 4, method: 'signContractCall', params: action.payload}
+
+    yield put(sendCommand(cmd))
+  }
+  catch (e)
+  {
+    console.error(e)
+  }
+}
+
+
 function* handleSendTx(action: ReturnType<typeof sendTransaction>) {
   const wallet = yield select((state: IApplicationState) => state.wallets.item)
   try {
     const { result } = parseMessage(action.payload)
-    console.log('handleSendTx', action)
+
     const hash = yield sendTx(result, wallet)
 
     yield all([put(setSendingTxData({ hash })), put(push(`/tx/${hash}`))])
@@ -104,7 +115,7 @@ function* handleSendTx(action: ReturnType<typeof sendTransaction>) {
       put(setSendingTxData({ error: err.message })),
       put(push(`/tx/error`)),
     ])
-    console.log('handleSendTx error', err)
+    console.error(err)
   }
 }
 
@@ -115,11 +126,12 @@ function* watchSendTx() {
 function* watchCreateTx() {
   yield takeEvery(TransportActionTypes.CREATE_ETH_TRANSFER, handleCreateEthTransfer)
   yield takeEvery(TransportActionTypes.CREATE_EOS_TRANSFER, handleCreateEosTransfer)
-
-  yield takeEvery(TransportActionTypes.CREATE_TX, handleCreateTx)
+  yield takeEvery(TransportActionTypes.CREATE_ETH_CONTRACT, handleCreateEthContract)
 }
+
 function* watchRemoteSignTransfer() {
   yield takeEvery(TransportActionTypes.REMOTE_SIGN_TRANSFER, handleRemoteSignTransfer)
+  yield takeEvery(TransportActionTypes.REMOTE_SIGN_CONTRACT, handleRemoteSignContract)
 }
 
 function* watchLogin() {
