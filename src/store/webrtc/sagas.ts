@@ -8,8 +8,9 @@ import { login, sendTransaction } from '../transport/actions'
 import { WebrtcActionTypes } from './types'
 import { IApplicationState } from '..'
 import { setStatus, connectionClosing, sendCommand } from './actions'
-import { RTCHelper } from '../../helpers/webrtc/webrtc'
 import { call as prepareCall } from '../../helpers/webrtc/jsonrpc'
+import { push } from 'connected-react-router';
+import { setSendingTxData } from '../wallets/actions';
 
 function createDataChannel(dataChannel: RTCDataChannel) {
   return eventChannel(emit => {
@@ -55,16 +56,25 @@ function* handleOpeningConnection() {
 }
 
 function* handleSendCommand(action: ReturnType<typeof sendCommand>) {
-  const rtc = (yield select(
-    (state: IApplicationState) => state.webrtc.rtc
-  )) as RTCHelper
-  let msg = prepareCall(
-    action.payload.method,
-    action.payload.id,
-    action.payload.params,
-    true
-  )
-  yield call((msg: string) => rtc.dataChannel!.send(msg), msg)
+  const { webrtc: {rtc, connected}, wallets:{item: wallet} } = yield select((state: IApplicationState) => state)
+  try
+  {
+    let msg = prepareCall(action.payload.method, action.payload.id, action.payload.params, true)
+    
+    yield put(setSendingTxData({ command: action.payload, error: '', hash: '' }))
+    yield put(setStatus('Verification'))
+
+    if(connected) {
+      yield call((msg: string) => rtc.dataChannel!.send(msg), msg)
+      yield put(push('/status'))
+    } else {
+      yield put(push(`/wallets/${wallet.address}/tx/sign`))
+    }
+    
+  } catch (error)
+  {
+    console.error(error)  
+  }
 }
 
 function* watchActions() {

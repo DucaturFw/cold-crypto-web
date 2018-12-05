@@ -68,7 +68,7 @@ export interface ISendingTxData {
   error?: string
 }
 
-export type FormValues = IEthTxFormValues | IEosTxFormValues | IEthContractFormValues
+export type IFormTransferData = IEthTxFormValues | IEosTxFormValues
 
 export interface IEthTxFormValues {
   to: string
