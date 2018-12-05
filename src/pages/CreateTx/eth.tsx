@@ -19,6 +19,7 @@ import { IWallet, IEthTxFormValues } from '../../store/wallets/types'
 import { createTransaction } from '../../store/transport/actions'
 
 import styled from 'react-emotion'
+import { TxTypes } from '../../helpers/jsonrps';
 
 interface IPropsFromState {
   wallet: IWallet
@@ -39,7 +40,7 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
     <Hr />
     <Formik
       initialValues={{ to: '', gasPrice: 3, data: '', amount: 0 }}
-      onSubmit={(values: IEthTxFormValues) => createTx(values)}
+      onSubmit={(values: IEthTxFormValues) => createTx(values, TxTypes.Transfer)}
       render={(formikBag: FormikProps<IEthTxFormValues>) => (
         <Form>
           <Column>
@@ -133,7 +134,7 @@ const mapStateToProps = ({ wallets }: IApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: IEthTxFormValues) => dispatch(createTransaction(data)),
+  createTx: (data: IEthTxFormValues, txType: TxTypes) => dispatch(createTransaction(data, txType)),
 })
 
 export const CreateEthTx = connect(

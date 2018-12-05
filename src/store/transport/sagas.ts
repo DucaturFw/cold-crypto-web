@@ -1,9 +1,9 @@
 import { all, fork, put, takeEvery, select } from 'redux-saga/effects'
-import { login, createTransaction, sendTransaction, createContract } from './actions'
+import { login, createTransaction, sendTransaction } from './actions'
 import { TransportActionTypes } from './types'
 import { IApplicationState } from '..'
 import { push } from 'connected-react-router'
-import { getSignTransferTxCommand, getSignTransferContractCommand } from '../../helpers/jsonrps'
+import { getTxCommand } from '../../helpers/jsonrps'
 import parseMessage from '../../utils/parseMessage'
 import { sendTx } from '../../helpers/sendtx'
 import { setSendingTxData, fetchSuccess } from '../wallets/actions'
@@ -28,67 +28,19 @@ function* handleLogin(action: ReturnType<typeof login>) {
 function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
   const wallet = yield select((state: IApplicationState) => state.wallets.item)
   const { connected } = yield select((state: IApplicationState) => state.webrtc)
+
   try {
-    const txFormData = action.payload
+    const {formData, txType } = action.payload
 
-    const signedData = yield getSignTransferTxCommand(txFormData, {
-      blockchain: wallet.blockchain,
-      chainId: wallet.chainId,
-      address: wallet.address,
-      nonce: wallet.nonce,
-    })
-    console.log(signedData)
+    const command = yield getTxCommand(formData, { blockchain: wallet.blockchain, chainId: wallet.chainId, address: wallet.address, nonce: wallet.nonce, }, txType)
 
-    yield put(
-      setSendingTxData({
-        signTx: signedData,
-        formData: txFormData,
-        error: '',
-        hash: '',
-      })
-    )
+    yield put(setSendingTxData({ command, formData, error: '', hash: '' }))
 
     if (connected) {
       yield all([
         put(setStatus('Verification')),
         put(push('/status')),
-        put(sendCommand(signedData)),
-      ])
-    } else {
-      yield put(push(`/wallets/${wallet.address}/tx/sign`))
-    }
-  } catch (err) {
-    console.log('handleCreateTx error', err)
-  }
-}
-
-function* handleCreateContract(action: ReturnType<typeof createContract>) {
-  const wallet = yield select((state: IApplicationState) => state.wallets.item)
-  const { connected } = yield select((state: IApplicationState) => state.webrtc)
-  try {
-    const contractFormData = action.payload
-
-    const signedData = yield getSignTransferContractCommand(contractFormData, {
-      blockchain: wallet.blockchain,
-      chainId: wallet.chainId,
-      address: wallet.address,
-      nonce: wallet.nonce,
-    })
-
-    yield put(
-      setSendingTxData({
-        signTx: signedData,
-        formData: contractFormData,
-        error: '',
-        hash: '',
-      })
-    )
-
-    if (connected) {
-      yield all([
-        put(setStatus('Verification')),
-        put(push('/status')),
-        put(sendCommand(signedData)),
+        put(sendCommand(command)),
       ])
     } else {
       yield put(push(`/wallets/${wallet.address}/tx/sign`))
@@ -123,16 +75,12 @@ function* watchCreateTx() {
   yield takeEvery(TransportActionTypes.CREATE_TX, handleCreateTx)
 }
 
-function* watchCreateContract() {
-  yield takeEvery(TransportActionTypes.CREATE_CONTRACT, handleCreateContract)
-}
-
 function* watchLogin() {
   yield takeEvery(TransportActionTypes.LOGIN, handleLogin)
 }
 
 function* transportSaga() {
-  yield all([fork(watchLogin), fork(watchCreateTx), fork(watchSendTx), fork(watchCreateContract)])
+  yield all([fork(watchLogin), fork(watchCreateTx), fork(watchSendTx)])
 }
 
 export default transportSaga

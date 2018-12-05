@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { IApplicationState, IConnectedReduxProps } from '../store'
-import { createContract } from '../store/transport/actions'
+import { IConnectedReduxProps } from '../store'
+import { createTransaction } from '../store/transport/actions'
 import { Formik, FormikProps, Form, Field, FieldProps, FieldArray, ArrayHelpers } from 'formik'
 import { IEthContractFormValues } from '../store/wallets/types'
 import {
@@ -15,12 +15,10 @@ import {
   Select,
 } from '../components/atoms'
 import { getPublicMethodNames, IAbiEntry, getArguments, IAbiArgument } from '../helpers/eth/eth-contracts'
-
-interface IPropsFromState {
-}
+import { TxTypes } from '../helpers/jsonrps';
 
 interface IPropsFromDispatch {
-  createCont: typeof createContract
+  createTx: typeof createTransaction
 }
 
 interface IStateProps {
@@ -28,7 +26,7 @@ interface IStateProps {
   methodArgs: IAbiArgument[]
 }
 
-type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
+type AllProps =  IPropsFromDispatch & IConnectedReduxProps
 
 class CreateContractPage extends React.Component<AllProps, IStateProps> {
   constructor(props: AllProps) {
@@ -66,12 +64,12 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
 
   render() {
     const { publicMethodNames, methodArgs } = this.state
-    const {createCont} = this.props
+    const {createTx} = this.props
     return (
       <React.Fragment>
         <Formik
           initialValues={{ to: '', abi: [], method: '', gasPrice: '5', gasLimit: "300000", args: []}}
-          onSubmit={(values: IEthContractFormValues) => createCont(values)}
+          onSubmit={(values: IEthContractFormValues) => createTx(values, TxTypes.Contract)}
           render={(formikBag: FormikProps<IEthContractFormValues>) => (
             <Form>
               <Column>
@@ -202,15 +200,11 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
     )
   }
 }
-
-const mapStateToProps = ({ wallets }: IApplicationState) => ({
-})
-
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createCont: (data: IEthContractFormValues) => dispatch(createContract(data)),
+  createTx: (data: IEthContractFormValues, txType: TxTypes) => dispatch(createTransaction(data, txType)),
 })
 
 export const CreateContract = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(CreateContractPage)

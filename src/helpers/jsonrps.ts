@@ -5,10 +5,16 @@ import {
   IWalletEth,
   IEosTxFormValues,
   IEthContractFormValues,
+  FormValues,
 } from '../store/wallets/types'
 import { IHostCommand } from './webrtc/hostproto'
 import { getContractData, convertParamsToEth } from './eth/eth';
 import { getArguments } from './eth/eth-contracts';
+
+export enum TxTypes {
+  Transfer,
+  Contract
+}
 
 // TODO: mobile app ignore blockchain array
 export const getWalletListCommand = () => {
@@ -20,7 +26,18 @@ export const getWalletListCommand = () => {
   }
 }
 
-export const getSignTransferTxCommand = async (
+export const getTxCommand = ( data: FormValues, wallet: IWalletEth, txType: TxTypes) => {
+  switch (txType) {
+    case TxTypes.Transfer:
+      return getTransferTxCommand(data, wallet)
+    case TxTypes.Contract:
+      return getContractCommand(data, wallet)
+    default:
+      throw new Error('tx type not found')
+  }
+} 
+
+const getTransferTxCommand = async (
   data: IEthTxFormValues | IEosTxFormValues,
   wallet: IWalletEth
 ): Promise<IHostCommand<unknown[], unknown>> => {
@@ -68,8 +85,7 @@ export const getSignTransferTxCommand = async (
   return { id: 3, method: 'signTransferTx', params: { wallet, tx } }
 }
 
-
-export const getSignTransferContractCommand = async ( formData: IEthContractFormValues, wallet: IWalletEth ): Promise<IHostCommand<unknown[], unknown>> => {
+const getContractCommand = async ( formData: IEthContractFormValues, wallet: IWalletEth ): Promise<IHostCommand<unknown[], unknown>> => {
    const tx  = {
       gasPrice: Web3.utils.toWei(formData.gasPrice.toString(), "gwei"),
       gasLimit: formData.gasLimit,

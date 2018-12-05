@@ -62,11 +62,13 @@ export interface IWalletsState {
 }
 
 export interface ISendingTxData {
-  signTx?: IHostCommand<unknown[], unknown>
+  command?: IHostCommand<unknown[], unknown>
   hash?: string
   formData?: IEthTxFormValues | IEosTxFormValues | IEthContractFormValues
   error?: string
 }
+
+export type FormValues = IEthTxFormValues | IEosTxFormValues | IEthContractFormValues
 
 export interface IEthTxFormValues {
   to: string

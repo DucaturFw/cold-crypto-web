@@ -17,8 +17,9 @@ import { Dispatch } from 'redux'
 import { IApplicationState } from '../../store'
 import { IWallet, IEosTxFormValues } from '../../store/wallets/types'
 import { createTransaction } from '../../store/transport/actions'
+import { TxTypes } from '../../helpers/jsonrps';
+import styled from 'react-emotion';
 
-import styled from 'react-emotion'
 
 interface IPropsFromState {
   wallet: IWallet
@@ -39,7 +40,7 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
     <Hr />
     <Formik
       initialValues={{ to: '', memo: '', amount: 0 }}
-      onSubmit={(values: IEosTxFormValues) => createTx(values)}
+      onSubmit={(values: IEosTxFormValues) => createTx(values, TxTypes.Transfer)}
       render={(formikBag: FormikProps<IEosTxFormValues>) => (
         <Form>
           <Column>
@@ -115,7 +116,7 @@ const mapStateToProps = ({ wallets }: IApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: IEosTxFormValues) => dispatch(createTransaction(data)),
+  createTx: (data: IEosTxFormValues, txType: TxTypes) => dispatch(createTransaction(data, txType)),
 })
 
 export const CreateEosTx = connect(

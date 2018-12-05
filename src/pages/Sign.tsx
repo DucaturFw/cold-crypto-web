@@ -8,7 +8,7 @@ import { call as prepareCall } from '../helpers/webrtc/jsonrpc'
 import { IHostCommand } from '../helpers/webrtc/hostproto'
 
 interface IPropsFromState {
-  signTx: IHostCommand<unknown[], unknown>
+  command: IHostCommand<unknown[], unknown>
 }
 
 interface IPropsFromDispatch {
@@ -17,8 +17,8 @@ interface IPropsFromDispatch {
 
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
-const SignPage: React.SFC<AllProps> = ({ signTx, sendTx }) => {
-  const value = prepareCall(signTx.method, signTx.id, signTx.params, true)
+const SignPage: React.SFC<AllProps> = ({ command, sendTx }) => {
+  const value = prepareCall(command.method, command.id, command.params, true)
   return (
     <React.Fragment>
       <QrLogin
@@ -31,7 +31,7 @@ const SignPage: React.SFC<AllProps> = ({ signTx, sendTx }) => {
 }
 
 const mapStateToProps = ({ wallets }: IApplicationState) => ({
-  signTx: wallets.sendingTxData.signTx!,
+  command: wallets.sendingTxData.command!,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

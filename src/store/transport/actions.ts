@@ -1,12 +1,10 @@
 import { action } from 'typesafe-actions'
 import { TransportActionTypes } from './types'
-import { IEthTxFormValues, IEosTxFormValues, IEthContractFormValues } from '../wallets/types'
+import { FormValues } from '../wallets/types'
+import { TxTypes } from '../../helpers/jsonrps';
 
-export const createContract = (contract: IEthContractFormValues) =>
-  action(TransportActionTypes.CREATE_CONTRACT, contract)
-
-export const createTransaction = (tx: IEthTxFormValues | IEosTxFormValues) =>
-  action(TransportActionTypes.CREATE_TX, tx)
+export const createTransaction = (formData: FormValues, txType: TxTypes) =>
+  action(TransportActionTypes.CREATE_TX, {formData, txType})
 
 export const signTransaction = (tx: string) =>
   action(TransportActionTypes.SIGN_TX, tx)

@@ -14,7 +14,7 @@ const initialState: IWalletsState = {
   item: {} as IWalletEth | IWalletEos,
   items: [],
   sendingTxData: {
-    signTx: {} as IHostCommand<unknown[], unknown>,
+    command: {} as IHostCommand<unknown[], unknown>,
     hash: '',
     formData: {} as IEthTxFormValues,
     error: '',
