@@ -8,8 +8,14 @@ import { Dispatch } from 'redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
 import { addWallet } from '../store/wallets/actions'
 import { IWallet, IWalletBase } from '../store/wallets/types'
-
 import { TXList } from './TXList'
+
+const TXListWrapper = styled('div')({
+  background: '#fff',
+  padding: '2rem',
+  boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.04)',
+  borderRadius: '.8rem',
+})
 
 interface IPropsFromState {
   loading: boolean
@@ -51,7 +57,9 @@ class WalletPage extends React.Component<AllProps> {
             </Column>
           </Row>
           <Hr />
-          <TXList wallet={wallet} />
+          <TXListWrapper>
+            <TXList wallet={wallet} />
+          </TXListWrapper>
           {loading && <Loader />}
         </Column>
       </React.Fragment>

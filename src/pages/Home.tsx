@@ -9,8 +9,9 @@ import {
   ButtonSecondary,
   TextInput,
   Link,
+  Select,
 } from '../components/atoms'
-import styled from 'react-emotion'
+
 
 export const Home: React.SFC<{}> = () => (
   <React.Fragment>
@@ -53,24 +54,4 @@ export const Home: React.SFC<{}> = () => (
       </Column>
     </Row>
   </React.Fragment>
-)
-
-export const Select = styled('select')(
-  ({ flipToRight }: { flipToRight: boolean }) => ({
-    ':after': {
-      border: 'solid white',
-      borderWidth: '0 3px 3px 0',
-      content: '""',
-      position: 'absolute',
-    },
-    appearance: 'none',
-    background: '#457b9d',
-    border: 0,
-    borderRadius: flipToRight ? '0 .2rem .2rem 0' : '.2rem',
-    color: '#f1faee',
-    padding: '0 1rem',
-    boxSizing: 'border-box',
-    position: 'relative',
-    margin: '.25rem 0',
-  })
 )

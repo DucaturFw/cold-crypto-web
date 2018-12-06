@@ -2,10 +2,11 @@ import React from 'react'
 import styled from 'react-emotion'
 import { Route } from 'react-router-dom'
 
-import { Header } from './Header'
+import { Header } from '../organisms/Header'
+import { Footer } from '../organisms/Footer'
 
 const Root = styled('div')({
-  background: 'rgb(0, 74, 124)',
+  background: 'linear-gradient(57deg, #0D0D0D 0%, #160A2E 100%)',
   minHeight: '100vh',
 })
 
@@ -13,11 +14,12 @@ const Main = styled('main')({
   alignItems: 'center',
   display: 'flex',
   justifyContent: 'center',
-  minHeight: 'calc(100vh - 4rem)',
+  minHeight: 'calc(100vh - 4rem - 4rem)',
 })
 
 const Modal = styled('div')({
   background: '#fff',
+  borderRadius: '.8rem',
   maxWidth: '50rem',
   minWidth: '30rem',
   padding: '2rem',
@@ -43,6 +45,7 @@ export class DefaultLayout extends React.Component<IDefaultProps, any> {
                 <Component {...matchProps} />
               </Modal>
             </Main>
+            <Footer />
           </Root>
         )}
       />
