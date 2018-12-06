@@ -12,7 +12,6 @@ import {
   Select,
 } from '../components/atoms'
 
-
 export const Home: React.SFC<{}> = () => (
   <React.Fragment>
     <H2>Welcome Back!</H2>
@@ -44,7 +43,7 @@ export const Home: React.SFC<{}> = () => (
           <TextInput type="text" placeholder="Type your wallet address here" />
           <Select flipToRight>
             <option value="eth" key="eth">
-              'eth
+              eth
             </option>
           </Select>
         </Row>

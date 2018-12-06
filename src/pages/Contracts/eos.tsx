@@ -1,36 +1,39 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
+import styled from 'react-emotion'
+import { css } from 'emotion'
 import { createTransaction } from '../../store/transport/actions'
-// import {
-//   Formik,
-//   // FormikProps,
-//   // Form,
-//   Field,
-//   FieldProps,
-//   // FieldArray,
-//   // ArrayHelpers,
-// } from 'formik'
 import { FormValues } from '../../store/wallets/types'
 import {
+  H2,
+  H3,
   Column,
   Label,
   TextInput,
   ButtonBase,
   Row,
-  // Wrap,
   Select,
 } from '../../components/atoms'
-// import {
-//   // getPublicMethodNames,
-//   // IAbiEntry,
-//   // getArguments,
-//   IAbiArgument,
-// } from '../../helpers/eth/eth-contracts'
+
 import { TxTypes } from '../../helpers/jsonrps'
 import { eos } from '../../helpers/eos'
 import { toDictionary, lookUpBase } from '../../helpers/eos-types'
 import { formToJson } from '../../helpers/func'
+
+const Error = styled('div')`
+  margin-top: 10px;
+  font-weight: bold;
+`
+
+const styles = {
+  offtop: css`
+    margin-top: 25px;
+  `,
+  select: css`
+    padding: 0.8rem 1rem;
+  `,
+}
 
 const expand = (type: string, customs: any): any => {
   try {
@@ -64,6 +67,7 @@ interface IStateProps {
   abi: any
   customs: any
   action: string
+  error: string
 }
 
 type AllProps = IPropsFromDispatch
@@ -77,6 +81,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
       abi: null,
       customs: null,
       action: '',
+      error: '',
     }
   }
 
@@ -93,7 +98,6 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
 
     try {
       const abi = await eos.getAbi(this.state.address)
-      console.log(abi)
 
       if (abi) {
         const customs = customTypes(abi.abi.structs, abi.abi.types)
@@ -103,7 +107,11 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
           customs,
         })
       }
-    } catch (e) {}
+    } catch (e) {
+      this.setState({
+        error: 'Contract not found',
+      })
+    }
   }
 
   handleConfirm = (e: any) => {
@@ -133,32 +141,39 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
       <React.Fragment>
         {!this.state.abi && (
           <form onSubmit={this.handleSubmit}>
+            <H2>Call Contract EOS</H2>
             <Column>
               <Row>
                 <Column style={{ flexBasis: '100%', marginRight: '0%' }}>
-                  <Label>Contract name:</Label>
                   <TextInput
                     type="text"
-                    placeholder="Address"
+                    placeholder="contract name"
                     value={this.state.address}
                     onChange={this.handleChangeAddress}
                   />
                 </Column>
               </Row>
+              <Row>{this.state.error && <Error>{this.state.error}</Error>}</Row>
               <Column
-                style={{ width: '30%', marginLeft: '35%', marginTop: '50px' }}
+                style={{ width: '40%', marginLeft: '30%', marginTop: '50px' }}
               >
-                <ButtonBase type="submit">Continue</ButtonBase>
+                <ButtonBase type="submit">Find contract</ButtonBase>
               </Column>
             </Column>
           </form>
         )}
         {this.state.abi && (
           <React.Fragment>
-            <Row>
+            <H2>Call Contract EOS</H2>
+            <H3>{this.state.address}</H3>
+            <Row className={styles.offtop}>
               <Column>
                 <Label>Contract method:</Label>
-                <Select onChange={this.handleMethodSelect} name="method">
+                <Select
+                  onChange={this.handleMethodSelect}
+                  name="method"
+                  className={styles.select}
+                >
                   <option value="">Select method</option>
                   {this.state.abi.abi.actions.map((item: any) => (
                     <option key={item.type} value={item.type}>
@@ -169,24 +184,32 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
               </Column>
             </Row>
             <form onSubmit={this.handleConfirm}>
-              {this.state.action &&
-                Object.entries(
-                  expand(this.state.action, this.state.customs)
-                ).map((item: any[]) => {
-                  return (
-                    <Row key={item[0]}>
-                      <Column>
-                        <Label>{item[0]}:</Label>
-                        <TextInput
-                          name={item[0]}
-                          type="text"
-                          placeholder={item[0]}
-                        />
-                      </Column>
-                    </Row>
-                  )
-                })}
-              <ButtonBase type="submit">Confirm</ButtonBase>
+              {this.state.action && (
+                <React.Fragment>
+                  <H3 className={styles.offtop}>Parameters:</H3>
+                  {Object.entries(
+                    expand(this.state.action, this.state.customs)
+                  ).map((item: any[]) => {
+                    return (
+                      <Row key={item[0]}>
+                        <Column>
+                          <Label>{item[0]}:</Label>
+                          <TextInput
+                            name={item[0]}
+                            type="text"
+                            placeholder={item[0]}
+                          />
+                        </Column>
+                      </Row>
+                    )
+                  })}
+                </React.Fragment>
+              )}
+              {this.state.action && (
+                <ButtonBase type="submit" className={styles.offtop}>
+                  Sign
+                </ButtonBase>
+              )}
             </form>
           </React.Fragment>
         )}
