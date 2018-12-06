@@ -10,7 +10,7 @@ import {
   Sign,
   Status,
   TxView,
-  CreateContract,
+  CallContract,
 } from './pages'
 
 export const Routes: React.SFC = () => {
@@ -24,7 +24,7 @@ export const Routes: React.SFC = () => {
           <ModalLayout path="/wallets/:id/tx/create" component={CreateTx} />
           <ModalLayout
             path="/wallets/:id/contract/create"
-            component={CreateContract}
+            component={CallContract}
           />
           <ModalLayout path="/wallets/:id/tx/sign" component={Sign} />
           <ModalLayout path="/tx/:id" component={TxView} />

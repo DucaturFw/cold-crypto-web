@@ -1,10 +1,17 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { IConnectedReduxProps } from '../store'
-import { createTransaction } from '../store/transport/actions'
-import { Formik, FormikProps, Form, Field, FieldProps, FieldArray, ArrayHelpers } from 'formik'
-import { IEthContractFormValues, FormValues } from '../store/wallets/types'
+import { createTransaction } from '../../store/transport/actions'
+import {
+  Formik,
+  FormikProps,
+  Form,
+  Field,
+  FieldProps,
+  FieldArray,
+  ArrayHelpers,
+} from 'formik'
+import { IEthContractFormValues, FormValues } from '../../store/wallets/types'
 import {
   Column,
   Label,
@@ -13,9 +20,14 @@ import {
   Row,
   Wrap,
   Select,
-} from '../components/atoms'
-import { getPublicMethodNames, IAbiEntry, getArguments, IAbiArgument } from '../helpers/eth/eth-contracts'
-import { TxTypes } from '../helpers/jsonrps';
+} from '../../components/atoms'
+import {
+  getPublicMethodNames,
+  IAbiEntry,
+  getArguments,
+  IAbiArgument,
+} from '../../helpers/eth/eth-contracts'
+import { TxTypes } from '../../helpers/jsonrps'
 
 interface IPropsFromDispatch {
   createTx: typeof createTransaction
@@ -26,9 +38,9 @@ interface IStateProps {
   methodArgs: IAbiArgument[]
 }
 
-type AllProps =  IPropsFromDispatch & IConnectedReduxProps
+type AllProps = IPropsFromDispatch
 
-class CreateContractPage extends React.Component<AllProps, IStateProps> {
+class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
   constructor(props: AllProps) {
     super(props)
 
@@ -64,12 +76,21 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
 
   render() {
     const { publicMethodNames, methodArgs } = this.state
-    const {createTx} = this.props
+    const { createTx } = this.props
     return (
       <React.Fragment>
         <Formik
-          initialValues={{ to: '', abi: [], method: '', gasPrice: '5', gasLimit: "300000", args: []}}
-          onSubmit={(values: IEthContractFormValues) => createTx(values, TxTypes.Contract)}
+          initialValues={{
+            to: '',
+            abi: [],
+            method: '',
+            gasPrice: '5',
+            gasLimit: '300000',
+            args: [],
+          }}
+          onSubmit={(values: IEthContractFormValues) =>
+            createTx(values, TxTypes.Contract)
+          }
           render={(formikBag: FormikProps<IEthContractFormValues>) => (
             <Form>
               <Column>
@@ -125,14 +146,23 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
                     <Label>Method:</Label>
                     <Field
                       name="method"
-                      render={({ field, form }: FieldProps<IEthContractFormValues>) => (
+                      render={({
+                        field,
+                        form,
+                      }: FieldProps<IEthContractFormValues>) => (
                         <Select
                           {...field}
                           onChange={e => {
                             form.setFieldValue('method', e.target.value)
-                            const args = getArguments(form.values.abi, e.target.value)
-                            form.setFieldValue('args', new Array(args.length).fill(''))
-                            this.setState({methodArgs: args})
+                            const args = getArguments(
+                              form.values.abi,
+                              e.target.value
+                            )
+                            form.setFieldValue(
+                              'args',
+                              new Array(args.length).fill('')
+                            )
+                            this.setState({ methodArgs: args })
                           }}
                         >
                           <option value="">Select method</option>
@@ -147,15 +177,22 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
                     <Wrap vertical={1} />
                     <FieldArray
                       name="args"
-                      render={({ form, }: ArrayHelpers & { form: FormikProps<IEthContractFormValues> })  => (
-                        form.values.args && form.values.args.length > 0 && 
+                      render={({
+                        form,
+                      }: ArrayHelpers & {
+                        form: FormikProps<IEthContractFormValues>
+                      }) =>
+                        form.values.args &&
+                        form.values.args.length > 0 && (
                           <React.Fragment>
                             <Label>Parameters:</Label>
                             {form.values.args.map((arg, index: number) => (
                               <Field
                                 key={index}
                                 name={`args[${index}`}
-                                render={({ field }: FieldProps<IEthContractFormValues>) => (
+                                render={({
+                                  field,
+                                }: FieldProps<IEthContractFormValues>) => (
                                   <TextInput
                                     type="text"
                                     placeholder={methodArgs[index].name}
@@ -165,7 +202,8 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
                               />
                             ))}
                           </React.Fragment>
-                      )}
+                        )
+                      }
                     />
                   </Column>
                   <Column>
@@ -201,10 +239,11 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
   }
 }
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: FormValues, txType: TxTypes) => dispatch(createTransaction(data, txType)),
+  createTx: (data: FormValues, txType: TxTypes) =>
+    dispatch(createTransaction(data, txType)),
 })
 
-export const CreateContract = connect(
+export const CallEthContract = connect(
   null,
   mapDispatchToProps
-)(CreateContractPage)
+)(CreateEthContractPage)
