@@ -1,7 +1,8 @@
 import callApi from '../../utils/callApi'
 import Web3 from 'web3'
-import { TransactionReceipt } from 'web3/types'
+
 import { IAbiArgumentType, getArguments, ABI } from './eth-contracts';
+
 const web3 = new Web3()
 
 const API_ENDPOINT =
@@ -15,9 +16,10 @@ export async function getNonce(address: string): Promise<number> {
   return web3.eth.getTransactionCount(address)
 }
 
-export async function sendTx(tx: string): Promise<TransactionReceipt> {
-  // console.log(tx);
-  return web3.eth.sendSignedTransaction(tx)
+export async function sendTx(tx: string): Promise<string> {
+  const result = await web3.eth.sendSignedTransaction(tx)
+
+  return result.transactionHash
 }
 
 export async function getTx(address: string) {

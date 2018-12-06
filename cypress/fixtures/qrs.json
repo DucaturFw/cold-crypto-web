@@ -1,4 +1,5 @@
 {
 	"login_multiple_eth_wallets": "|2|[{\"address\":\"0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0\",\"blockchain\":\"eth\",\"chainId\":4},{\"address\":\"0x30384424F1Ab508F1f82b58f1335f343ABdF68AE\",\"blockchain\":\"eth\",\"chainId\":4},{\"address\":\"0x1AD80eC32FD6Ef24e80801e90C5f7e32950C2D05\",\"blockchain\":\"eth\",\"chainId\":4}]",
-	"login_single_eth_wallet": "|2|[{\"address\":\"0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0\",\"blockchain\":\"eth\",\"chainId\":4}]"
+	"login_single_eth_wallet": "|2|[{\"address\":\"0x5DcD6E2D92bC4F96F9072A25CC8d4a3A4Ad07ba0\",\"blockchain\":\"eth\",\"chainId\":4}]",
+	"random_eth_tx": "|3|\"0xf86c13850ba43b7400825208946cc5f688a315f3dc28a7781717a9a798a59fda7b88017bd2e3551224008025a04bbd92c4fb3f1216821bec5ecbfc292d17cd59184c35212cdbe4521a649c1593a03720179d7944ba02fa09471f746acd5429c9c4fe93f5d1d24b318c9f8d176c1a\""
 }

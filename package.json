@@ -8,11 +8,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "yarn test:tsc && yarn test:qrs-gen && yarn test:cypress",
-    "ci": "start-server-and-test start http://localhost:3000 test",
+    "ci": "yarn test:tsc",
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer build/static/js/main.*",
     "lint": "tslint 'src/**/*.{ts, tsx}'",
-    "test:cypress": "yarn test:qrs-gen && yarn cypress run",
+    "test:cypress": "yarn test:qrs-gen && yarn cypress run --browser chrome",
     "test:qrs-gen": "(cd cypress/fixtures && exec node generate_qr_codes.js)",
     "test:tsc": "tsc --noEmit"
   },
@@ -65,7 +65,7 @@
     "tslint-config-prettier": "^1.17.0",
     "tslint-config-standard": "^8.0.1",
     "tslint-react": "^3.6.0",
-    "typescript": "^3.1.6"
+    "typescript": "^3.2.1"
   },
   "eslintConfig": {
     "extends": "react-app"

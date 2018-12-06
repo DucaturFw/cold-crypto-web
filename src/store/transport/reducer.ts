@@ -5,6 +5,7 @@ import { ITransportState, TransportActionTypes } from './types'
 
 const initialState: ITransportState = {
   qrcodeData: '',
+  lastWebrtcMsg: null,
 }
 export type TransportsAction = ActionType<typeof transports>
 

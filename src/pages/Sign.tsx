@@ -18,13 +18,21 @@ interface IPropsFromDispatch {
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
 const SignPage: React.SFC<AllProps> = ({ command, sendTx }) => {
+  let scaned = false
   const value = prepareCall(command.method, command.id, command.params, true)
+  const handleScan = (result: string) => {
+    if (!scaned) {
+      scaned = true
+      sendTx(result)
+    }
+  }
+
   return (
     <React.Fragment>
       <QrLogin
         title={'Sign Transaction By Mobile'}
         value={value || ''}
-        onScan={sendTx}
+        onScan={handleScan}
       />
     </React.Fragment>
   )
@@ -41,4 +49,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 export const Sign = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SignPage)
+)(SignPage as any)

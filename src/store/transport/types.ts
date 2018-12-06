@@ -1,3 +1,5 @@
+import { IHostCommand } from "../../helpers/webrtc/hostproto"
+
 export enum TransportActionTypes {
   SEND_TX = '@@transport/SEND_TX',
   LOGIN = '@@transport/LOGIN',
@@ -9,4 +11,5 @@ export enum TransportActionTypes {
 
 export interface ITransportState {
   qrcodeData: string
+  lastWebrtcMsg: IHostCommand<unknown[], unknown> | null
 }
