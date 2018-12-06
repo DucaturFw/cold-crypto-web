@@ -1,7 +1,7 @@
 import styled from 'react-emotion'
 
 export const Select = styled('select')(
-  ({ flipToRight }: { flipToRight: boolean }) => ({
+  ({ flipToRight }: { flipToRight?: boolean }) => ({
     ':after': {
       border: 'solid white',
       borderWidth: '0 3px 3px 0',
