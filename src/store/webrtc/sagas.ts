@@ -10,6 +10,7 @@ import { IApplicationState } from '..'
 import { setStatus, connectionClosing, sendCommand } from './actions'
 import { RTCHelper } from '../../helpers/webrtc/webrtc'
 import { call as prepareCall } from '../../helpers/webrtc/jsonrpc'
+import { IHostCommand } from '../../helpers/webrtc/hostproto'
 
 function createDataChannel(dataChannel: RTCDataChannel) {
   return eventChannel(emit => {
@@ -46,11 +47,13 @@ function* watchDataChannel() {
 }
 
 function* handleOpeningConnection() {
-  const rtc = yield select((state: IApplicationState) => state.webrtc.rtc)
+  const [rtc, msg] = (yield select((state: IApplicationState) => [state.webrtc.rtc, state.transport.lastWebrtcMsg])) as [RTCHelper, IHostCommand<unknown[], unknown>]
+  if (msg)
+    yield put(sendCommand(msg))
 
   while (true) {
     yield delay(3000)
-    if (rtc.dataChannel.readyState === 'closing') yield put(connectionClosing())
+    if (rtc.dataChannel!.readyState === 'closing') yield put(connectionClosing())
   }
 }
 

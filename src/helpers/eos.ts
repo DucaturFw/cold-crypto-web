@@ -18,7 +18,7 @@ export const getInfo = (account: string) => {
 ;
 
 // Create instance Eosjs
-const eos = Eos({
+export const eos = Eos({
   httpEndpoint: 'https://jungle2.cryptolions.io',
   chainId: chain.jungle,
 });

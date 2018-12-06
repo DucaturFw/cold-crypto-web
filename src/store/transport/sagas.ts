@@ -3,12 +3,13 @@ import { login, createTransaction, sendTransaction } from './actions'
 import { TransportActionTypes } from './types'
 import { IApplicationState } from '..'
 import { push } from 'connected-react-router'
-import { getSignTransferTxCommand } from '../../helpers/jsonrps'
+import { getTxCommand } from '../../helpers/jsonrps'
 import parseMessage from '../../utils/parseMessage'
 import { sendTx } from '../../helpers/sendtx'
 import { setSendingTxData, fetchSuccess } from '../wallets/actions'
 import { authSuccess } from '../auth/actions'
 import { setStatus, sendCommand } from '../webrtc/actions'
+import { IWallet } from '../wallets/types'
 
 function* handleLogin(action: ReturnType<typeof login>) {
   try {
@@ -28,31 +29,20 @@ function* handleLogin(action: ReturnType<typeof login>) {
 function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
   const wallet = yield select((state: IApplicationState) => state.wallets.item)
   const { connected } = yield select((state: IApplicationState) => state.webrtc)
+
   try {
-    const txFormData = action.payload
+    const {formData, txType } = action.payload
 
-    const signedData = yield getSignTransferTxCommand(txFormData, {
-      blockchain: wallet.blockchain,
-      chainId: wallet.chainId,
-      address: wallet.address,
-      nonce: wallet.nonce,
-    })
-    console.log(signedData)
+    const command = yield getTxCommand(formData, { ...wallet as IWallet }, txType)
 
-    yield put(
-      setSendingTxData({
-        signTx: signedData,
-        formData: txFormData,
-        error: '',
-        hash: '',
-      })
-    )
+    console.log(command);
+    yield put(setSendingTxData({ command, formData, error: '', hash: '' }))
 
     if (connected) {
       yield all([
         put(setStatus('Verification')),
         put(push('/status')),
-        put(sendCommand(signedData)),
+        put(sendCommand(command)),
       ])
     } else {
       yield put(push(`/wallets/${wallet.address}/tx/sign`))

@@ -57,7 +57,7 @@ export class RTCHelper extends EventEmitter {
     offer: RTCSessionDescriptionInit
   ): Promise<RTCSessionDescriptionInit> => {
     console.log(`${this.tag}pushOffer: ${JSON.stringify(offer)}`)
-    if (this.offer) throw "can't push offer to already inited rtc connection!"
+    if (this.offer) throw new Error("can't push offer to already inited rtc connection!")
 
     await this.rpc.setRemoteDescription(offer)
     let answer = await this.rpc.createAnswer()
