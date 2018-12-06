@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'react-emotion'
 import { Link } from '../atoms'
+import Logo from '../moleculas/Logo'
 
 const Root = styled('aside')({
   background: '#fff',
-  borderRight: '1px solid rgb(234, 234, 234)',
+  boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.04)',
   gridArea: 'sidebar',
 })
 
@@ -19,7 +20,8 @@ const MenuLink = styled(Link)(({ selected }: { selected: boolean }) => ({
 }))
 
 const Container = styled('menu')({
-  padding: '.5rem 0',
+  padding: 0,
+  margin: 0,
 })
 
 const MainMenu = () => (
@@ -34,6 +36,7 @@ const MainMenu = () => (
 
 export const Sidebar = () => (
   <Root>
+    <Logo to='/' reverseColor={true} />
     <MainMenu />
   </Root>
 )

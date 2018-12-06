@@ -72,6 +72,7 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
                       )}
                     />
                   </LabelAtop>
+                  <img src="/icon-change.svg" />
                   <LabelAtop label="usd">
                     <Field
                       name="amount"

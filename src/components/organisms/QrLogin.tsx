@@ -40,7 +40,7 @@ export const QrLogin: React.SFC<AllProps> = ({
             <H2>Scan QR Code</H2>
           </Centered>
           <Centered style={{ display: 'flex' }}>
-            { value && <QRCode value={value} renderAs="svg" /> }
+            { value && <QRCode value={value} renderAs="svg" size={200} /> }
           </Centered>
         </Column>
         {!readonly && (
@@ -53,7 +53,7 @@ export const QrLogin: React.SFC<AllProps> = ({
                 delay={300}
                 onScan={result => result && onScan(result)}
                 onError={error => errorHandle(error)}
-                style={{ width: '30vh' }}
+                style={{ width: 200 }}
               />
             </Centered>
           </Column>

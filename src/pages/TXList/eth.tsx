@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { OverflowTd, Table } from './common'
+import { A } from '../../components/atoms'
 import { IEthTx } from '../../store/wallets/types'
 
 const API_URL = 'https://rinkeby.etherscan.io/tx'
@@ -21,13 +22,13 @@ export const EthTx = (txs: IEthTx[]) => {
           <tr key={index}>
             <td>{new Date(item.timeStamp * 1000).toLocaleString()}</td>
             <OverflowTd>
-              <a
+              <A
                 target="_blank"
                 // TODO: make genrator explorer url for blockchains
                 href={`${API_URL}/${item.hash}`}
               >
                 {item.hash}
-              </a>
+              </A>
             </OverflowTd>
             <OverflowTd>{item.from}</OverflowTd>
             <td>{item.value}</td>

@@ -22,13 +22,10 @@ export const Routes: React.SFC = () => {
         <MainLayout>
           <Route exact path="/wallets/:id" component={Wallet} />
           <ModalLayout path="/wallets/:id/tx/create" component={CreateTx} />
-          <ModalLayout
-            path="/wallets/:id/contract/create"
-            component={CallContract}
-          />
+          <ModalLayout path="/wallets/:id/contract/create" component={CallContract} />
           <ModalLayout path="/wallets/:id/tx/sign" component={Sign} />
           <ModalLayout path="/tx/:id" component={TxView} />
-          <ModalLayout path="/status" component={Status} />
+          <ModalLayout path="/status" component={Status} />        
         </MainLayout>
       </Switch>
     </div>

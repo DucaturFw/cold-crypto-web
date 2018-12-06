@@ -43,13 +43,13 @@ class WalletPage extends React.Component<AllProps> {
           <Row>
             <Column style={{ flexBasis: '15rem', marginRight: '2rem' }}>
               <Link to={`/wallets/${wallet.address}/tx/create`}>
-                <ButtonBase>Create New Tx</ButtonBase>
+                <ButtonBase style={{minWidth: '13rem'}}>Create New Tx</ButtonBase>
               </Link>
               <Link to={`/wallets/${wallet.address}/contract/create`}>
                 <ButtonBase>Call Contract</ButtonBase>
               </Link>
             </Column>
-            <Column>
+            <Column style={{ display: 'flex', justifyContent: 'center' }}>
               <H1>{wallet.blockchain} Wallet</H1>
               <H2>
                 <Address>{wallet.address}</Address>

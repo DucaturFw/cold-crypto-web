@@ -18,8 +18,10 @@ import {
   TextInput,
   ButtonBase,
   Row,
+  H1,
+  Hr,
   // Wrap,
-  Select,
+  SelectOptions,
 } from '../../components/atoms'
 // import {
 //   // getPublicMethodNames,
@@ -134,6 +136,10 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
         {!this.state.abi && (
           <form onSubmit={this.handleSubmit}>
             <Column>
+`             <Row>
+                <H1>Call Contract EOS</H1>
+              </Row>
+              <Hr />`
               <Row>
                 <Column style={{ flexBasis: '100%', marginRight: '0%' }}>
                   <Label>Contract name:</Label>
@@ -158,14 +164,14 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
             <Row>
               <Column>
                 <Label>Contract method:</Label>
-                <Select onChange={this.handleMethodSelect} name="method">
+                <SelectOptions onChange={this.handleMethodSelect} name="method">
                   <option value="">Select method</option>
                   {this.state.abi.abi.actions.map((item: any) => (
                     <option key={item.type} value={item.type}>
                       {item.name}
                     </option>
                   ))}
-                </Select>
+                </SelectOptions>
               </Column>
             </Row>
             <form onSubmit={this.handleConfirm}>

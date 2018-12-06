@@ -1,19 +1,17 @@
 import React from 'react'
 import styled from 'react-emotion'
-// import { Route } from 'react-router-dom'
 
-import { Header } from '../organisms/Header'
 import { Sidebar } from '../organisms/Sidebar'
 
 const Container = styled('div')({
   background: '#fff',
   display: 'grid',
   gridTemplateAreas: `
-      "header header header header"
-      "sidebar main main main"
-    `,
+    "sidebar main main main"
+    "sidebar footer footer footer"
+  `,
   gridTemplateColumns: '16rem auto auto auto',
-  gridTemplateRows: '4rem auto',
+  gridTemplateRows: 'auto auto',
   minHeight: '100vh',
 })
 
@@ -30,7 +28,6 @@ export const MainLayout: React.SFC = props => {
   const { children } = props
   return (
     <Container>
-      <Header to="/" logoColorReverse={true} />
       <Main>{children}</Main>
       <Sidebar />
     </Container>
