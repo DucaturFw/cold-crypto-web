@@ -159,7 +159,7 @@ class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
                       }: FieldProps<IEthContractFormValues>) => (
                         <SelectOptions
                           {...field}
-                          onChange={e => {
+                          onChange={(e: any) => {
                             form.setFieldValue('method', e.target.value)
                             const args = getArguments(
                               form.values.abi,

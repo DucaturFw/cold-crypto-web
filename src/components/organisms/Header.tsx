@@ -23,9 +23,9 @@ const MainMenu = styled('div')({
   }
 })
 
-export const Header = ({ to, logoColorReverse }: { to: string, logoColorReverse?: boolean }) => (
+export const Header = ({ to, logoColorReverse }: { to?: string, logoColorReverse?: boolean }) => (
   <Root>
-    <Logo reverseColor={false} />
+    <Logo reverseColor={false} to={to} />
     <MainMenu>
       <Link to="#">About</Link>
       <Link to="#">Blog</Link>

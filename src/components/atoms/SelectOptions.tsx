@@ -29,8 +29,8 @@ const Wrapper = styled('div')({
   position: 'relative',
 })
 
-export const SelectOptions = ({ children }: any) => (
+export const SelectOptions = ({ children, onChange }: any) => (
   <Wrapper>
-    <Select>{ children }</Select>
+    <Select onChange={onChange}>{ children }</Select>
   </Wrapper>
 )
