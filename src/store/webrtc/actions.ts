@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions'
 import { WebrtcActionTypes } from './types'
-import { IHostCommand } from '../../helpers/webrtc/hostproto'
+import { IHostCommandU } from '../../helpers/webrtc/hostproto'
 
 export const connectionReady = () =>
   action(WebrtcActionTypes.CONNECTION_OPEN)
@@ -14,5 +14,5 @@ export const setConnectionSid = () =>
 export const setStatus = (status: string) =>
   action(WebrtcActionTypes.SET_STATUS, status)
 
-export const sendCommand = (command: IHostCommand<unknown[], unknown>) =>
+export const sendCommand = (command: IHostCommandU) =>
   action(WebrtcActionTypes.SEND_COMMAND, command)

@@ -5,10 +5,10 @@ import { Dispatch } from 'redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
 import { sendTransaction } from '../store/transport/actions'
 import { call as prepareCall } from '../helpers/webrtc/jsonrpc'
-import { IHostCommand } from '../helpers/webrtc/hostproto'
+import { IHostCommandU } from '../helpers/webrtc/hostproto'
 
 interface IPropsFromState {
-  signTx: IHostCommand<unknown[], unknown>
+  command: IHostCommandU
 }
 
 interface IPropsFromDispatch {
@@ -17,9 +17,9 @@ interface IPropsFromDispatch {
 
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
-const SignPage: React.SFC<AllProps> = ({ signTx, sendTx }) => {
+const SignPage: React.SFC<AllProps> = ({ command, sendTx }) => {
   let scaned = false
-  const value = prepareCall(signTx.method, signTx.id, signTx.params, true)
+  const value = prepareCall(command.method, command.id, command.params, true)
   const handleScan = (result: string) => {
     if (!scaned) {
       scaned = true
@@ -39,7 +39,7 @@ const SignPage: React.SFC<AllProps> = ({ signTx, sendTx }) => {
 }
 
 const mapStateToProps = ({ wallets }: IApplicationState) => ({
-  signTx: wallets.sendingTxData.signTx!,
+  command: wallets.sendingTxData.command!,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

@@ -1,7 +1,7 @@
-import { IWallet } from "../store/wallets/types";
+import { IWallet } from "../store/wallets/types"
 
-import { getInfo as ethInfo } from './eth';
-import { getInfo as eosInfo } from './eos';
+import { getInfo as ethInfo } from './eth/eth'
+import { getInfo as eosInfo } from './eos'
 
 export const getBcInfo = async (wallet: IWallet) => {
   if (wallet.blockchain === 'eth') {

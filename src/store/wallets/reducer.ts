@@ -8,13 +8,13 @@ import {
   IWalletEos,
   IEthTxFormValues,
 } from './types'
-import { IHostCommand } from '../../helpers/webrtc/hostproto'
+import { IHostCommandU } from '../../helpers/webrtc/hostproto'
 
 const initialState: IWalletsState = {
   item: {} as IWalletEth | IWalletEos,
   items: [],
   sendingTxData: {
-    signTx: {} as IHostCommand<unknown[], unknown>,
+    command: {} as IHostCommandU,
     hash: '',
     formData: {} as IEthTxFormValues,
     error: '',

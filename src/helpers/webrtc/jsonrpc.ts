@@ -2,7 +2,7 @@ import {
   parseHostMessage,
   isMethodCall,
   isError,
-  IHostCommand,
+  IHostCommandU,
 } from './hostproto'
 
 export type Id = string | number | null
@@ -68,11 +68,11 @@ export type RequestHandler = (
 ) => void
 
 export type RequestHandlerTuple<
-  TCmd extends IHostCommand<unknown[], unknown>,
+  TCmd extends IHostCommandU,
   TRes
 > = [TCmd, (err: any, result: TRes) => void]
 type RequestHandlerTupleU = RequestHandlerTuple<
-  IHostCommand<unknown[], unknown>,
+  IHostCommandU,
   unknown
 >
 
