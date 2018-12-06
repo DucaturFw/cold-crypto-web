@@ -5,9 +5,11 @@ import {
   IWalletEth,
   IEosTxFormValues,
   IEthContractFormValues,
+  IEosContractFormValues,
   FormValues,
   IWallet,
   IWalletEos,
+  IWalletBase,
 } from '../store/wallets/types'
 import { IHostCommandU } from './webrtc/hostproto'
 import { getContractData, convertParamsToEth } from './eth/eth'
@@ -34,7 +36,7 @@ export const getTxCommand = (data: FormValues, wallet: IWalletEos | IWalletEth, 
     case TxTypes.Transfer:
       return getTransferTxCommand(data as IEthTxFormValues | IEosTxFormValues, wallet)
     case TxTypes.Contract:
-      return getContractCommand(data as IEthContractFormValues, wallet as IWalletEth)
+      return getContractCommand(data as IEthContractFormValues | IEosContractFormValues, wallet as IWalletEth)
     default:
       throw new Error('tx type not found')
   }
@@ -42,11 +44,11 @@ export const getTxCommand = (data: FormValues, wallet: IWalletEos | IWalletEth, 
 
 function isEthTransfer(data: FormValues, wallet: IWallet): data is IEthTxFormValues | IEthContractFormValues
 {
-  return wallet.blockchain == 'eth'
+  return wallet.blockchain === 'eth'
 }
 function isEosTransfer(data: FormValues, wallet: IWallet): data is IEosTxFormValues
 {
-  return wallet.blockchain == 'eos'
+  return wallet.blockchain === 'eos'
 }
 
 const getTransferTxCommand = async (
@@ -99,21 +101,61 @@ const getTransferTxCommand = async (
   return { id: 3, method: 'signTransferTx', params: { wallet, tx } }
 }
 
-const getContractCommand = async ( formData: IEthContractFormValues, wallet: IWalletEth ): Promise<IHostCommandU> => {
-   const tx  = {
+const getContractCommand = async ( formData: IEthContractFormValues | IEosContractFormValues, wallet: IWalletEth ): Promise<IHostCommandU> => {
+  if (isEthTransfer(formData, wallet))
+  {
+    const tx  = {
       gasPrice: Web3.utils.toWei(formData.gasPrice.toString(), "gwei"),
       gasLimit: formData.gasLimit,
       nonce: wallet.nonce,
       to: formData.to,
       data: getContractData(formData.abi, formData.method, formData.args)
     };
-
+  
     const argsTypes = getArguments(formData.abi, formData.method).map(
       item => item.type
     );
     const args = convertParamsToEth(argsTypes, formData.args);
-
+  
     const abi = { method: formData.method, args };
 
-  return { id: 4, method: 'signContractCall', params: { abi, wallet, tx } }
+    return { id: 4, method: 'signContractCall', params: { abi, wallet, tx } }
+  }
+
+  if (isEosTransfer(formData, wallet))
+  {
+    const abi = Object.entries(formData.abi)
+      .map((params: string[]) => params.join(':'))
+      .join(',');
+
+    const walletBase: IWalletBase = {
+      address: wallet.address,
+      blockchain: wallet.blockchain,
+      chainId: wallet.chainId
+    }
+
+    const txHeaders = await getTxHeaders(wallet.chainId as string)
+    const tx = {
+      method: `${formData.method}(${abi})`,
+      transaction: {
+        ...txHeaders,
+        actions: [
+          {
+            name: formData.method,
+            account: formData.to,
+            authorization: [
+              {
+                actor: wallet.address,
+                permission: 'active',
+              },
+            ],
+            data: (formData as IEosContractFormValues).data
+          },
+        ],
+      },
+    }
+
+    return { id: 4, method: 'signContractCall', params: { abi, wallet: walletBase, tx } }
+  }
+  throw new Error ('Unknown blockchain');
 };

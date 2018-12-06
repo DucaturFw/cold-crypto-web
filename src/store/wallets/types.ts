@@ -97,5 +97,7 @@ export interface IEosTxFormValues {
 
 export interface IEosContractFormValues {
   to: string
-  // abi: string
+  method: string
+  data: any
+  abi: string
 }

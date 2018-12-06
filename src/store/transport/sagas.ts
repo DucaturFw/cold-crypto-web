@@ -35,6 +35,7 @@ function* handleCreateTx(action: ReturnType<typeof createTransaction>) {
 
     const command = yield getTxCommand(formData, { ...wallet as IWallet }, txType)
 
+    console.log(command);
     yield put(setSendingTxData({ command, formData, error: '', hash: '' }))
 
     if (connected) {

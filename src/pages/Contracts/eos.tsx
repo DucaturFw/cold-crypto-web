@@ -110,7 +110,15 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
     e.preventDefault()
 
     const data = formToJson(e.target)
-    console.log(data)
+    this.props.createTx(
+      {
+        to: this.state.address,
+        method: this.state.action,
+        data,
+        abi: this.state.customs[this.state.action].fields,
+      },
+      TxTypes.Contract
+    )
   }
 
   handleMethodSelect = (e: any) => {
@@ -132,6 +140,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
                   <TextInput
                     type="text"
                     placeholder="Address"
+                    value={this.state.address}
                     onChange={this.handleChangeAddress}
                   />
                 </Column>
@@ -145,7 +154,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
           </form>
         )}
         {this.state.abi && (
-          <form onSubmit={this.handleConfirm}>
+          <React.Fragment>
             <Row>
               <Column>
                 <Label>Contract method:</Label>
@@ -159,9 +168,11 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
                 </Select>
               </Column>
             </Row>
-            {this.state.action &&
-              Object.entries(expand(this.state.action, this.state.customs)).map(
-                (item: any[]) => {
+            <form onSubmit={this.handleConfirm}>
+              {this.state.action &&
+                Object.entries(
+                  expand(this.state.action, this.state.customs)
+                ).map((item: any[]) => {
                   return (
                     <Row key={item[0]}>
                       <Column>
@@ -170,15 +181,14 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
                           name={item[0]}
                           type="text"
                           placeholder={item[0]}
-                          onChange={this.handleChangeAddress}
                         />
                       </Column>
                     </Row>
                   )
-                }
-              )}
-            <ButtonBase type="submit">Confirm</ButtonBase>
-          </form>
+                })}
+              <ButtonBase type="submit">Confirm</ButtonBase>
+            </form>
+          </React.Fragment>
         )}
       </React.Fragment>
     )
