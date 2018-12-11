@@ -12,7 +12,6 @@ import {
   SelectFloat,
 } from '../components/atoms'
 
-
 export const Home: React.SFC<{}> = () => (
   <div style={{ width: '38rem' }}>
     <H2>Welcome Back!</H2>
@@ -44,7 +43,7 @@ export const Home: React.SFC<{}> = () => (
           <TextInput type="text" placeholder="Type your wallet address here" />
           <SelectFloat flipToRight>
             <option value="eth" key="eth">
-              'eth
+              eth
             </option>
           </SelectFloat>
         </Row>
