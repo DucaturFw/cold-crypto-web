@@ -75,7 +75,7 @@ function* handleRemoteSignTransfer(action: ReturnType<typeof remoteSignTransferT
   
   try
   {
-    let cmd = { id: 2, method: 'signTransferTx', params: { tx: action.payload, wallet } }
+    let cmd = { id: 3, method: 'signTransferTx', params: { tx: action.payload, wallet } }
 
     yield put(sendCommand(cmd))
   }

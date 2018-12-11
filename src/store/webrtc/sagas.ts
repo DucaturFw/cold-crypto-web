@@ -1,4 +1,4 @@
-import { fork, all, take, cancel, select, call, put, takeEvery } from 'redux-saga/effects'
+import { fork, all, take, select, call, put, takeEvery, cancel } from 'redux-saga/effects'
 import { eventChannel, delay } from 'redux-saga'
 
 import connectTask from './connectSaga'
@@ -42,6 +42,10 @@ function* watchDataChannel() {
         yield put(setStatus('Sending'))
         yield put(sendTransaction(message))
         break
+      case RTCCommands.signContractCall:
+        yield put(setStatus('Sending'))
+        yield put(sendTransaction(message))
+        break
       default:
         break
     }
@@ -62,7 +66,7 @@ function* handleOpeningConnection() {
 function* handleSendCommand(action: ReturnType<typeof sendCommand>) {
   const { webrtc: {rtc, connected}, wallets:{item: wallet} } = yield select((state: IApplicationState) => state)
   try
-  {
+  {  
     let msg = prepareCall(action.payload.method, action.payload.id, action.payload.params, true)
     
     yield put(setSendingTxData({ command: action.payload, error: '', hash: '' }))
