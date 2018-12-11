@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions'
 import { TransportActionTypes } from './types'
-import { IEthTxFormValues, IEthContractFormValues, IEosTxFormValues } from '../wallets/types'
+import { IEthTxFormValues, IEthContractFormValues, IEosTxFormValues, IEosContractFormValues } from '../wallets/types'
 
 export const createEthTransfer = (formData: IEthTxFormValues) =>
   action(TransportActionTypes.CREATE_ETH_TRANSFER, formData)
@@ -10,6 +10,9 @@ export const createEosTransfer = (formData: IEosTxFormValues) =>
 
 export const createEthContract = (formData: IEthContractFormValues) =>
   action(TransportActionTypes.CREATE_ETH_CONTRACT, formData)
+
+  export const createEosContract = (formData: IEosContractFormValues) =>
+  action(TransportActionTypes.CREATE_EOS_CONTRACT, formData)
 
 export const remoteSignTransferTx = (tx: unknown) =>
   action(TransportActionTypes.REMOTE_SIGN_TRANSFER, tx)

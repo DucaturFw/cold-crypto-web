@@ -1,20 +1,38 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { IConnectedReduxProps } from '../store'
-import { createEthContract } from '../store/transport/actions'
-import { Formik, FormikProps, Form, Field, FieldProps, FieldArray, ArrayHelpers } from 'formik'
-import { IEthContractFormValues } from '../store/wallets/types'
+
+import { createEthContract } from '../../store/transport/actions'
+import { IEthContractFormValues } from '../../store/wallets/types'
+
+import {
+  Formik,
+  FormikProps,
+  Form,
+  Field,
+  FieldProps,
+  FieldArray,
+  ArrayHelpers,
+} from 'formik'
+
 import {
   Column,
   Label,
   TextInput,
+  RangeInput,
   ButtonBase,
   Row,
   Wrap,
-  Select,
-} from '../components/atoms'
-import { getPublicMethodNames, IAbiEntry, getArguments, IAbiArgument } from '../helpers/eth/eth-contracts'
+  SelectOptions,
+  H1,
+  Hr,
+} from '../../components/atoms'
+import {
+  getPublicMethodNames,
+  IAbiEntry,
+  getArguments,
+  IAbiArgument,
+} from '../../helpers/eth/eth-contracts'
 
 interface IPropsFromDispatch {
   createTx: typeof createEthContract
@@ -25,9 +43,9 @@ interface IStateProps {
   methodArgs: IAbiArgument[]
 }
 
-type AllProps =  IPropsFromDispatch & IConnectedReduxProps
+type AllProps = IPropsFromDispatch
 
-class CreateContractPage extends React.Component<AllProps, IStateProps> {
+class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
   constructor(props: AllProps) {
     super(props)
 
@@ -63,15 +81,26 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
 
   render() {
     const { publicMethodNames, methodArgs } = this.state
-    const {createTx} = this.props
+    const { createTx } = this.props
     return (
       <React.Fragment>
         <Formik
-          initialValues={{ to: '', abi: [], method: '', gasPrice: '5', gasLimit: "300000", args: []}}
+          initialValues={{
+            to: '',
+            abi: [],
+            method: '',
+            gasPrice: '5',
+            gasLimit: '300000',
+            args: [],
+          }}
           onSubmit={(values: IEthContractFormValues) => createTx(values)}
           render={(formikBag: FormikProps<IEthContractFormValues>) => (
-            <Form>
+            <Form style={{ width: 600 }}>
               <Column>
+                <Row>
+                  <H1>Call Contract ETH</H1>
+                </Row>
+                <Hr />
                 <Row>
                   <Column style={{ flexBasis: '65%', marginRight: '5%' }}>
                     <Label>Address:</Label>
@@ -90,9 +119,7 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
                     />
                   </Column>
                   <Column style={{ flexBasis: '30%' }}>
-                    <Label>
-                      <small>Select from computer:</small>
-                    </Label>
+                    <Label>Select from computer:</Label>
                     <div style={{ flexBasis: '30%', position: 'relative' }}>
                       <ButtonBase>Upload ABI</ButtonBase>
                       <Field
@@ -120,18 +147,27 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
                   </Column>
                 </Row>
                 <Row>
-                  <Column>
+                  <Column style={{ flexBasis: '65%', marginRight: '5%' }}>
                     <Label>Method:</Label>
                     <Field
                       name="method"
-                      render={({ field, form }: FieldProps<IEthContractFormValues>) => (
-                        <Select
+                      render={({
+                        field,
+                        form,
+                      }: FieldProps<IEthContractFormValues>) => (
+                        <SelectOptions
                           {...field}
-                          onChange={e => {
+                          onChange={(e: any) => {
                             form.setFieldValue('method', e.target.value)
-                            const args = getArguments(form.values.abi, e.target.value)
-                            form.setFieldValue('args', new Array(args.length).fill(''))
-                            this.setState({methodArgs: args})
+                            const args = getArguments(
+                              form.values.abi,
+                              e.target.value
+                            )
+                            form.setFieldValue(
+                              'args',
+                              new Array(args.length).fill('')
+                            )
+                            this.setState({ methodArgs: args })
                           }}
                         >
                           <option value="">Select method</option>
@@ -140,21 +176,28 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
                               {item}
                             </option>
                           ))}
-                        </Select>
+                        </SelectOptions>
                       )}
                     />
                     <Wrap vertical={1} />
                     <FieldArray
                       name="args"
-                      render={({ form, }: ArrayHelpers & { form: FormikProps<IEthContractFormValues> })  => (
-                        form.values.args && form.values.args.length > 0 && 
+                      render={({
+                        form,
+                      }: ArrayHelpers & {
+                        form: FormikProps<IEthContractFormValues>
+                      }) =>
+                        form.values.args &&
+                        form.values.args.length > 0 && (
                           <React.Fragment>
                             <Label>Parameters:</Label>
                             {form.values.args.map((arg, index: number) => (
                               <Field
                                 key={index}
                                 name={`args[${index}`}
-                                render={({ field }: FieldProps<IEthContractFormValues>) => (
+                                render={({
+                                  field,
+                                }: FieldProps<IEthContractFormValues>) => (
                                   <TextInput
                                     type="text"
                                     placeholder={methodArgs[index].name}
@@ -164,11 +207,12 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
                               />
                             ))}
                           </React.Fragment>
-                      )}
+                        )
+                      }
                     />
                   </Column>
-                  <Column>
-                    <Wrap horizontal={2}>
+                  <Column style={{ flexBasis: '30%', textAlign: 'left' }}>
+                    <Wrap horizontal={0}>
                       <Label>Estimated GAS: {formikBag.values.gasLimit}</Label>
                       <Wrap vertical={1} />
                       <Label>GAS price: {formikBag.values.gasPrice} GWEI</Label>
@@ -178,7 +222,7 @@ class CreateContractPage extends React.Component<AllProps, IStateProps> {
                           field,
                           form,
                         }: FieldProps<IEthContractFormValues>) => (
-                          <TextInput
+                          <RangeInput
                             type="range"
                             placeholder="Address"
                             {...field}
@@ -203,7 +247,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   createTx: (data: any) => dispatch(createEthContract(data)),
 })
 
-export const CreateContract = connect(
+export const CallEthContract = connect(
   null,
   mapDispatchToProps
-)(CreateContractPage)
+)(CreateEthContractPage)

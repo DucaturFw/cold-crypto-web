@@ -2,11 +2,11 @@ import { ActionType } from 'typesafe-actions'
 import * as webrtc from './actions'
 import { Reducer } from 'redux'
 import { IWebrtcState, WebrtcActionTypes } from './types'
-import { singleton } from '../../helpers/webrtc/webrtcsingleton'
+import { getSingleton } from '../../helpers/webrtc/webrtcsingleton'
 
 const initialState: IWebrtcState = {
-  rtc: singleton.rtc,
-  connected: singleton.connected,
+  rtc: getSingleton().rtc,
+  connected: getSingleton().connected,
   status: '',
   pushedMessages: [],
 }

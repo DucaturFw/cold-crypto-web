@@ -7,6 +7,7 @@ export const Button = styled('button')({
   fontSize: '.9rem',
   margin: '.25rem 0',
   outline: 0,
-  padding: '.8rem 2rem',
+  padding: '.5rem 2rem',
+  lineHeight: '1.45rem',
   width: '100%',
 })

@@ -1,24 +1,27 @@
 import React from 'react'
 import styled from 'react-emotion'
 import { Link } from '../atoms'
+import Logo from '../moleculas/Logo'
 
 const Root = styled('aside')({
-  background: 'rgb(245, 247, 249)',
-  borderRight: '1px solid rgb(234, 234, 234)',
+  background: '#fff',
+  boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.04)',
   gridArea: 'sidebar',
 })
 
 const items = [{ id: 'wallets', title: 'Wallets' }]
 
 const MenuLink = styled(Link)(({ selected }: { selected: boolean }) => ({
-  borderLeft: `4px solid ${selected ? 'rgb(53, 88, 168)' : 'transparent'}`,
-  color: selected ? 'rgb(53, 88, 168)' : 'rgb(84, 84, 86)',
+  color: selected ? '#00BCF9' : '#171933',
+  borderLeft: `3px solid ${selected ? '#00BCF9' : 'transparent'}`,
   fontWeight: selected ? 'bold' : 'normal',
   padding: '.75rem 1.5rem',
+  background: selected ? 'rgba(179, 236, 254, 0.6)' : 'transparent'
 }))
 
 const Container = styled('menu')({
-  padding: '.5rem 0',
+  padding: 0,
+  margin: 0,
 })
 
 const MainMenu = () => (
@@ -33,6 +36,7 @@ const MainMenu = () => (
 
 export const Sidebar = () => (
   <Root>
+    <Logo to='/' reverseColor={true} />
     <MainMenu />
   </Root>
 )

@@ -2,12 +2,13 @@ import styled from 'react-emotion'
 
 export const TextInput = styled('input')({
   '::placeholder': {
-    color: '#93a7b3',
+    color: 'rgba(22, 10, 46, 0.6)',
   },
-  background: 'rgb(255, 255, 255)',
-  border: '1px solid rgb(204, 204, 204)',
+  background: '#F3F2F4',
+  border: '2px solid #736C82',
+  borderRadius: '6rem',
   boxSizing: 'border-box',
-  color: 'rgb(84, 84, 86)',
+  color: 'rgba(22, 10, 46, 0.6)',
   fontSize: '.9rem',
   margin: '.25rem 0',
   outline: 'none',

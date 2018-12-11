@@ -11,6 +11,7 @@ import {
   LabelAtop,
   TextArea,
   ButtonBase,
+  RangeInput,
 } from '../../components/atoms'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
@@ -69,6 +70,7 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
                       )}
                     />
                   </LabelAtop>
+                  <img src="/icon-change.svg" />
                   <LabelAtop label="usd">
                     <Field
                       name="amount"
@@ -108,7 +110,7 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
                   render={({ field, form }: FieldProps<IEthTxFormValues>) => (
                     <React.Fragment>
                       <Label>Gas price {field.value} GWEI</Label>
-                      <TextInput type="range" min="1" max="7" {...field} />
+                      <RangeInput type="range" min="1" max="7" {...field} />
                     </React.Fragment>
                   )}
                 />

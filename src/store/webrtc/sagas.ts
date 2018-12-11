@@ -1,5 +1,5 @@
-import { fork, all, take, cancel, select, call, put } from 'redux-saga/effects'
-import { eventChannel, takeEvery, delay } from 'redux-saga'
+import { fork, all, take, cancel, select, call, put, takeEvery } from 'redux-saga/effects'
+import { eventChannel, delay } from 'redux-saga'
 
 import connectTask from './connectSaga'
 import parseMessage from '../../utils/parseMessage'
@@ -11,6 +11,8 @@ import { setStatus, connectionClosing, sendCommand } from './actions'
 import { call as prepareCall } from '../../helpers/webrtc/jsonrpc'
 import { push } from 'connected-react-router';
 import { setSendingTxData } from '../wallets/actions';
+import { IHostCommand } from '../../helpers/webrtc/hostproto'
+import { RTCHelper } from '../../helpers/webrtc/webrtc';
 
 function createDataChannel(dataChannel: RTCDataChannel) {
   return eventChannel(emit => {
@@ -47,11 +49,13 @@ function* watchDataChannel() {
 }
 
 function* handleOpeningConnection() {
-  const rtc = yield select((state: IApplicationState) => state.webrtc.rtc)
+  const [rtc, msg] = (yield select((state: IApplicationState) => [state.webrtc.rtc, state.transport.lastWebrtcMsg])) as [RTCHelper, IHostCommand<unknown[], unknown>]
+  if (msg)
+    yield put(sendCommand(msg))
 
   while (true) {
     yield delay(3000)
-    if (rtc.dataChannel.readyState === 'closing') yield put(connectionClosing())
+    if (rtc.dataChannel!.readyState === 'closing') yield put(connectionClosing())
   }
 }
 

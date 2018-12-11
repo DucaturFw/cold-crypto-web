@@ -64,12 +64,14 @@ export interface IWalletsState {
 export interface ISendingTxData {
   command?: IHostCommandU
   hash?: string
-  formData?: IEthTxFormValues | IEosTxFormValues | IEthContractFormValues
+  formData?: FormValues
   error?: string
 }
 
-export type IFormTransferData = IEthTxFormValues | IEosTxFormValues
-export type IFormContractData = IEthContractFormValues
+export type FormValues = IEthTxFormValues 
+  | IEthContractFormValues
+  | IEosTxFormValues
+  | IEosContractFormValues
 
 export interface IEthTxFormValues {
   to: string
@@ -91,4 +93,11 @@ export interface IEosTxFormValues {
   to: string
   memo: string
   amount: number
+}
+
+export interface IEosContractFormValues {
+  to: string
+  method: string
+  data: any
+  abi: string
 }

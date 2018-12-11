@@ -2,18 +2,21 @@ import { RTCHelper } from './webrtc'
 import { JsonRpc } from './jsonrpc'
 import { timedPromise } from './promise'
 
-function init() {
+let i = 0
+
+export function init() {
   let rtc = new RTCHelper('webrtc')
+  let ii = i++
 
   let jrpc = new JsonRpc(
-    msg => rtc.dataChannel!.send(msg),
+    msg => (console.log(`JSONRPC ${ii}: ${msg}`), rtc.dataChannel!.send(msg)),
     (json, cb) => {
       console.log(`ignored remote signer request:`, json)
       cb(undefined, null)
     }
   )
 
-  rtc.onMessage = ev => (console.log(ev), jrpc.onMessage(ev.data.toString()))
+  rtc.onMessage = ev => (console.log(`webrtc jrpc incoming:`, ev), jrpc.onMessage(ev.data.toString()))
   let connected = false
 
   return {
@@ -33,7 +36,8 @@ export async function checkConnection(): Promise<boolean> {
   }
 }
 
-export let singleton = init()
+let singleton = init()
+export let getSingleton = () => singleton
 
 export function reset() {
   singleton = init()

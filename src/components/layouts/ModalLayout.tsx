@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom'
 
 const Root = styled('header')({
   alignItems: 'center',
-  background: 'rgba(0, 0, 0, 0.5)',
+  background: 'linear-gradient(57deg, #0D0D0D 0%, #160A2E 100%)',
   display: 'flex',
   height: '100vh',
   justifyContent: 'center',

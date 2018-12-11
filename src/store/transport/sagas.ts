@@ -9,7 +9,7 @@ import { sendTx } from '../../helpers/sendtx'
 import { setSendingTxData, fetchSuccess } from '../wallets/actions'
 import { authSuccess } from '../auth/actions'
 import { sendCommand } from '../webrtc/actions'
-import { IWallet, IFormContractData, IFormTransferData } from '../wallets/types'
+import { IWallet } from '../wallets/types'
 import { PayloadAction } from 'typesafe-actions/dist/types'
 
 function* handleLogin(action: ReturnType<typeof login>) {
@@ -27,7 +27,7 @@ function* handleLogin(action: ReturnType<typeof login>) {
   }
 }
 
-function createContractHandler<TFormData extends IFormContractData, TWallet extends IWallet>(getContractParams: (form: TFormData, wallet: TWallet) => Promise<unknown>)
+function createContractHandler<TFormData, TWallet extends IWallet>(getContractParams: (form: TFormData, wallet: TWallet) => Promise<unknown>)
 {
   return function* handleCreateTransfer(action: PayloadAction<TransportActionTypes, TFormData>)
   {
@@ -46,7 +46,7 @@ function createContractHandler<TFormData extends IFormContractData, TWallet exte
   }
 }
 
-function createTransferHandler<TFormData extends IFormTransferData, TWallet extends IWallet>(getTransferTx: (form: TFormData, wallet: TWallet) => Promise<unknown>)
+function createTransferHandler<TFormData, TWallet extends IWallet>(getTransferTx: (form: TFormData, wallet: TWallet) => Promise<unknown>)
 {
   return function* handleCreateTransfer(action: PayloadAction<TransportActionTypes, TFormData>)
   {

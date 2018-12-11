@@ -1,8 +1,9 @@
 import styled from 'react-emotion'
 
 export const TextArea = styled('textarea')({
-  background: 'rgb(255, 255, 255)',
-  border: '1px solid rgb(204, 204, 204)',
+  background: '#F3F2F4',
+  border: '2px solid #736C82',
+  borderRadius: '2rem',
   boxSizing: 'border-box',
   color: 'rgb(84, 84, 86)',
   fontSize: '.9rem',

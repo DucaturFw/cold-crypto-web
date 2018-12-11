@@ -17,7 +17,7 @@ import { Dispatch } from 'redux'
 import { IApplicationState } from '../../store'
 import { IWallet, IEosTxFormValues } from '../../store/wallets/types'
 import { createEosTransfer } from '../../store/transport/actions'
-import styled from 'react-emotion';
+import styled from 'react-emotion'
 
 interface IPropsFromState {
   wallet: IWallet
@@ -80,9 +80,7 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
                           type="number"
                           readOnly
                           step={(1e-4).toFixed(4)}
-                          value={field.value}
-                          // TODO: add totalPrice
-                          // value={totalPrice}
+                          value={field.value * 1.69}
                         />
                       )}
                     />

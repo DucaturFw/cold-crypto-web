@@ -9,11 +9,11 @@ import {
   ButtonSecondary,
   TextInput,
   Link,
+  SelectFloat,
 } from '../components/atoms'
-import styled from 'react-emotion'
 
 export const Home: React.SFC<{}> = () => (
-  <React.Fragment>
+  <div style={{ width: '38rem' }}>
     <H2>Welcome Back!</H2>
     <H3>Sign in to your wallet below</H3>
     <Hr />
@@ -28,12 +28,12 @@ export const Home: React.SFC<{}> = () => (
         }}
       >
         <Row>
-          <Link to="/login">
-            <ButtonBase>Login using QR code</ButtonBase>
+          <Link to="/login" style={{ width: '100%' }}>
+            <ButtonBase>Login with QR code</ButtonBase>
           </Link>
         </Row>
         <Row>
-          <Link to="/login?rtc=true">
+          <Link to="/login?rtc=true" style={{ width: '100%' }}>
             <ButtonSecondary>Webrtc login</ButtonSecondary>
           </Link>
         </Row>
@@ -41,36 +41,16 @@ export const Home: React.SFC<{}> = () => (
       <Column style={{ width: '50%' }}>
         <Row>
           <TextInput type="text" placeholder="Type your wallet address here" />
-          <Select flipToRight>
+          <SelectFloat flipToRight>
             <option value="eth" key="eth">
-              'eth
+              eth
             </option>
-          </Select>
+          </SelectFloat>
         </Row>
         <Row>
           <ButtonSecondary>Login with address</ButtonSecondary>
         </Row>
       </Column>
     </Row>
-  </React.Fragment>
-)
-
-export const Select = styled('select')(
-  ({ flipToRight }: { flipToRight: boolean }) => ({
-    ':after': {
-      border: 'solid white',
-      borderWidth: '0 3px 3px 0',
-      content: '""',
-      position: 'absolute',
-    },
-    appearance: 'none',
-    background: '#457b9d',
-    border: 0,
-    borderRadius: flipToRight ? '0 .2rem .2rem 0' : '.2rem',
-    color: '#f1faee',
-    padding: '0 1rem',
-    boxSizing: 'border-box',
-    position: 'relative',
-    margin: '.25rem 0',
-  })
+  </div>
 )
