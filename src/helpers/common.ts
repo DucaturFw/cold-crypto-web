@@ -5,7 +5,7 @@ import { getInfo as eosInfo } from './eos'
 
 export const getBcInfo = async (wallet: IWallet) => {
   if (wallet.blockchain === 'eth') {
-    return ethInfo(wallet.address)
+    return ethInfo(wallet)
   }
 
   if (wallet.blockchain === 'eos') {

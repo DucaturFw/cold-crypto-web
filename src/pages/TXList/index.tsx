@@ -12,7 +12,7 @@ export const TXList: React.SFC<IProps> = ({ wallet }) => {
   if (!wallet.txs) return <div />
 
   if (wallet.blockchain === 'eth') {
-    return EthTx(wallet.txs)
+    return EthTx(wallet as IWalletEth)
   }
 
   if (wallet.blockchain === 'eos') {
