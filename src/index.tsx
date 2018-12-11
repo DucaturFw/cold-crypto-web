@@ -20,10 +20,22 @@ const history = createBrowserHistory({ basename })
 const store = configureStore(history)
 store.subscribe(subscriber(store))
 
+const rootEl = document.getElementById('root')
+
 ReactDOM.render(
-  <App store={store} history={history} />,
-  document.getElementById('root')
-)
+  <App store={store} history={history}/>,
+  rootEl
+);
+
+if (module.hot) {
+  module.hot.accept('./App', () => {
+    const NextApp = require('./App').default
+    ReactDOM.render(
+      <NextApp />,
+      rootEl
+    )
+  })
+}
 
 // unregister() or register()
 serviceWorker.unregister()

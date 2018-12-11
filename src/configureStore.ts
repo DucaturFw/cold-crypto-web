@@ -17,13 +17,23 @@ export default function configureStore(
   delete initialState.webrtc
   delete initialState.transport
 
+  const reducer = rootReducer(history)
   const store = createStore(
-    rootReducer(history),
+    reducer,
     initialState,
     composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
   )
 
   sagaMiddleware.run(rootSaga)
+
+  if (process.env.NODE_ENV !== 'production') {
+    if (module.hot) {
+      module.hot.accept('./store', () => {
+        store.replaceReducer(reducer);
+      });
+    }
+  }
+
   return store
 }
 

@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start --hot",
     "build": "react-scripts build",
     "test": "yarn test:tsc && yarn test:qrs-gen && yarn test:cypress",
     "ci": "yarn test:tsc",
@@ -58,6 +58,7 @@
     "@types/react-redux": "^6.0.10",
     "@types/react-router-dom": "^4.3.1",
     "@types/web3": "^1.0.12",
+    "@types/webpack-env": "^1.13.6",
     "fs-extra": "^7.0.1",
     "fuse-box": "3.7.0-next.9",
     "prettier": "^1.15.2",
