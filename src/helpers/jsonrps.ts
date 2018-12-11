@@ -5,20 +5,12 @@ import {
   IWalletEth,
   IEosTxFormValues,
   IEthContractFormValues,
-  IEosContractFormValues,
-  FormValues,
-  IWallet,
   IWalletEos,
-  IWalletBase,
+  IEosContractFormValues,
+  IWalletBase
 } from '../store/wallets/types'
-import { IHostCommandU } from './webrtc/hostproto'
 import { getContractData, convertParamsToEth } from './eth/eth'
 import { getArguments } from './eth/eth-contracts';
-
-export enum TxTypes {
-  Transfer,
-  Contract
-}
 
 // TODO: mobile app ignore blockchain array
 export const getWalletListCommand = () => {
@@ -30,49 +22,21 @@ export const getWalletListCommand = () => {
   }
 }
 
-export const getTxCommand = (data: FormValues, wallet: IWalletEos | IWalletEth, txType: TxTypes) =>
+
+export async function getEthTransferTx(form: IEthTxFormValues, wallet: IWalletEth)
 {
-  switch (txType) {
-    case TxTypes.Transfer:
-      return getTransferTxCommand(data as IEthTxFormValues | IEosTxFormValues, wallet)
-    case TxTypes.Contract:
-      return getContractCommand(data as IEthContractFormValues | IEosContractFormValues, wallet as IWalletEth)
-    default:
-      throw new Error('tx type not found')
-  }
+  return Promise.resolve({
+    gasPrice: Web3.utils.toWei(form.gasPrice.toString(), 'gwei'),
+    nonce: wallet.nonce,
+    to: form.to,
+    value: Web3.utils.toWei(form.amount.toString()),
+  })
 }
 
-function isEthTransfer(data: FormValues, wallet: IWallet): data is IEthTxFormValues | IEthContractFormValues
+export async function getEosTransferTx(data: IEosTxFormValues, wallet: IWalletEos)
 {
-  return wallet.blockchain === 'eth'
-}
-function isEosTransfer(data: FormValues, wallet: IWallet): data is IEosTxFormValues
-{
-  return wallet.blockchain === 'eos'
-}
-
-const getTransferTxCommand = async (
-  data: IEthTxFormValues | IEosTxFormValues,
-  wallet: IWalletEth | IWalletEos
-): Promise<IHostCommandU> => {
-  let tx
-  if (isEthTransfer(data, wallet))
-  {
-    let amount = ("amount" in data) ? data.amount : 0
-    tx = {
-      gasPrice: Web3.utils.toWei(
-        data.gasPrice.toString(),
-        'gwei'
-      ),
-      nonce: wallet.nonce,
-      to: data.to,
-      value: Web3.utils.toWei(amount.toString()),
-    }
-  }
-
-  if (isEosTransfer(data, wallet)) {
-    const txHeaders = await getTxHeaders(wallet.chainId as string)
-    tx = {
+  const txHeaders = await getTxHeaders(wallet.chainId as string)
+  return {
       method: 'transfer(from:name,to:name,quantity:asset,memo:string)',
       transaction: {
         ...txHeaders,
@@ -96,35 +60,29 @@ const getTransferTxCommand = async (
         ],
       },
     }
-  }
-
-  return { id: 3, method: 'signTransferTx', params: { wallet, tx } }
 }
 
-const getContractCommand = async ( formData: IEthContractFormValues | IEosContractFormValues, wallet: IWalletEth ): Promise<IHostCommandU> => {
-  if (isEthTransfer(formData, wallet))
-  {
-    const tx  = {
-      gasPrice: Web3.utils.toWei(formData.gasPrice.toString(), "gwei"),
-      gasLimit: formData.gasLimit,
-      nonce: wallet.nonce,
-      to: formData.to,
-      data: getContractData(formData.abi, formData.method, formData.args)
-    };
-  
-    const argsTypes = getArguments(formData.abi, formData.method).map(
-      item => item.type
-    );
-    const args = convertParamsToEth(argsTypes, formData.args);
-  
-    const abi = { method: formData.method, args };
+export async function getEthContractParams (formData: IEthContractFormValues, wallet: IWalletEth) {
+  const tx  = {
+    gasPrice: Web3.utils.toWei(formData.gasPrice.toString(), "gwei"),
+    gasLimit: formData.gasLimit,
+    nonce: wallet.nonce,
+    to: formData.to,
+    data: getContractData(formData.abi, formData.method, formData.args)
+  };
 
-    return { id: 4, method: 'signContractCall', params: { abi, wallet, tx } }
-  }
+  const argsTypes = getArguments(formData.abi, formData.method).map(
+    item => item.type
+  );
+  const args = convertParamsToEth(argsTypes, formData.args);
 
-  if (isEosTransfer(formData, wallet))
-  {
-    const abi = Object.entries(formData.abi)
+  const abi = { method: formData.method, args };
+
+  return Promise.resolve({ abi, wallet, tx })
+};
+
+export async function getEosContractParams (formData: IEosContractFormValues, wallet: IWalletEos) {
+  const abi = Object.entries(formData.abi)
       .map((params: string[]) => params.join(':'))
       .join(',');
 
@@ -155,7 +113,5 @@ const getContractCommand = async ( formData: IEthContractFormValues | IEosContra
       },
     }
 
-    return { id: 4, method: 'signContractCall', params: { abi, wallet: walletBase, tx } }
-  }
-  throw new Error ('Unknown blockchain');
+    return Promise.resolve({ abi, wallet: walletBase, tx })
 };

@@ -1,7 +1,10 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { createTransaction } from '../../store/transport/actions'
+
+import { createEthContract } from '../../store/transport/actions'
+import { IEthContractFormValues } from '../../store/wallets/types'
+
 import {
   Formik,
   FormikProps,
@@ -11,7 +14,7 @@ import {
   FieldArray,
   ArrayHelpers,
 } from 'formik'
-import { IEthContractFormValues, FormValues } from '../../store/wallets/types'
+
 import {
   Column,
   Label,
@@ -30,10 +33,9 @@ import {
   getArguments,
   IAbiArgument,
 } from '../../helpers/eth/eth-contracts'
-import { TxTypes } from '../../helpers/jsonrps'
 
 interface IPropsFromDispatch {
-  createTx: typeof createTransaction
+  createTx: typeof createEthContract
 }
 
 interface IStateProps {
@@ -91,9 +93,7 @@ class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
             gasLimit: '300000',
             args: [],
           }}
-          onSubmit={(values: IEthContractFormValues) =>
-            createTx(values, TxTypes.Contract)
-          }
+          onSubmit={(values: IEthContractFormValues) => createTx(values)}
           render={(formikBag: FormikProps<IEthContractFormValues>) => (
             <Form style={{ width: 600 }}>
               <Column>
@@ -119,9 +119,7 @@ class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
                     />
                   </Column>
                   <Column style={{ flexBasis: '30%' }}>
-                    <Label>
-                      Select from computer:
-                    </Label>
+                    <Label>Select from computer:</Label>
                     <div style={{ flexBasis: '30%', position: 'relative' }}>
                       <ButtonBase>Upload ABI</ButtonBase>
                       <Field
@@ -246,8 +244,7 @@ class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
   }
 }
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: FormValues, txType: TxTypes) =>
-    dispatch(createTransaction(data, txType)),
+  createTx: (data: any) => dispatch(createEthContract(data)),
 })
 
 export const CallEthContract = connect(

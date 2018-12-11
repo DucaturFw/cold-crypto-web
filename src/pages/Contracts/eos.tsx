@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import styled from 'react-emotion'
 import { css } from 'emotion'
-import { createTransaction } from '../../store/transport/actions'
-import { FormValues } from '../../store/wallets/types'
+import { createEosContract } from '../../store/transport/actions'
+import { IEosContractFormValues } from '../../store/wallets/types'
 import {
   H2,
   H3,
@@ -16,7 +16,6 @@ import {
   SelectOptions,
 } from '../../components/atoms'
 
-import { TxTypes } from '../../helpers/jsonrps'
 import { eos } from '../../helpers/eos'
 import { toDictionary, lookUpBase } from '../../helpers/eos-types'
 import { formToJson } from '../../helpers/func'
@@ -59,7 +58,7 @@ const customTypes = (customs: any, types: any) => {
 }
 
 interface IPropsFromDispatch {
-  createTx: typeof createTransaction
+  createTx: typeof createEosContract
 }
 
 interface IStateProps {
@@ -118,15 +117,12 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
     e.preventDefault()
 
     const data = formToJson(e.target)
-    this.props.createTx(
-      {
-        to: this.state.address,
-        method: this.state.action,
-        data,
-        abi: this.state.customs[this.state.action].fields,
-      },
-      TxTypes.Contract
-    )
+    this.props.createTx({
+      to: this.state.address,
+      method: this.state.action,
+      data,
+      abi: this.state.customs[this.state.action].fields,
+    })
   }
 
   handleMethodSelect = (e: any) => {
@@ -218,8 +214,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
   }
 }
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: FormValues, txType: TxTypes) =>
-    dispatch(createTransaction(data, txType)),
+  createTx: (data: IEosContractFormValues) => dispatch(createEosContract(data)),
 })
 
 export const CallEosContract = connect(
