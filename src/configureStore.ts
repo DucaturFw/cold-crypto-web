@@ -12,7 +12,7 @@ export default function configureStore(
 ): Store<IApplicationState> {
   const composeEnhancers = composeWithDevTools({})
   const sagaMiddleware = createSagaMiddleware()
-  const initialState = (JSON.parse(window.localStorage.getItem('state') || '') || {}) as DeepPartial<IApplicationState>
+  const initialState = (JSON.parse(window.localStorage.getItem('state') || '{}') || {}) as DeepPartial<IApplicationState>
 
   delete initialState.webrtc
   delete initialState.transport

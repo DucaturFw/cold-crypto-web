@@ -83,7 +83,7 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
                           type="number"
                           readOnly
                           step={(1e-4).toFixed(4)}
-                          value={field.value}
+                          value={field.value * 1.69}
                         />
                       )}
                     />

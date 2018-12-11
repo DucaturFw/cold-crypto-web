@@ -39,7 +39,7 @@ export class DefaultLayout extends React.Component<IDefaultProps, any> {
         {...rest}
         render={matchProps => (
           <Root>
-            <Header to="/" />
+            <Header />
             <Main>
               <Modal>
                 <Component {...matchProps} />

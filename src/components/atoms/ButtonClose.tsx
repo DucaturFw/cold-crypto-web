@@ -14,6 +14,6 @@ const Img = styled('img')({
 
 export const ButtonClose = () => (
   <Root to="/">
-    <Img src="x-mark-thin.svg" />
+    <Img src="/icon-close.svg" />
   </Root>
 )

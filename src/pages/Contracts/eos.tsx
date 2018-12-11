@@ -13,7 +13,9 @@ import {
   TextInput,
   ButtonBase,
   Row,
-  Select,
+  H1,
+  Hr,
+  SelectOptions
 } from '../../components/atoms'
 
 import { TxTypes } from '../../helpers/jsonrps'
@@ -143,6 +145,10 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
           <form onSubmit={this.handleSubmit}>
             <H2>Call Contract EOS</H2>
             <Column>
+`             <Row>
+                <H1>Call Contract EOS</H1>
+              </Row>
+              <Hr />`
               <Row>
                 <Column style={{ flexBasis: '100%', marginRight: '0%' }}>
                   <TextInput
@@ -169,7 +175,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
             <Row className={styles.offtop}>
               <Column>
                 <Label>Contract method:</Label>
-                <Select
+                <SelectOptions
                   onChange={this.handleMethodSelect}
                   name="method"
                   className={styles.select}
@@ -180,7 +186,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
                       {item.name}
                     </option>
                   ))}
-                </Select>
+                </SelectOptions>
               </Column>
             </Row>
             <form onSubmit={this.handleConfirm}>

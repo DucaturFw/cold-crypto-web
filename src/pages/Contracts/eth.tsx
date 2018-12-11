@@ -16,10 +16,13 @@ import {
   Column,
   Label,
   TextInput,
+  RangeInput,
   ButtonBase,
   Row,
   Wrap,
-  Select,
+  SelectOptions,
+  H1,
+  Hr,
 } from '../../components/atoms'
 import {
   getPublicMethodNames,
@@ -92,8 +95,12 @@ class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
             createTx(values, TxTypes.Contract)
           }
           render={(formikBag: FormikProps<IEthContractFormValues>) => (
-            <Form>
+            <Form style={{ width: 600 }}>
               <Column>
+                <Row>
+                  <H1>Call Contract ETH</H1>
+                </Row>
+                <Hr />
                 <Row>
                   <Column style={{ flexBasis: '65%', marginRight: '5%' }}>
                     <Label>Address:</Label>
@@ -113,7 +120,7 @@ class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
                   </Column>
                   <Column style={{ flexBasis: '30%' }}>
                     <Label>
-                      <small>Select from computer:</small>
+                      Select from computer:
                     </Label>
                     <div style={{ flexBasis: '30%', position: 'relative' }}>
                       <ButtonBase>Upload ABI</ButtonBase>
@@ -142,7 +149,7 @@ class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
                   </Column>
                 </Row>
                 <Row>
-                  <Column>
+                  <Column style={{ flexBasis: '65%', marginRight: '5%' }}>
                     <Label>Method:</Label>
                     <Field
                       name="method"
@@ -150,9 +157,9 @@ class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
                         field,
                         form,
                       }: FieldProps<IEthContractFormValues>) => (
-                        <Select
+                        <SelectOptions
                           {...field}
-                          onChange={e => {
+                          onChange={(e: any) => {
                             form.setFieldValue('method', e.target.value)
                             const args = getArguments(
                               form.values.abi,
@@ -171,7 +178,7 @@ class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
                               {item}
                             </option>
                           ))}
-                        </Select>
+                        </SelectOptions>
                       )}
                     />
                     <Wrap vertical={1} />
@@ -206,8 +213,8 @@ class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
                       }
                     />
                   </Column>
-                  <Column>
-                    <Wrap horizontal={2}>
+                  <Column style={{ flexBasis: '30%', textAlign: 'left' }}>
+                    <Wrap horizontal={0}>
                       <Label>Estimated GAS: {formikBag.values.gasLimit}</Label>
                       <Wrap vertical={1} />
                       <Label>GAS price: {formikBag.values.gasPrice} GWEI</Label>
@@ -217,7 +224,7 @@ class CreateEthContractPage extends React.Component<AllProps, IStateProps> {
                           field,
                           form,
                         }: FieldProps<IEthContractFormValues>) => (
-                          <TextInput
+                          <RangeInput
                             type="range"
                             placeholder="Address"
                             {...field}

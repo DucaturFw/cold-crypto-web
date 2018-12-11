@@ -1,6 +1,7 @@
 import React from 'react'
-import styled, { css } from 'react-emotion'
-import { H1, Link } from '../atoms'
+import styled from 'react-emotion'
+import { Link } from '../atoms'
+import Logo from '../moleculas/Logo'
 
 const Root = styled('header')({
   gridArea: 'header',
@@ -8,12 +9,6 @@ const Root = styled('header')({
   display: 'flex',
   justifyContent: 'space-between',
 })
-
-const Logo = styled(H1)(({ reverse }: { reverse: boolean }) => ({
-  color: reverse ? '#171933' : '#fff',
-  padding: '2rem',
-  fontSize: '1.4rem',
-}))
 
 const MainMenu = styled('div')({
   display: 'flex',
@@ -28,23 +23,9 @@ const MainMenu = styled('div')({
   }
 })
 
-export const Header = ({ to, logoColorReverse }: { to: string, logoColorReverse?: boolean }) => (
+export const Header = ({ to, logoColorReverse }: { to?: string, logoColorReverse?: boolean }) => (
   <Root>
-    <Link to={to}>
-      <Logo reverse={Boolean(logoColorReverse)}>
-        Cold Crypto
-        <sup
-          className={css`
-            color: #f2494d;
-            font-size: 0.7rem;
-            text-transform: lowercase;
-            vertical-align: super;
-          `}
-        >
-          beta mode
-        </sup>
-      </Logo>
-    </Link>
+    <Logo reverseColor={false} to={to} />
     <MainMenu>
       <Link to="#">About</Link>
       <Link to="#">Blog</Link>
