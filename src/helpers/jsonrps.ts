@@ -60,7 +60,7 @@ export async function getEosTransferTx(data: IEosTxFormValues, wallet: IWalletEo
     }
 }
 
-export const getEthContractParams = async (formData: IEthContractFormValues, wallet: IWalletEth) => {
+export async  function getEthContractParams (formData: IEthContractFormValues, wallet: IWalletEth) {
    const tx  = {
       gasPrice: Web3.utils.toWei(formData.gasPrice.toString(), "gwei"),
       gasLimit: formData.gasLimit,
@@ -76,5 +76,5 @@ export const getEthContractParams = async (formData: IEthContractFormValues, wal
 
     const abi = { method: formData.method, args };
 
-  return { abi, wallet, tx }
+  return Promise.resolve({ abi, wallet, tx })
 };

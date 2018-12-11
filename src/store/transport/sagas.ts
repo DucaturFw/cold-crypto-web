@@ -27,8 +27,6 @@ function* handleLogin(action: ReturnType<typeof login>) {
   }
 }
 
-
-
 function createContractHandler<TFormData extends IFormContractData, TWallet extends IWallet>(getContractParams: (form: TFormData, wallet: TWallet) => Promise<unknown>)
 {
   return function* handleCreateTransfer(action: PayloadAction<TransportActionTypes, TFormData>)
@@ -39,7 +37,7 @@ function createContractHandler<TFormData extends IFormContractData, TWallet exte
     try
     {
       const params = yield getContractParams(action.payload, wallet)
-      yield put(handleRemoteSignContract(params))
+      yield handleRemoteSignContract(params)
     }
     catch(e)
     {
