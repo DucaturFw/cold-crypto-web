@@ -51,10 +51,10 @@ export type IAbiEntry =
 export type ABI = IAbiEntry[]
 
 function isFunction(abiEntry: IAbiEntry): abiEntry is IAbiFunctionEntry {
-  return abiEntry.type == 'function'
+  return abiEntry.type === 'function'
 }
 export function isEvent(abiEntry: IAbiEntry): abiEntry is IAbiEventEntry {
-  return abiEntry.type == 'event'
+  return abiEntry.type === 'event'
 }
 
 export function methodSignature(abiEntry: IAbiFunctionEntry): string {
@@ -66,13 +66,13 @@ export function getPublicMethodNames(abi: ABI): string[] {
   return abi.filter(isFunction).map(methodSignature)
 }
 export function isPayable(abi: ABI, methodName: string): boolean {
-  let f = abi.filter(isFunction).find(x => methodSignature(x) == methodName)
-  if (!f) throw 'function not found'
+  let f = abi.filter(isFunction).find(x => methodSignature(x) === methodName)
+  if (!f) throw new Error('function not found')
 
-  return f.stateMutability == 'payable'
+  return f.stateMutability === 'payable'
 }
 export function getArguments(abi: ABI, methodName: string): IAbiArgument[] {
-  return abi.filter(isFunction).find(x => methodSignature(x) == methodName)!
+  return abi.filter(isFunction).find(x => methodSignature(x) === methodName)!
     .inputs
 }
 
@@ -91,7 +91,7 @@ export function implementsInterface(abi: ABI, intrfc: ABI): boolean {
   return true
 }
 export function entryEquals(e1: IAbiEntry, e2: IAbiEntry): boolean {
-  if (e1.type != e2.type) return false
+  if (e1.type !== e2.type) return false
   switch (e1.type) {
     case 'event':
       return eventEquals(e1, e2 as IAbiEventEntry)
@@ -110,7 +110,7 @@ export function functionEquals(
   //     f.stateMutability
   //   }`
   // console.log(`comparing ${str(f1)} with ${str(f2)}`)
-  if (f1.name != f2.name) return false
+  if (f1.name !== f2.name) return false
 
   // TODO: temporary disabled (more research needed)
   // if (f1.payable && !f2.payable) // if reference function is payable, second should also
@@ -122,7 +122,7 @@ export function functionEquals(
   return true
 }
 export function eventEquals(e1: IAbiEventEntry, e2: IAbiEventEntry): boolean {
-  if (e1.name != e2.name) return false
+  if (e1.name !== e2.name) return false
   if (!tupleEquivalent(e1.inputs, e2.inputs)) return false
 
   return true
@@ -131,10 +131,10 @@ export function tupleEquivalent(
   inputs1: { type: string }[],
   inputs2: { type: string }[]
 ): boolean {
-  if (inputs1.length != inputs2.length) return false
+  if (inputs1.length !== inputs2.length) return false
 
   for (let i = 0; i < inputs1.length; i++) {
-    if (inputs1[i].type != inputs2[i].type) return false
+    if (inputs1[i].type !== inputs2[i].type) return false
   }
   return true
 }
