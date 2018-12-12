@@ -90,8 +90,7 @@ function* handleRemoteSignContract(action: ReturnType<typeof remoteSignContractT
 {
   try
   {
-    let cmd = { id: 4, method: 'signContractCall', params: action.payload}
-
+    let cmd = { id: 4, method: 'signContractCall', params: action}
     yield put(sendCommand(cmd))
   }
   catch (e)
