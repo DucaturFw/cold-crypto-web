@@ -5,15 +5,17 @@ import { Link } from 'react-router-dom'
 const Root = styled(Link)({
   alignSelf: 'center',
   marginLeft: '1rem',
+  textDecoration: 'none',
+  color: 'black',
+  fontSize: '2rem',
 })
 
-const Img = styled('img')({
-  height: '1.5rem',
-  width: '1.5rem',
+const XSpan = styled('span')({
+  textDecoration: "none !important"
 })
 
 export const ButtonClose = () => (
   <Root to="/">
-    <Img src="/icon-close.svg" />
+    <XSpan>×</XSpan>
   </Root>
 )
