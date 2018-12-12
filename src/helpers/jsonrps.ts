@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import { getTxHeaders } from './eos-tx-helpers'
+import { getTxHeaders } from './eos'
 import {
   IEthTxFormValues,
   IWalletEth,
@@ -35,7 +35,7 @@ export async function getEthTransferTx(form: IEthTxFormValues, wallet: IWalletEt
 
 export async function getEosTransferTx(data: IEosTxFormValues, wallet: IWalletEos)
 {
-  const txHeaders = await getTxHeaders(wallet.chainId as string)
+  const txHeaders = await getTxHeaders(wallet)
   return {
       method: 'transfer(from:name,to:name,quantity:asset,memo:string)',
       transaction: {
@@ -68,7 +68,7 @@ export async function getEthContractParams (formData: IEthContractFormValues, wa
     gasLimit: formData.gasLimit,
     nonce: wallet.nonce,
     to: formData.to,
-    data: getContractData(formData.abi, formData.method, formData.args)
+    data: getContractData(wallet, formData.abi, formData.method, formData.args)
   };
 
   const argsTypes = getArguments(formData.abi, formData.method).map(
@@ -92,7 +92,7 @@ export async function getEosContractParams (formData: IEosContractFormValues, wa
       chainId: wallet.chainId
     }
 
-    const txHeaders = await getTxHeaders(wallet.chainId as string)
+    const txHeaders = await getTxHeaders(wallet)
     const tx = {
       method: `${formData.method}(${abi})`,
       transaction: {

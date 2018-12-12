@@ -4,7 +4,7 @@ import { Dispatch } from 'redux'
 import styled from 'react-emotion'
 import { css } from 'emotion'
 import { createEosContract } from '../../store/transport/actions'
-import { IEosContractFormValues } from '../../store/wallets/types'
+import { IEosContractFormValues, IWalletEos } from '../../store/wallets/types'
 import {
   H2,
   H3,
@@ -16,9 +16,10 @@ import {
   SelectOptions,
 } from '../../components/atoms'
 
-import { eos } from '../../helpers/eos'
+import { getEos } from '../../helpers/eos'
 import { toDictionary, lookUpBase } from '../../helpers/eos-types'
 import { formToJson } from '../../helpers/func'
+import { IApplicationState } from '../../store'
 
 const Error = styled('div')`
   margin-top: 10px;
@@ -59,6 +60,7 @@ const customTypes = (customs: any, types: any) => {
 
 interface IPropsFromDispatch {
   createTx: typeof createEosContract
+  wallet: IWalletEos
 }
 
 interface IStateProps {
@@ -96,6 +98,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
     e.preventDefault()
 
     try {
+      const eos = getEos(this.props.wallet)
       const abi = await eos.getAbi(this.state.address)
 
       if (abi) {
@@ -213,11 +216,16 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
     )
   }
 }
+
+const mapStateToProps = ({ wallets }: IApplicationState) => ({
+  wallet: wallets.item,
+})
+
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   createTx: (data: IEosContractFormValues) => dispatch(createEosContract(data)),
 })
 
 export const CallEosContract = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(CreateEosContractPage)
