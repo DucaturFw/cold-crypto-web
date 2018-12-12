@@ -49,14 +49,16 @@ const networks = {
         sign: 'mainnet',
         chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
         url: 'http://mainnet.eoscalgary.io:80',
-        explorerUrl: 'https://eospark.com/MainNet'
+        explorerUrl: 'https://eospark.com/MainNet',
+        apiExplorerUrl: 'https://junglehistory.cryptolions.io:4433'
       },
       {
         name: 'Jungle Testnet',
         sign: 'testnet',
         chainId: 'e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473',
-        url: 'https://junglehistory.cryptolions.io:4433',
-        explorerUrl: 'https://jungle.eospark.com'
+        url: 'https://jungle2.cryptolions.io',
+        explorerUrl: 'https://jungle.eospark.com',
+        apiExplorerUrl: 'https://junglehistory.cryptolions.io:4433'
       }
     ]
   },
