@@ -4,7 +4,7 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
 import { ISendingTxData, IWalletBase, IWallet } from '../store/wallets/types'
-import { getEtherscanExploreUrl } from '../helpers/eth/eth'
+import { getBcNetByChainId } from '../helpers/blockchains'
 
 interface IPropsFromState {
   sendingData: ISendingTxData
@@ -14,14 +14,9 @@ interface IPropsFromState {
 type AllProps = IPropsFromState & IConnectedReduxProps
 
 const getExplrUrl = (wallet: IWallet, hash: string | undefined) => {
-  switch (wallet.blockchain) {
-    case 'eth':
-      return `${getEtherscanExploreUrl(wallet.chainId as string)}/tx/${hash}`
-    case 'eos':
-      return `https://jungle.eospark.com/tx/${hash}`
-    default:
-      return ''
-  }
+  return `${
+    getBcNetByChainId(wallet.blockchain, wallet.chainId as string).explorerUrl
+  }/tx/${hash}`
 }
 
 const TxViewPage: React.SFC<AllProps> = ({

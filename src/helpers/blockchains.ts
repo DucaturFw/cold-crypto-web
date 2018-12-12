@@ -19,7 +19,7 @@ const networks = {
         name: 'Mainnet',
         sign: 'mainnet',
         url: 'wss://mainnet.infura.io/ws',
-        explorerUrl: 'https://etherscan.io/',
+        explorerUrl: 'https://etherscan.io',
         apiExplorerUrl: 'https://api.etherscan.io',
         chainId: '1'
       },
@@ -27,7 +27,7 @@ const networks = {
         name: 'Ropsten',
         sign: 'ropsten',
         url: 'wss://ropsten.infura.io/ws',
-        explorerUrl: 'https://ropsten.etherscan.io/',
+        explorerUrl: 'https://ropsten.etherscan.io',
         apiExplorerUrl: 'https://api-ropsten.etherscan.io',
         chainId: '3'
       },
@@ -35,7 +35,7 @@ const networks = {
         name: 'Rinkeby',
         sign: 'rinkeby',
         url: 'wss://rinkeby.infura.io/ws',
-        explorerUrl: 'https://rinkeby.etherscan.io/',
+        explorerUrl: 'https://rinkeby.etherscan.io',
         apiExplorerUrl: 'https://api-rinkeby.etherscan.io',
         chainId: '4'
       }
@@ -49,14 +49,14 @@ const networks = {
         sign: 'mainnet',
         chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
         url: 'http://mainnet.eoscalgary.io:80',
-        explorerUrl: 'https://eospark.com/MainNet/'
+        explorerUrl: 'https://eospark.com/MainNet'
       },
       {
         name: 'Jungle Testnet',
         sign: 'testnet',
-        chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca',
-        url: 'http://jungle.eosgen.io:80',
-        explorerUrl: 'https://eospark.com/Jungle/'
+        chainId: 'e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473',
+        url: 'https://junglehistory.cryptolions.io:4433',
+        explorerUrl: 'https://jungle.eospark.com'
       }
     ]
   },
