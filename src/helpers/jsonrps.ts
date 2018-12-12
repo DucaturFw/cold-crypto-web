@@ -68,7 +68,7 @@ export async function getEthContractParams (formData: IEthContractFormValues, wa
     gasLimit: formData.gasLimit,
     nonce: wallet.nonce,
     to: formData.to,
-    data: getContractData(formData.abi, formData.method, formData.args)
+    data: getContractData(wallet, formData.abi, formData.method, formData.args)
   };
 
   const argsTypes = getArguments(formData.abi, formData.method).map(

@@ -6,7 +6,7 @@ export const sendTx = (tx: string, wallet: IWalletBase) => {
   console.log(tx, wallet)
   switch (wallet.blockchain) {
     case 'eth':
-      return sendEth(tx)
+      return sendEth(wallet, tx)
     case 'eos':
       return sendEos(tx)
 
