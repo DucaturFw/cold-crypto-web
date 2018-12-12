@@ -33,8 +33,6 @@ function* answerSaga(ws: WebSocket, rtc: RTCHelper, answer: string) {
   rtc.on('ice', sendIce)
   yield call(rtc.pushAnswer, { type: 'answer' as RTCSdpType, sdp: answer })
   yield call(rtc.waitConnection)
-
-  yield put(sendCommand(getWalletListCommand()))
   yield put(connectionReady())
   return ws.close()
 }
@@ -65,6 +63,7 @@ export default function* connectSaga() {
         openChan.close()
         messageChan.close()
         console.log('ws connection closed')
+        yield put(sendCommand(getWalletListCommand()))
       }
     }
 }
