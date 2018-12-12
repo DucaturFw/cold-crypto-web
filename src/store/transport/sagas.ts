@@ -3,7 +3,7 @@ import { login, sendTransaction, remoteSignTransferTx, remoteSignContractTx } fr
 import { TransportActionTypes } from './types'
 import { IApplicationState } from '..'
 import { push } from 'connected-react-router'
-import { getEthTransferTx, getEosTransferTx, getEthContractParams } from '../../helpers/jsonrps'
+import { getEthTransferTx, getEosTransferTx, getEthContractParams, getEosContractParams } from '../../helpers/jsonrps'
 import parseMessage from '../../utils/parseMessage'
 import { sendTx } from '../../helpers/sendtx'
 import { setSendingTxData, fetchSuccess } from '../wallets/actions'
@@ -68,6 +68,7 @@ function createTransferHandler<TFormData, TWallet extends IWallet>(getTransferTx
 const handleCreateEthTransfer = createTransferHandler(getEthTransferTx)
 const handleCreateEosTransfer = createTransferHandler(getEosTransferTx)
 const handleCreateEthContract = createContractHandler(getEthContractParams)
+const handleCreateEosContract = createContractHandler(getEosContractParams)
 
 function* handleRemoteSignTransfer(action: ReturnType<typeof remoteSignTransferTx>)
 {
@@ -125,6 +126,7 @@ function* watchCreateTx() {
   yield takeEvery(TransportActionTypes.CREATE_ETH_TRANSFER, handleCreateEthTransfer)
   yield takeEvery(TransportActionTypes.CREATE_EOS_TRANSFER, handleCreateEosTransfer)
   yield takeEvery(TransportActionTypes.CREATE_ETH_CONTRACT, handleCreateEthContract)
+  yield takeEvery(TransportActionTypes.CREATE_EOS_CONTRACT, handleCreateEosContract)
 }
 
 function* watchRemoteSignTransfer() {
