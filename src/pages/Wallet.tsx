@@ -8,8 +8,22 @@ import { Dispatch } from 'redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
 import { addWallet } from '../store/wallets/actions'
 import { IWallet, IWalletBase } from '../store/wallets/types'
-
 import { TXList } from './TXList'
+import { getBcNetByChainId } from '../helpers/blockchains'
+
+const TXListWrapper = styled('div')({
+  background: '#fff',
+  padding: '2rem',
+  boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.04)',
+  borderRadius: '.8rem',
+})
+
+const Net = styled('h3')`
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+  font-size: 14px;
+`
 
 interface IPropsFromState {
   loading: boolean
@@ -31,27 +45,35 @@ class WalletPage extends React.Component<AllProps> {
 
   public render() {
     const { wallet, loading } = this.props
+    const net = getBcNetByChainId(wallet.blockchain, wallet.chainId as string)
     return (
       <React.Fragment>
         <Column>
           <Row>
             <Column style={{ flexBasis: '15rem', marginRight: '2rem' }}>
               <Link to={`/wallets/${wallet.address}/tx/create`}>
-                <ButtonBase>Create New Tx</ButtonBase>
+                <ButtonBase style={{ minWidth: '13rem' }}>
+                  Create New Tx
+                </ButtonBase>
               </Link>
               <Link to={`/wallets/${wallet.address}/contract/create`}>
                 <ButtonBase>Call Contract</ButtonBase>
               </Link>
             </Column>
-            <Column>
+            <Column style={{ display: 'flex', justifyContent: 'center' }}>
               <H1>{wallet.blockchain} Wallet</H1>
               <H2>
                 <Address>{wallet.address}</Address>
               </H2>
+              <Net>
+                Network: <b>{net.name}</b>
+              </Net>
             </Column>
           </Row>
           <Hr />
-          <TXList wallet={wallet} />
+          <TXListWrapper>
+            <TXList wallet={wallet} />
+          </TXListWrapper>
           {loading && <Loader />}
         </Column>
       </React.Fragment>

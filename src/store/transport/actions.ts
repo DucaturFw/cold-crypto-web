@@ -1,15 +1,30 @@
 import { action } from 'typesafe-actions'
 import { TransportActionTypes } from './types'
-import { IEthTxFormValues, IEosTxFormValues, IWalletBase } from '../wallets/types'
+import { IEthTxFormValues, IEthContractFormValues, IEosTxFormValues, IEosContractFormValues } from '../wallets/types'
 
-export const createTransaction = (tx: IEthTxFormValues | IEosTxFormValues) =>
-  action(TransportActionTypes.CREATE_TX, tx)
+export const createEthTransfer = (formData: IEthTxFormValues) =>
+  action(TransportActionTypes.CREATE_ETH_TRANSFER, formData)
+
+export const createEosTransfer = (formData: IEosTxFormValues) =>
+  action(TransportActionTypes.CREATE_EOS_TRANSFER, formData)
+
+export const createEthContract = (formData: IEthContractFormValues) =>
+  action(TransportActionTypes.CREATE_ETH_CONTRACT, formData)
+
+export const createEosContract = (formData: IEosContractFormValues) =>
+  action(TransportActionTypes.CREATE_EOS_CONTRACT, formData)
+
+export const remoteSignTransferTx = (tx: unknown) =>
+  action(TransportActionTypes.REMOTE_SIGN_TRANSFER, tx)
+
+export const remoteSignContractTx = (params: unknown) =>
+  action(TransportActionTypes.REMOTE_SIGN_CONTRACT, params)
 
 export const signTransaction = (tx: string) =>
   action(TransportActionTypes.SIGN_TX, tx)
 
-export const sendTransaction = (tx: string, wallet: IWalletBase) =>
-  action(TransportActionTypes.SEND_TX, { tx, wallet })
+export const sendTransaction = (tx: string) =>
+  action(TransportActionTypes.SEND_TX, tx)
 
 export const login = (message: string) =>
   action(TransportActionTypes.LOGIN, message)

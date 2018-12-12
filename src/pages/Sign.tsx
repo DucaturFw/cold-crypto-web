@@ -1,14 +1,14 @@
 import * as React from 'react'
-import { QrLogin } from '../components/atoms'
+import { QrLogin } from '../components/organisms/QrLogin'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IApplicationState, IConnectedReduxProps } from '../store'
 import { sendTransaction } from '../store/transport/actions'
-import { IWalletBase } from '../store/wallets/types'
+import { call as prepareCall } from '../helpers/webrtc/jsonrpc'
+import { IHostCommandU } from '../helpers/webrtc/hostproto'
 
 interface IPropsFromState {
-  signTx: string
-  wallet: IWalletBase
+  command: IHostCommandU
 }
 
 interface IPropsFromDispatch {
@@ -17,14 +17,21 @@ interface IPropsFromDispatch {
 
 type AllProps = IPropsFromState & IPropsFromDispatch & IConnectedReduxProps
 
-const SignPage: React.SFC<AllProps> = ({ signTx, sendTx, wallet }) => {
-  const handleScan = (result: string) => sendTx(result, wallet)
+const SignPage: React.SFC<AllProps> = ({ command, sendTx }) => {
+  let scaned = false
+  const value = prepareCall(command.method, command.id, command.params, true)
+  const handleScan = (result: string) => {
+    if (!scaned) {
+      scaned = true
+      sendTx(result)
+    }
+  }
 
   return (
     <React.Fragment>
       <QrLogin
         title={'Sign Transaction By Mobile'}
-        value={signTx || ''}
+        value={value || ''}
         onScan={handleScan}
       />
     </React.Fragment>
@@ -32,16 +39,14 @@ const SignPage: React.SFC<AllProps> = ({ signTx, sendTx, wallet }) => {
 }
 
 const mapStateToProps = ({ wallets }: IApplicationState) => ({
-  signTx: wallets.sendingTxData.signTx!,
-  wallet: wallets.item,
+  command: wallets.sendingTxData.command!,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  sendTx: (data: string, wallet: IWalletBase) =>
-    dispatch(sendTransaction(data, wallet)),
+  sendTx: (data: string) => dispatch(sendTransaction(data)),
 })
 
 export const Sign = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SignPage)
+)(SignPage as any)

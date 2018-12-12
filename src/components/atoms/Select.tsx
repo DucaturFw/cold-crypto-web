@@ -1,12 +1,20 @@
 import styled from 'react-emotion'
 
-export const Select = styled('select')({
-  background: '#fff',
-  border: '1px solid rgb(204, 204, 204)',
-  boxSizing: 'border-box',
-  display: 'block',
-  height: '2.5rem',
-  outline: 0,
-  padding: '.5rem',
-  width: '100%',
-})
+export const Select = styled('select')(
+  ({ flipToRight }: { flipToRight?: boolean }) => ({
+    ':after': {
+      border: 'solid white',
+      borderWidth: '0 3px 3px 0',
+      content: '""',
+      position: 'absolute',
+    },
+    appearance: 'none',
+    background: '#00BCF9',
+    border: 0,
+    borderRadius: '6rem',
+    color: '#f1faee',
+    padding: '0 1rem',
+    boxSizing: 'border-box',
+    margin: '.25rem 0',
+  })
+)

@@ -1,4 +1,4 @@
-import { Store, createStore, applyMiddleware, AnyAction } from 'redux'
+import { Store, createStore, applyMiddleware, AnyAction, DeepPartial } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { routerMiddleware } from 'connected-react-router'
 import { composeWithDevTools } from 'redux-devtools-extension'
@@ -12,11 +12,10 @@ export default function configureStore(
 ): Store<IApplicationState> {
   const composeEnhancers = composeWithDevTools({})
   const sagaMiddleware = createSagaMiddleware()
-  const initialState = JSON.parse(window.localStorage.getItem('state') as string) || {}
+  const initialState = (JSON.parse(window.localStorage.getItem('state') || '{}') || {}) as DeepPartial<IApplicationState>
 
-  if (initialState.webrtc) {
-    delete initialState.webrtc;
-  }
+  delete initialState.webrtc
+  delete initialState.transport
 
   const store = createStore(
     rootReducer(history),

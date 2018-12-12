@@ -20,6 +20,18 @@
     "deprecation": true,
     "no-floating-promises": false,
     "no-unnecessary-qualifier": true,
+    "no-object-literal-type-assertion": false,
+    "no-console": false,
+    "no-empty-interface": false,
+    "array-type": false,
+    "max-line-length": [true, 1000],
+    "prefer-const": false,
+    "curly": false,
+    "ban-comma-operator": false,
+    "member-access": false,
+    "no-submodule-imports": false,
+    "arrow-parens": false,
+    "arrow-return-shorthand": true,
     "no-empty": false
   },
   "rulesDirectory": []

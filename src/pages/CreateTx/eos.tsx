@@ -16,8 +16,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IApplicationState } from '../../store'
 import { IWallet, IEosTxFormValues } from '../../store/wallets/types'
-import { createTransaction } from '../../store/transport/actions'
-
+import { createEosTransfer } from '../../store/transport/actions'
 import styled from 'react-emotion'
 
 interface IPropsFromState {
@@ -25,7 +24,7 @@ interface IPropsFromState {
 }
 
 interface IPropsFromDispatch {
-  createTx: typeof createTransaction
+  createTx: typeof createEosTransfer
 }
 
 type AllProps = IPropsFromState & IPropsFromDispatch
@@ -81,9 +80,7 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
                           type="number"
                           readOnly
                           step={(1e-4).toFixed(4)}
-                          value={field.value}
-                          // TODO: add totalPrice
-                          // value={totalPrice}
+                          value={field.value * 1.69}
                         />
                       )}
                     />
@@ -115,7 +112,7 @@ const mapStateToProps = ({ wallets }: IApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: IEosTxFormValues) => dispatch(createTransaction(data)),
+  createTx: (data: IEosTxFormValues) => dispatch(createEosTransfer(data)),
 })
 
 export const CreateEosTx = connect(

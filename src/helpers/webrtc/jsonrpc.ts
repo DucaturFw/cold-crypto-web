@@ -1,4 +1,9 @@
-import { parseHostMessage, isMethodCall, isError, IHostCommand } from "./hostproto"
+import {
+  parseHostMessage,
+  isMethodCall,
+  isError,
+  IHostCommandU,
+} from './hostproto'
 
 export type Id = string | number | null
 
@@ -35,7 +40,7 @@ export function result<T>(
 export function call(
   method: string,
   id: Id,
-  params: {} | unknown[],
+  params: unknown | unknown[],
   reduced: boolean = false
 ) {
   if (reduced) return `${method}|${id}|${JSON.stringify(params)}`
@@ -62,8 +67,14 @@ export type RequestHandler = (
   callback: (err: any, result: any) => void
 ) => void
 
-export type RequestHandlerTuple<TCmd extends IHostCommand<unknown[], unknown>, TRes> = [TCmd, (err: any, result: TRes) => void]
-type RequestHandlerTupleU = RequestHandlerTuple<IHostCommand<unknown[], unknown>, unknown>
+export type RequestHandlerTuple<
+  TCmd extends IHostCommandU,
+  TRes
+> = [TCmd, (err: any, result: TRes) => void]
+type RequestHandlerTupleU = RequestHandlerTuple<
+  IHostCommandU,
+  unknown
+>
 
 export class JsonRpc {
   public send: (msg: string) => void
@@ -80,54 +91,61 @@ export class JsonRpc {
 
   private _callbacksQueue = [] as RequestHandler[]
   private _messageQueue = [] as RequestHandlerTupleU[]
-  public switchToQueueMode()
-  {
-    this.onRequest = (json, cb) =>
-    {
-      if (this._callbacksQueue.length)
-      {
+  public switchToQueueMode() {
+    this.onRequest = (json, cb) => {
+      // console.log('*** 1')
+      if (this._callbacksQueue.length) {
+        // console.log('*** 2')
         let m = this._callbacksQueue.shift()!
+        // console.log('*** 3')
         m(json, cb)
-      }
-      else
-      {
+        // console.log('*** 4')
+      } else {
+        // console.log('*** 5')
         this._messageQueue.push([json, cb])
+        // console.log('*** 6')
       }
     }
   }
-  public async nextMessage(): Promise<RequestHandlerTupleU>
-  {
+  public async nextMessage(): Promise<RequestHandlerTupleU> {
     if (this._messageQueue.length)
       return Promise.resolve(this._messageQueue.shift()!)
     else
-      return new Promise<RequestHandlerTupleU>((res, rej) => this._callbacksQueue.push((..._) => res(_)))
+      return new Promise<RequestHandlerTupleU>((res, rej) =>
+        this._callbacksQueue.push((..._) => res(_))
+      )
   }
-  public onMessage = (data: string) =>
-  {
-      let json = parseHostMessage(data)
-      if (!json)
-        return console.error(`JsonRpc: error parsing data!\n${data}`)
-      
-      let id = json.id as number
-      if (isMethodCall(json))
-      {
-        this.onRequest(json, (error, result) =>
-          this.send(
-            JSON.stringify({
-              id,
-              jsonrpc: '2.0',
-              ...(error ? { error } : { result }),
-            })
-          )
-        )
-      } else if (this.listeners[id]) {
-        let m = this.listeners[id]
-        delete this.listeners[id]
-        if (isError(json))
-          m(json.error, undefined)
-        else
-          m(undefined, json.result)
-      }
+  public onMessage = (data: string) => {
+    // console.log('%%%! 1')
+    let json = parseHostMessage(data)
+    // console.log('%%%! 2')
+    if (!json)
+      return console.error(`JsonRpc: error parsing data!\n${data}`)
+    
+    // console.log('%%%! 3')
+    let id = json.id as number
+    // console.log('%%%! 4')
+    if (isMethodCall(json)) {
+      // console.log('%%%! 5')
+      this.onRequest(json, (error, result) =>
+        (/* console.log('%%%! 6'),
+        console.log(this.send.toString()), */
+        this.send(
+          JSON.stringify({
+            id,
+            jsonrpc: '2.0',
+            ...(error ? { error } : { result }),
+          })
+        ))
+      )
+    } else if (this.listeners[id]) {
+      let m = this.listeners[id]
+      delete this.listeners[id]
+      if (isError(json))
+        m(json.error, undefined)
+      else
+        m(undefined, json.result)
+    }
   }
   public async ping() {
     let response = await this.call('ping')

@@ -1,37 +1,42 @@
 import Web3 from 'web3'
-import { getTxHeaders } from './eos-tx-helpers'
+import { getTxHeaders } from './eos'
 import {
   IEthTxFormValues,
   IWalletEth,
   IEosTxFormValues,
+  IEthContractFormValues,
+  IWalletEos,
+  IEosContractFormValues,
+  IWalletBase
 } from '../store/wallets/types'
+import { getContractData, convertParamsToEth } from './eth/eth'
+import { getArguments } from './eth/eth-contracts';
 
 // TODO: mobile app ignore blockchain array
 export const getWalletListCommand = () => {
   const params = { blockchains: ['eth', 'eos'] }
-  return `getWalletList|2|${JSON.stringify(params)}`
+  return {
+    id: 2,
+    method: 'getWalletList',
+    params,
+  }
 }
 
-export const getSignTransferTxCommand = async (
-  data: IEthTxFormValues | IEosTxFormValues,
-  wallet: IWalletEth
-): Promise<string> => {
-  let tx
-  if (wallet.blockchain === 'eth') {
-    tx = {
-      gasPrice: Web3.utils.toWei(
-        (data as IEthTxFormValues).gasPrice.toString(),
-        'gwei'
-      ),
-      nonce: wallet.nonce,
-      to: data.to,
-      value: Web3.utils.toWei(data.amount.toString()),
-    }
-  }
 
-  if (wallet.blockchain === 'eos') {
-    const txHeaders = await getTxHeaders(wallet.chainId as string)
-    tx = {
+export async function getEthTransferTx(form: IEthTxFormValues, wallet: IWalletEth)
+{
+  return Promise.resolve({
+    gasPrice: Web3.utils.toWei(form.gasPrice.toString(), 'gwei'),
+    nonce: wallet.nonce,
+    to: form.to,
+    value: Web3.utils.toWei(form.amount.toString()),
+  })
+}
+
+export async function getEosTransferTx(data: IEosTxFormValues, wallet: IWalletEos)
+{
+  const txHeaders = await getTxHeaders(wallet)
+  return {
       method: 'transfer(from:name,to:name,quantity:asset,memo:string)',
       transaction: {
         ...txHeaders,
@@ -55,7 +60,58 @@ export const getSignTransferTxCommand = async (
         ],
       },
     }
-  }
-
-  return `signTransferTx|3|${JSON.stringify({ wallet, tx })}`
 }
+
+export async function getEthContractParams (formData: IEthContractFormValues, wallet: IWalletEth) {
+  const tx  = {
+    gasPrice: Web3.utils.toWei(formData.gasPrice.toString(), "gwei"),
+    gasLimit: formData.gasLimit,
+    nonce: wallet.nonce,
+    to: formData.to,
+    data: getContractData(wallet, formData.abi, formData.method, formData.args)
+  };
+
+  const argsTypes = getArguments(formData.abi, formData.method).map(
+    item => item.type
+  );
+  const args = convertParamsToEth(argsTypes, formData.args);
+
+  const abi = { method: formData.method, args };
+
+  return Promise.resolve({ abi, wallet, tx })
+};
+
+export async function getEosContractParams (formData: IEosContractFormValues, wallet: IWalletEos) {
+  const abi = Object.entries(formData.abi)
+      .map((params: string[]) => params.join(':'))
+      .join(',');
+
+    const walletBase: IWalletBase = {
+      address: wallet.address,
+      blockchain: wallet.blockchain,
+      chainId: wallet.chainId
+    }
+
+    const txHeaders = await getTxHeaders(wallet)
+    const tx = {
+      method: `${formData.method}(${abi})`,
+      transaction: {
+        ...txHeaders,
+        actions: [
+          {
+            name: formData.method,
+            account: formData.to,
+            authorization: [
+              {
+                actor: wallet.address,
+                permission: 'active',
+              },
+            ],
+            data: (formData as IEosContractFormValues).data
+          },
+        ],
+      },
+    }
+
+    return Promise.resolve({ abi, wallet: walletBase, tx })
+};

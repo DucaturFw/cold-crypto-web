@@ -11,13 +11,13 @@ import {
   LabelAtop,
   TextArea,
   ButtonBase,
+  RangeInput,
 } from '../../components/atoms'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IApplicationState } from '../../store'
 import { IWallet, IEthTxFormValues } from '../../store/wallets/types'
-import { createTransaction } from '../../store/transport/actions'
-
+import { createEthTransfer } from '../../store/transport/actions'
 import styled from 'react-emotion'
 
 interface IPropsFromState {
@@ -25,7 +25,7 @@ interface IPropsFromState {
 }
 
 interface IPropsFromDispatch {
-  createTx: typeof createTransaction
+  createTx: typeof createEthTransfer
 }
 
 type AllProps = IPropsFromState & IPropsFromDispatch
@@ -70,6 +70,7 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
                       )}
                     />
                   </LabelAtop>
+                  <img src="/icon-change.svg" />
                   <LabelAtop label="usd">
                     <Field
                       name="amount"
@@ -109,7 +110,7 @@ const CreateTxPage: React.SFC<AllProps> = ({ wallet, createTx }) => (
                   render={({ field, form }: FieldProps<IEthTxFormValues>) => (
                     <React.Fragment>
                       <Label>Gas price {field.value} GWEI</Label>
-                      <TextInput type="range" min="1" max="7" {...field} />
+                      <RangeInput type="range" min="1" max="7" {...field} />
                     </React.Fragment>
                   )}
                 />
@@ -133,13 +134,13 @@ const mapStateToProps = ({ wallets }: IApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createTx: (data: IEthTxFormValues) => dispatch(createTransaction(data)),
+  createTx: (data: IEthTxFormValues) => dispatch(createEthTransfer(data)),
 })
 
 export const CreateEthTx = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateTxPage as any)
+)(CreateTxPage)
 
 const RowMargined = styled(Row)({
   margin: '1rem 0',

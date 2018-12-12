@@ -1,11 +1,15 @@
 import * as React from 'react'
 
 import { OverflowTd, Table } from './common'
-import { IEthTx } from '../../store/wallets/types'
+import { A } from '../../components/atoms'
+import { IEthTx, IWalletEth } from '../../store/wallets/types'
+import { getEtherscanExploreUrl } from '../../helpers/eth/eth'
 
-const API_URL = 'https://ropsten.etherscan.io/tx'
+export const EthTx = (wallet: IWalletEth) => {
+  if (!wallet || !wallet.txs) {
+    return null
+  }
 
-export const EthTx = (txs: IEthTx[]) => {
   return (
     <Table>
       <thead>
@@ -17,17 +21,19 @@ export const EthTx = (txs: IEthTx[]) => {
         </tr>
       </thead>
       <tbody>
-        {txs.map((item: IEthTx, index: number) => (
+        {wallet.txs!.map((item: IEthTx, index: number) => (
           <tr key={index}>
             <td>{new Date(item.timeStamp * 1000).toLocaleString()}</td>
             <OverflowTd>
-              <a
+              <A
                 target="_blank"
                 // TODO: make genrator explorer url for blockchains
-                href={`${API_URL}/${item.hash}`}
+                href={`${getEtherscanExploreUrl(wallet.chainId as string)}/tx/${
+                  item.hash
+                }`}
               >
                 {item.hash}
-              </a>
+              </A>
             </OverflowTd>
             <OverflowTd>{item.from}</OverflowTd>
             <td>{item.value}</td>

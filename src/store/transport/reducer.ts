@@ -1,11 +1,18 @@
+import { ActionType } from 'typesafe-actions'
 import { Reducer } from 'redux'
+import * as transports from './actions'
 import { ITransportState, TransportActionTypes } from './types'
 
 const initialState: ITransportState = {
   qrcodeData: '',
+  lastWebrtcMsg: null,
 }
+export type TransportsAction = ActionType<typeof transports>
 
-const reducer: Reducer<ITransportState> = (state = initialState, action) => {
+const reducer: Reducer<ITransportState, TransportsAction> = (
+  state = initialState,
+  action
+) => {
   switch (action.type) {
     case TransportActionTypes.SET_RTC_SID: {
       return { ...state, qrcodeData: action.payload }

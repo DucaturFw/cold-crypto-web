@@ -1,5 +1,5 @@
-import { fork, all, take, cancel, select, call, put } from 'redux-saga/effects'
-import { eventChannel, takeEvery, delay } from 'redux-saga'
+import { fork, all, take, select, call, put, takeEvery, cancel } from 'redux-saga/effects'
+import { eventChannel, delay } from 'redux-saga'
 
 import connectTask from './connectSaga'
 import parseMessage from '../../utils/parseMessage'
@@ -7,7 +7,12 @@ import { RTCCommands } from '../../constants'
 import { login, sendTransaction } from '../transport/actions'
 import { WebrtcActionTypes } from './types'
 import { IApplicationState } from '..'
-import { setStatus, connectionClosing } from './actions'
+import { setStatus, connectionClosing, sendCommand } from './actions'
+import { call as prepareCall } from '../../helpers/webrtc/jsonrpc'
+import { push } from 'connected-react-router';
+import { setSendingTxData } from '../wallets/actions';
+import { IHostCommand } from '../../helpers/webrtc/hostproto'
+import { RTCHelper } from '../../helpers/webrtc/webrtc';
 
 function createDataChannel(dataChannel: RTCDataChannel) {
   return eventChannel(emit => {
@@ -23,19 +28,23 @@ function createDataChannel(dataChannel: RTCDataChannel) {
 
 function* watchDataChannel() {
   const rtc = yield select((state: IApplicationState) => state.webrtc.rtc)
-  const wallet = yield select((state: IApplicationState) => state.wallets.item)
   const channelMessage = yield call(createDataChannel, rtc.dataChannel)
 
   while (true) {
     const message = yield take(channelMessage)
     const { id } = parseMessage(message)
+
     switch (id) {
       case RTCCommands.getWalletList:
         yield put(login(message))
         break
       case RTCCommands.signTransferTx:
         yield put(setStatus('Sending'))
-        yield put(sendTransaction(message, wallet))
+        yield put(sendTransaction(message))
+        break
+      case RTCCommands.signContractCall:
+        yield put(setStatus('Sending'))
+        yield put(sendTransaction(message))
         break
       default:
         break
@@ -44,17 +53,41 @@ function* watchDataChannel() {
 }
 
 function* handleOpeningConnection() {
-  const rtc = yield select((state: IApplicationState) => state.webrtc.rtc)
+  const [rtc, msg] = (yield select((state: IApplicationState) => [state.webrtc.rtc, state.transport.lastWebrtcMsg])) as [RTCHelper, IHostCommand<unknown[], unknown>]
+  if (msg)
+    yield put(sendCommand(msg))
 
   while (true) {
     yield delay(3000)
-    if (rtc.dataChannel.readyState === 'closing') yield put(connectionClosing())
+    if (rtc.dataChannel!.readyState === 'closing') yield put(connectionClosing())
   }
 }
 
-function* watchStatusConnection() {
+function* handleSendCommand(action: ReturnType<typeof sendCommand>) {
+  const { webrtc: {rtc, connected}, wallets:{item: wallet} } = yield select((state: IApplicationState) => state)
+  try
+  {  
+    let msg = prepareCall(action.payload.method, action.payload.id, action.payload.params, true)
+    
+    yield put(setSendingTxData({ command: action.payload, error: '', hash: '' }))
+    yield put(setStatus('Verification'))
+
+    if(connected) {
+      yield call((msg: string) => rtc.dataChannel!.send(msg), msg)
+      yield put(push('/status'))
+    } else {
+      yield put(push(`/wallets/${wallet.address}/tx/sign`))
+    }
+    
+  } catch (error)
+  {
+    console.error(error)  
+  }
+}
+
+function* watchActions() {
   yield takeEvery(WebrtcActionTypes.CONNECTION_OPEN, handleOpeningConnection)
-  yield takeEvery(WebrtcActionTypes.CONNECTION_OPEN, handleOpeningConnection)
+  yield takeEvery(WebrtcActionTypes.SEND_COMMAND, handleSendCommand)
 }
 
 function* watchConnection() {
@@ -67,11 +100,7 @@ function* watchConnection() {
 }
 
 function* webrtcSaga() {
-  yield all([
-    fork(watchConnection),
-    fork(watchDataChannel),
-    fork(watchStatusConnection),
-  ])
+  yield all([fork(watchConnection), fork(watchDataChannel), fork(watchActions)])
 }
 
 export default webrtcSaga
