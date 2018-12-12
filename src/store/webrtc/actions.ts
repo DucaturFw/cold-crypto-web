@@ -16,3 +16,6 @@ export const setStatus = (status: string) =>
 
 export const sendCommand = (command: IHostCommandU) =>
   action(WebrtcActionTypes.SEND_COMMAND, command)
+
+export const setSender = (send: (data: string) => void) =>
+  action(WebrtcActionTypes.SET_SENDER, send)

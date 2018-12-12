@@ -64,7 +64,7 @@ function* handleOpeningConnection() {
 }
 
 function* handleSendCommand(action: ReturnType<typeof sendCommand>) {
-  const { webrtc: {rtc, connected}, wallets:{item: wallet} } = yield select((state: IApplicationState) => state)
+  const { webrtc: {connected, send}, wallets:{item: wallet} } = yield select((state: IApplicationState) => state)
   try
   {  
     let msg = prepareCall(action.payload.method, action.payload.id, action.payload.params, true)
@@ -73,7 +73,7 @@ function* handleSendCommand(action: ReturnType<typeof sendCommand>) {
     yield put(setStatus('Verification'))
 
     if(connected) {
-      yield call((msg: string) => rtc.dataChannel!.send(msg), msg)
+      yield call(send, msg)
       yield put(push('/status'))
     } else {
       yield put(push(`/wallets/${wallet.address}/tx/sign`))

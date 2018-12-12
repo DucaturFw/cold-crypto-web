@@ -2,7 +2,7 @@ import { call, take, put, cancelled, select } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 
 import { handshakeServerUrl } from '../../constants'
-import { connectionReady, sendCommand } from './actions'
+import { connectionReady, sendCommand, setSender } from './actions'
 import { getWalletListCommand } from '../../helpers/jsonrps'
 import { setRtcSid } from '../transport/actions'
 import { IApplicationState } from '..'
@@ -46,6 +46,13 @@ export default function* connectSaga() {
   yield take(openChan)
 
   ws.send(makeOfferRequest(offerPromise.sdp))
+
+  yield put(setSender((data) => ws.send((console.log(`DATATATATT`, data), JSON.stringify({
+    jsonrpc: '2.0',
+    id: 789,
+    method: 'fallback',
+    params: { msg: data }
+  })))))
 
   while (true)
     try {

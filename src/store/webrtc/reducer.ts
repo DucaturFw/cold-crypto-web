@@ -6,6 +6,7 @@ import { getSingleton } from '../../helpers/webrtc/webrtcsingleton'
 
 const initialState: IWebrtcState = {
   rtc: getSingleton().rtc,
+  send: data => getSingleton().rtc.dataChannel!.send(data),
   connected: getSingleton().connected,
   status: '',
   pushedMessages: [],
@@ -24,6 +25,9 @@ const reducer: Reducer<IWebrtcState, ActionType<typeof webrtc>> = (
     }
     case WebrtcActionTypes.SET_STATUS: {
       return { ...state, status: action.payload }
+    }
+    case WebrtcActionTypes.SET_SENDER: {
+      return { ...state, send: action.payload }
     }
     case WebrtcActionTypes.SEND_COMMAND: {
       return {
