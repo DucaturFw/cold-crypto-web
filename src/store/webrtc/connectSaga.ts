@@ -1,5 +1,5 @@
 import { call, take, put, cancelled, select, race } from 'redux-saga/effects'
-import { eventChannel } from 'redux-saga'
+import { delay, eventChannel, Channel } from 'redux-saga'
 
 import { handshakeServerUrl } from '../../constants'
 import { connectionReady, sendCommand, setSender } from './actions'
@@ -21,11 +21,11 @@ const onOpenChannel = (ws: WebSocket) =>
     return () => ws.removeEventListener('open', emit)
   })
 
-const onWsFallbackChannel = (ws: WebSocket) =>
+const onWsMessageChannel = (ws: WebSocket) =>
   eventChannel(emit => {
-    ws.addEventListener('fallback', emit)
-    return () => ws.removeEventListener('fallback', emit)
-  })
+    ws.addEventListener('message', emit)
+    return () => ws.removeEventListener('message', emit)
+  }) as Channel<MessageEvent>
 
 const onRtcConnectFailedChannel = (rtc: RTCHelper) =>
   eventChannel(emit => {
@@ -64,6 +64,14 @@ const makeWsSender = (ws: WebSocket) => (msg: string | object /* TODO: add type 
     params: { msg }
   }))
 
+function* timeoutOnWsAnswer(wsMessageChan: Channel<MessageEvent>) {
+  while (true) {
+    const { data } = yield take(wsMessageChan)
+    const { method } = JSON.parse(data.toString())
+    if (method === 'answer')
+      return yield delay(7000)
+  }
+}
 
 export default function* connectSaga() {
   // TODO: eject webrtc instance from redux store, pass it directly
@@ -82,20 +90,21 @@ export default function* connectSaga() {
   const rtcConnectedChan = onRtcConnectedChannel(rtc)
   const rtcConnectFailedChan = onRtcConnectFailedChannel(rtc)
   const rtcMessageChan = onRtcMessageChannel(rtc)
-  const wsFallbackChan = onWsFallbackChannel(ws)
+  const wsMessageChan = onWsMessageChannel(ws)
 
   const [ rtcConnected ] = yield race([
     take(rtcConnectedChan),
-    take(rtcConnectFailedChan)
-  ] as any /* TODO: update types of reduc-saga */)
+    take(rtcConnectFailedChan),
+    call(timeoutOnWsAnswer, wsMessageChan)
+   ] as any /* TODO: update types of reduc-saga */)
 
   // yield fork(watchForWsClose(ws)) TODO: implement for catch future disconnections
 
-  const msgChan = rtcConnected ? rtcMessageChan : wsFallbackChan
+  // const msgChan = rtcConnected ? rtcMessageChan : wsMessageChan
 
   while (true)
     try {
-      const { data } = yield take(msgChan)
+      const { data } = yield take(wsMessageChan)
       const { id, method, result, params } = JSON.parse(data.toString())
 
       if (id === 1) yield put(setRtcSid(webrtcLogin(result.sid)))
@@ -107,7 +116,7 @@ export default function* connectSaga() {
     } finally {
       if (yield cancelled()) {
         openChan.close()
-        msgChan.close()
+        wsMessageChan.close()
         console.log('ws connection closed')
         yield put(sendCommand(getWalletListCommand()))
       }
