@@ -16,6 +16,9 @@ const makeOfferRequest = (offer: string) =>
 const makeIceRequest = (ice: RTCIceCandidate) =>
   JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'ice', params: { ice } })
 
+const makeRtcLoginRequest = (sid: string) =>
+  `webrtcLogin|1|${JSON.stringify({ sid, url: handshakeServerUrl })}`
+
 const onOpenChannel = (ws: WebSocket) =>
   eventChannel(emit => {
     ws.addEventListener('open', emit)
@@ -95,20 +98,27 @@ function* proxyFallbackMessagesToWs(rtcMessageChan: Channel<MessageEvent>, ws: W
   }
 }
 
-function* watchForIncomingMessagesSaga() {
-  while (true) {
+function* watchForIncomingMessagesSaga(rtc: RTCHelper, ws: WebSocket) {
+  while (true) try {
     const { payload } = yield take(incomingMessage)
-    console.log({ incomingMessage: payload })
+    const { id, method, result, params } = payload
 
-    // TODO: Here is an entry point for all incomming messages
-    // for example:
+    if (id === 1)
+      yield put(setRtcSid(makeRtcLoginRequest(result.sid)))
 
-    // const { id, method, result, params } = payload
+    if (method === 'ice')
+      yield call(rtc.pushIceCandidate, params.ice)
 
-    // if (id === 1) yield put(setRtcSid(webrtcLogin(result.sid)))
-    // if (method === 'ice') yield call(rtc.pushIceCandidate, params.ice)
-    // if (method === 'answer')
-    //   return yield call(answerSaga, ws, rtc, params.answer)
+    if (method === 'answer')
+      return yield call(answerSaga, ws, rtc, params.answer)
+
+  } catch (err) {
+    console.log(err)
+    return err
+  } finally {
+    if (yield cancelled()) {
+      yield put(sendCommand(getWalletListCommand()))
+    }
   }
 }
 
@@ -142,36 +152,14 @@ export default function* connectSaga() {
     yield fork(proxyFallbackMessagesToWs, rtcMessageChan, ws)
     yield fork(proxyIncomingFallbackToRtc, wsMessageChan)
   }
-  
-  yield fork(watchForIncomingMessagesSaga)
 
   // yield fork(watchForWsClose(ws)) TODO: implement for catch future disconnections
 
-  // const msgChan = rtcConnected ? rtcMessageChan : wsMessageChan
+  // Waiting for end of messages loop
+  yield call(watchForIncomingMessagesSaga, rtc, ws)
 
-  while (true)
-    try {
-      const { data } = yield take(wsMessageChan)
-      const { id, method, result, params } = JSON.parse(data.toString())
-
-      if (id === 1) yield put(setRtcSid(webrtcLogin(result.sid)))
-      if (method === 'ice') yield call(rtc.pushIceCandidate, params.ice)
-      if (method === 'answer')
-        return yield call(answerSaga, ws, rtc, params.answer)
-    } catch (err) {
-      console.log(err)
-    } finally {
-      if (yield cancelled()) {
-        openChan.close()
-        wsMessageChan.close()
-        console.log('ws connection closed')
-        yield put(sendCommand(getWalletListCommand()))
-      }
-    }
-}
-
-export const webrtcLogin = (sid: string) => {
-  const params = { sid, url: handshakeServerUrl }
-
-  return `webrtcLogin|1|${JSON.stringify(params)}`
+  openChan.close()
+  wsMessageChan.close()
+  // TODO: close over channels
+  console.log('ws connection closed')
 }
