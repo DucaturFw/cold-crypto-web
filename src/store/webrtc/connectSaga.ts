@@ -56,14 +56,6 @@ function* answerSaga(ws: WebSocket, rtc: RTCHelper, answer: string) {
   return ws.close()
 }
 
-const makeWsSender = (ws: WebSocket) => (msg: string | object /* TODO: add type */) =>
-  ws.send(typeof msg === 'string' ? msg : JSON.stringify({
-    jsonrpc: '2.0',
-    id: 789,
-    method: 'fallback',
-    params: { msg }
-  }))
-
 function* timeoutOnWsAnswer(wsMessageChan: Channel<MessageEvent>) {
   while (true) {
     const { data } = yield take(wsMessageChan)
@@ -123,14 +115,13 @@ export default function* connectSaga() {
   const rtc = yield select((state: IApplicationState) => state.webrtc.rtc)
   const offerPromise = yield call(rtc.createOffer)
   const ws = new WebSocket(handshakeServerUrl)
-  const send = makeWsSender(ws)
   const openChan = onOpenChannel(ws)
 
   // Waiting for WS, we can't work without this critical connection
   // TODO: change flow to offline qr codes?
   yield take(openChan)
 
-  send(makeOfferRequest(offerPromise.sdp))
+  ws.send(makeOfferRequest(offerPromise.sdp))
 
   const rtcConnectedChan = onRtcConnectedChannel(rtc)
   const rtcConnectFailedChan = onRtcConnectFailedChannel(rtc)
@@ -141,7 +132,7 @@ export default function* connectSaga() {
     take(rtcConnectedChan),
     take(rtcConnectFailedChan),
     call(timeoutOnWsAnswer, wsMessageChan)
-  ] as any /* TODO: update types of reduc-saga */)
+  ] as any /* TODO: update types of redux-saga */)
 
   yield fork(wrapRtcMessages, rtcMessageChan)
 
