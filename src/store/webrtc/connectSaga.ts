@@ -1,6 +1,8 @@
 import { call, take, put, cancelled, select, race, fork } from 'redux-saga/effects'
 import { delay, eventChannel, Channel } from 'redux-saga'
 
+import { parseHostMessage } from '../../helpers/webrtc/hostproto'
+
 import { handshakeServerUrl } from '../../constants'
 import { connectionReady, sendCommand, setSender, incomingMessage } from './actions'
 import { getWalletListCommand } from '../../helpers/jsonrps'
@@ -68,7 +70,7 @@ function* timeoutOnWsAnswer(wsMessageChan: Channel<MessageEvent>) {
 function* wrapRtcMessages(rtcMessageChan: Channel<MessageEvent>) {
   while (true) {
     const { data } = yield take(rtcMessageChan)
-    yield put(incomingMessage(JSON.parse(data.toString()))) // TODO: Check format? Add typings!
+    yield put(incomingMessage(parseHostMessage(data))) // TODO: Check format? Add typings!
   }
 }
 
