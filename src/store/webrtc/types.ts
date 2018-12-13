@@ -7,7 +7,8 @@ export enum WebrtcActionTypes {
   SET_CONNECTION_SID = '@@Webrtc/SET_CONNECTION_SID',
   SET_STATUS = '@@Webrtc/SET_STATUS',
   SEND_COMMAND = '@@Webrtc/SEND_COMMAND',
-  SET_SENDER = '@@Webrtc/SET_SENDER'
+  SET_SENDER = '@@Webrtc/SET_SENDER',
+  INCOMING_MESSAGE = '@@Webrtc/INCOMING_MESSAGE',
 }
 
 export interface IWebrtcState {

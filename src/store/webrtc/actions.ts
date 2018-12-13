@@ -19,3 +19,6 @@ export const sendCommand = (command: IHostCommandU) =>
 
 export const setSender = (send: (data: string) => void) =>
   action(WebrtcActionTypes.SET_SENDER, send)
+
+export const incomingMessage = (msg: any /* TODO: typings?*/) =>
+  action(WebrtcActionTypes.INCOMING_MESSAGE, msg)

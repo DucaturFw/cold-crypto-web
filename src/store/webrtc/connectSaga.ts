@@ -1,8 +1,8 @@
-import { call, take, put, cancelled, select, race } from 'redux-saga/effects'
+import { call, take, put, cancelled, select, race, fork } from 'redux-saga/effects'
 import { delay, eventChannel, Channel } from 'redux-saga'
 
 import { handshakeServerUrl } from '../../constants'
-import { connectionReady, sendCommand, setSender } from './actions'
+import { connectionReady, sendCommand, setSender, incomingMessage } from './actions'
 import { getWalletListCommand } from '../../helpers/jsonrps'
 import { setRtcSid } from '../transport/actions'
 import { IApplicationState } from '..'
@@ -44,7 +44,7 @@ const onRtcMessageChannel = (rtc: RTCHelper) =>
   eventChannel(emit => {
     rtc.on('msg', err => emit(err))
     return () => false
-  })
+  }) as Channel<MessageEvent>
 
 function* answerSaga(ws: WebSocket, rtc: RTCHelper, answer: string) {
   const sendIce = (ice: RTCIceCandidate) => ws.send(makeIceRequest(ice)) // TODO: Add typings
@@ -73,6 +73,51 @@ function* timeoutOnWsAnswer(wsMessageChan: Channel<MessageEvent>) {
   }
 }
 
+function* wrapRtcMessages(rtcMessageChan: Channel<MessageEvent>) {
+  while (true) {
+    const { data } = yield take(rtcMessageChan)
+    yield put(incomingMessage(JSON.parse(data.toString()))) // TODO: Check format? Add typings!
+  }
+}
+
+function* proxyIncomingFallbackToRtc(wsMessageChan: Channel<MessageEvent>) {
+  while (true) {
+    const { data } = yield take(wsMessageChan)
+    const { params } = JSON.parse(data.toString())
+    yield put(incomingMessage({ method: 'fallback', params: { msg: params } }))
+  }
+}
+
+function* proxyFallbackMessagesToWs(rtcMessageChan: Channel<MessageEvent>, ws: WebSocket) {
+  while (true) {
+    const { payload } = yield take(rtcMessageChan)
+
+    ws.send(JSON.stringify({
+      jsonrpc: '2.0',
+      id: 789,
+      method: 'fallback',
+      params: { msg: payload }
+    }))
+  }
+}
+
+function* watchForIncomingMessagesSaga() {
+  while (true) {
+    const { payload } = yield take(incomingMessage)
+    console.log({ incomingMessage: payload })
+
+    // TODO: Here is an entry point for all incomming messages
+    // for example:
+
+    // const { id, method, result, params } = payload
+
+    // if (id === 1) yield put(setRtcSid(webrtcLogin(result.sid)))
+    // if (method === 'ice') yield call(rtc.pushIceCandidate, params.ice)
+    // if (method === 'answer')
+    //   return yield call(answerSaga, ws, rtc, params.answer)
+  }
+}
+
 export default function* connectSaga() {
   // TODO: eject webrtc instance from redux store, pass it directly
   const rtc = yield select((state: IApplicationState) => state.webrtc.rtc)
@@ -96,7 +141,16 @@ export default function* connectSaga() {
     take(rtcConnectedChan),
     take(rtcConnectFailedChan),
     call(timeoutOnWsAnswer, wsMessageChan)
-   ] as any /* TODO: update types of reduc-saga */)
+  ] as any /* TODO: update types of reduc-saga */)
+
+  yield fork(wrapRtcMessages, rtcMessageChan)
+
+  if (!rtcConnected) {
+    yield fork(proxyFallbackMessagesToWs, rtcMessageChan, ws)
+    yield fork(proxyIncomingFallbackToRtc, wsMessageChan)
+  }
+  
+  yield fork(watchForIncomingMessagesSaga)
 
   // yield fork(watchForWsClose(ws)) TODO: implement for catch future disconnections
 
