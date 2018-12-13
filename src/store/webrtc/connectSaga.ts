@@ -66,13 +66,16 @@ const makeWsSender = (ws: WebSocket) => (msg: string | object /* TODO: add type 
 
 
 export default function* connectSaga() {
+  // TODO: eject webrtc instance from redux store, pass it directly
   const rtc = yield select((state: IApplicationState) => state.webrtc.rtc)
   const offerPromise = yield call(rtc.createOffer)
   const ws = new WebSocket(handshakeServerUrl)
-  const openChan = onOpenChannel(ws)
-  yield take(openChan)
-
   const send = makeWsSender(ws)
+  const openChan = onOpenChannel(ws)
+
+  // Waiting for WS, we can't work without this critical connection
+  // TODO: change flow to offline qr codes?
+  yield take(openChan)
 
   send(makeOfferRequest(offerPromise.sdp))
 
