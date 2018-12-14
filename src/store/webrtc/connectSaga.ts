@@ -1,5 +1,6 @@
 import { call, take, put, cancelled, select } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
+import { parseHostMessage } from '../../helpers/webrtc/hostproto'
 
 import { handshakeServerUrl } from '../../constants'
 import { connectionReady, sendCommand, setSender } from './actions'
@@ -57,7 +58,8 @@ export default function* connectSaga() {
   while (true)
     try {
       const { data } = yield take(messageChan)
-      const { id, method, result, params } = JSON.parse(data.toString())
+      const msg = parseHostMessage(data) as any
+      const { id, method, result, params } = msg.method === 'falback' ? msg.params.msg : msg
 
       if (id === 1) yield put(setRtcSid(webrtcLogin(result.sid)))
       if (method === 'ice') yield call(rtc.pushIceCandidate, params.ice)
