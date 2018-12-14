@@ -32,13 +32,6 @@ const onWsMessageChannel = (ws: WebSocket) =>
     return () => ws.removeEventListener('message', emit)
   }) as Channel<MessageEvent>
 
-const onRtcConnectFailedChannel = (rtc: RTCHelper) =>
-  eventChannel(emit => {
-    rtc.on('error', err => emit(err))
-    rtc.on('close', err => emit(err))
-    return () => false
-  })
-
 const onRtcConnectedChannel = (rtc: RTCHelper) =>
   eventChannel(emit => {
     rtc.on('connected', err => emit(err))
@@ -73,6 +66,7 @@ function* timeoutOnWsAnswer(wsMessageChan: Channel<MessageEvent>) {
 function* wrapRtcMessages(rtcMessageChan: Channel<MessageEvent>) {
   while (true) {
     const { data } = yield take(rtcMessageChan)
+    console.log('rtc recieved', data)
     yield put(incomingMessage(parseHostMessage(data))) // TODO: Check format? Add typings!
   }
 }
@@ -80,28 +74,36 @@ function* wrapRtcMessages(rtcMessageChan: Channel<MessageEvent>) {
 function* proxyIncomingFallbackToRtc(wsMessageChan: Channel<MessageEvent>) {
   while (true) {
     const { data } = yield take(wsMessageChan)
-    const { params } = JSON.parse(data.toString())
-    yield put(incomingMessage({ method: 'fallback', params: { msg: params } }))
+    console.log('ws recieved', data)
+    yield put(incomingMessage({
+      method: 'fallback',
+      params: {
+        msg: parseHostMessage(data)
+      }
+    }))
   }
 }
 
 function* proxyFallbackMessagesToWs(rtcMessageChan: Channel<MessageEvent>, ws: WebSocket) {
   while (true) {
     const { payload } = yield take(rtcMessageChan)
-
-    ws.send(JSON.stringify({
+    const msg = JSON.stringify({
       jsonrpc: '2.0',
       id: 789,
       method: 'fallback',
       params: { msg: payload }
-    }))
+    })
+
+    ws.send(msg)
+    console.log('sended', msg)
   }
 }
 
 function* watchForIncomingMessagesSaga(rtc: RTCHelper, ws: WebSocket) {
   while (true) try {
     const { payload } = yield take(incomingMessage)
-    const { id, method, result, params } = payload
+    const data = payload.method && payload.method === 'fallback' ? payload.params.msg : payload
+    const { id, method, result, params } = data
 
     if (id === 1)
       yield put(setRtcSid(makeRtcLoginRequest(result.sid)))
@@ -135,23 +137,24 @@ export default function* connectSaga() {
 
   ws.send(makeOfferRequest(offerPromise.sdp))
 
-  const rtcConnectedChan = onRtcConnectedChannel(rtc)
-  const rtcConnectFailedChan = onRtcConnectFailedChannel(rtc)
+  // const rtcConnectedChan = onRtcConnectedChannel(rtc)
   const rtcMessageChan = onRtcMessageChannel(rtc)
   const wsMessageChan = onWsMessageChannel(ws)
 
-  const [ rtcConnected ] = yield race([
-    take(rtcConnectedChan),
-    take(rtcConnectFailedChan),
-    call(timeoutOnWsAnswer, wsMessageChan)
-  ] as any /* TODO: update types of redux-saga */)
+  // const [ rtcConnected ] = yield race([
+  //   take(rtcConnectedChan),
+  //   delay(5000),
+  //   call(timeoutOnWsAnswer, wsMessageChan)
+  // ] as any /* TODO: update types of redux-saga */)
 
+  yield fork(proxyFallbackMessagesToWs, rtcMessageChan, ws)
+  yield fork(proxyIncomingFallbackToRtc, wsMessageChan)
   yield fork(wrapRtcMessages, rtcMessageChan)
 
-  if (!rtcConnected) {
-    yield fork(proxyFallbackMessagesToWs, rtcMessageChan, ws)
-    yield fork(proxyIncomingFallbackToRtc, wsMessageChan)
-  }
+  // if (!rtcConnected) {
+  //   yield fork(proxyFallbackMessagesToWs, rtcMessageChan, ws)
+  //   yield fork(proxyIncomingFallbackToRtc, wsMessageChan)
+  // }
 
   // yield fork(watchForWsClose(ws)) TODO: implement for catch future disconnections
 
