@@ -16,8 +16,7 @@ import {
   SelectOptions,
 } from '../../components/atoms'
 
-import { getEos } from '../../helpers/eos'
-import { toDictionary, lookUpBase } from '../../helpers/eos-types'
+import { getEos, EosContract } from '../../helpers/eos'
 import { formToJson } from '../../helpers/func'
 import { IApplicationState } from '../../store'
 
@@ -35,29 +34,6 @@ const styles = {
   `,
 }
 
-const expand = (type: string, customs: any): any => {
-  try {
-    return lookUpBase(type, customs)
-  } catch (e) {
-    console.error('editor err', e)
-    return 'error_type_' + type
-  }
-}
-
-const customTypes = (customs: any, types: any) => {
-  const dict = toDictionary(
-    customs,
-    (x: any) => x.name,
-    x => ({
-      ...x,
-      fields: toDictionary(x.fields, (f: any) => f.name, f => f.type),
-    })
-  )
-  ;(types as any[]).forEach(type => (dict[type.new_type_name] = type.type))
-
-  return dict
-}
-
 interface IPropsFromDispatch {
   createTx: typeof createEosContract
   wallet: IWalletEos
@@ -65,8 +41,7 @@ interface IPropsFromDispatch {
 
 interface IStateProps {
   address: string
-  abi: any
-  customs: any
+  contract: EosContract | null
   action: string
   error: string
 }
@@ -79,8 +54,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
 
     this.state = {
       address: '',
-      abi: null,
-      customs: null,
+      contract: null,
       action: '',
       error: '',
     }
@@ -99,14 +73,11 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
 
     try {
       const eos = getEos(this.props.wallet)
-      const abi = await eos.getAbi(this.state.address)
+      const contract = new EosContract(eos)
 
-      if (abi) {
-        const customs = customTypes(abi.abi.structs, abi.abi.types)
-
+      if (await contract.assignContract(this.state.address)) {
         this.setState({
-          abi,
-          customs,
+          contract,
         })
       }
     } catch (e) {
@@ -124,7 +95,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
       to: this.state.address,
       method: this.state.action,
       data,
-      abi: this.state.customs[this.state.action].fields,
+      abi: this.state.contract!.getMethodAbi(this.state.action),
     })
   }
 
@@ -138,7 +109,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
   render() {
     return (
       <React.Fragment>
-        {!this.state.abi && (
+        {!this.state.contract && (
           <form onSubmit={this.handleSubmit}>
             <H2>Call Contract EOS</H2>
             <Column>
@@ -161,7 +132,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
             </Column>
           </form>
         )}
-        {this.state.abi && (
+        {this.state.contract && (
           <React.Fragment>
             <H2>Call Contract EOS</H2>
             <H3>{this.state.address}</H3>
@@ -174,7 +145,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
                   className={styles.select}
                 >
                   <option value="">Select method</option>
-                  {this.state.abi.abi.actions.map((item: any) => (
+                  {this.state.contract.getActions().map((item: any) => (
                     <option key={item.type} value={item.type}>
                       {item.name}
                     </option>
@@ -187,7 +158,7 @@ class CreateEosContractPage extends React.Component<AllProps, IStateProps> {
                 <React.Fragment>
                   <H3 className={styles.offtop}>Parameters:</H3>
                   {Object.entries(
-                    expand(this.state.action, this.state.customs)
+                    this.state.contract.getMethodFields(this.state.action)
                   ).map((item: any[]) => {
                     return (
                       <Row key={item[0]}>
