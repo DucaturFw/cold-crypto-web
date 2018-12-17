@@ -7,9 +7,7 @@ import {
   Hr,
   ButtonBase,
   ButtonSecondary,
-  TextInput,
   Link,
-  SelectFloat,
 } from '../components/atoms'
 
 export const Home: React.SFC<{}> = () => (
@@ -27,29 +25,21 @@ export const Home: React.SFC<{}> = () => (
           paddingRight: '1rem',
         }}
       >
-        <Row>
-          <Link to="/login" style={{ width: '100%' }}>
-            <ButtonBase>Login with QR code</ButtonBase>
-          </Link>
-        </Row>
-        <Row>
-          <Link to="/login?rtc=true" style={{ width: '100%' }}>
-            <ButtonSecondary>Webrtc login</ButtonSecondary>
-          </Link>
-        </Row>
+        <Link to="/login">
+          <ButtonBase>Login with QR code</ButtonBase>
+        </Link>
       </Column>
-      <Column style={{ width: '50%' }}>
-        <Row>
-          <TextInput type="text" placeholder="Type your wallet address here" />
-          <SelectFloat flipToRight>
-            <option value="eth" key="eth">
-              eth
-            </option>
-          </SelectFloat>
-        </Row>
-        <Row>
-          <ButtonSecondary>Login with address</ButtonSecondary>
-        </Row>
+      <Column
+        style={{
+          width: '50%',
+          display: 'flex',
+          justifyContent: 'center',
+          paddingRight: '1rem',
+        }}
+      >
+        <Link to="/login?rtc=true">
+          <ButtonSecondary>Webrtc login</ButtonSecondary>
+        </Link>
       </Column>
     </Row>
   </div>
