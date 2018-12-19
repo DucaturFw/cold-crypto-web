@@ -1,7 +1,9 @@
-import callApi from './../utils/callApi';
+import callApi from './../../utils/callApi';
 import Eos from "eosjs"
-import { getBcNetByChainId } from '../helpers/blockchains'
-import { IWalletEos } from '../store/wallets/types';
+import { getBcNetByChainId } from '../blockchains'
+import { IWalletEos } from '../../store/wallets/types';
+
+export { EosContract } from './contract'
 
 const chain = {
   main: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906', // main network
