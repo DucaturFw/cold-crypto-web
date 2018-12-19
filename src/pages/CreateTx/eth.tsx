@@ -23,6 +23,7 @@ import styled from 'react-emotion'
 
 interface IPropsFromState {
   wallet: IWallet
+  price: number
 }
 
 interface IPropsFromDispatch {
@@ -34,9 +35,20 @@ type AllProps = IPropsFromState & IPropsFromDispatch
 
 class CreateTxPage extends React.Component<AllProps, {}> {
   componentDidMount() {
-    console.log('121')
     this.props.priceGet()
   }
+
+  updatePrice = async (e: React.ChangeEvent<HTMLInputElement>, form: any) => {
+    const { name, value } = e.target
+
+    form.setFieldValue(name, value)
+    if (name === 'amount') {
+      form.setFieldValue('price', parseFloat(value) * this.props.price)
+    } else {
+      form.setFieldValue('amount', parseFloat(value) / this.props.price)
+    }
+  }
+
   render() {
     const { wallet, createTx } = this.props
     return (
@@ -73,8 +85,9 @@ class CreateTxPage extends React.Component<AllProps, {}> {
                             <TextInput
                               type="number"
                               min="0"
-                              step={(1e-18).toFixed(20)}
-                              {...field}
+                              name="amount"
+                              value={field.value}
+                              onChange={e => this.updatePrice(e, form)}
                             />
                           )}
                         />
@@ -82,18 +95,16 @@ class CreateTxPage extends React.Component<AllProps, {}> {
                       <img src="/icon-change.svg" />
                       <LabelAtop label="usd">
                         <Field
-                          name="amount"
+                          name="price"
                           render={({
                             field,
                             form,
                           }: FieldProps<IEthTxFormValues>) => (
                             <TextInput
                               type="number"
-                              readOnly
-                              step={(1e-18).toFixed(20)}
+                              name="price"
                               value={field.value}
-                              // TODO: add totalPrice
-                              // value={totalPrice}
+                              onChange={e => this.updatePrice(e, form)}
                             />
                           )}
                         />
@@ -146,8 +157,9 @@ class CreateTxPage extends React.Component<AllProps, {}> {
   }
 }
 
-const mapStateToProps = ({ wallets }: IApplicationState) => ({
+const mapStateToProps = ({ wallets, price }: IApplicationState) => ({
   wallet: wallets.item,
+  price: price.eth,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
