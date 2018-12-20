@@ -19,6 +19,7 @@
   "dependencies": {
     "@cypress/webpack-preprocessor": "^4.0.2",
     "@emotion/core": "^10.0.0",
+    "axios": "^0.18.0",
     "bn.js": "^4.11.8",
     "connected-react-router": "^5.0.1",
     "create-emotion": "^9.2.6",

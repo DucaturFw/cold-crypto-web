@@ -17,11 +17,16 @@ import webrtcSaga from './webrtc/sagas'
 import { webrtcReducer } from './webrtc/reducer'
 import { IWebrtcState } from './webrtc/types'
 
+import priceSaga from './price/sagas'
+import { priceReducer } from './price/reducer'
+import { IPriceState } from './price/types'
+
 // top-level state
 export interface IApplicationState {
   wallets: IWalletsState
   auth: IAuthState
   transport: ITransportState
+  price: IPriceState
   webrtc: IWebrtcState
   router: RouterState
 }
@@ -36,9 +41,10 @@ export const rootReducer = (history: any) =>
     auth: authReducer,
     transport: transportReducer,
     webrtc: webrtcReducer,
+    price: priceReducer,
     router: connectRouter(history),
   })
 
 export function* rootSaga() {
-  yield all([fork(walletsSaga), fork(transportSaga), fork(webrtcSaga)])
+  yield all([fork(walletsSaga), fork(transportSaga), fork(webrtcSaga), fork(priceSaga)])
 }
