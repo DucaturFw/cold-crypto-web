@@ -40,12 +40,14 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
     "redux": "^4.0.1",
+    "redux-act": "^1.7.4",
     "redux-devtools-extension": "^2.13.7",
     "redux-saga": "^0.16.2",
     "ts-loader": "^5.3.1",
     "typesafe-actions": "^2.0.4",
     "videoshow": "^0.1.11",
-    "web3": "^1.0.0-beta.36"
+    "web3": "^1.0.0-beta.36",
+    "webrtc-datachannel": "^0.1.0"
   },
   "devDependencies": {
     "@types/history": "^4.7.2",

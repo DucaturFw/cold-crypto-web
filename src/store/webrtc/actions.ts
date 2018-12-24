@@ -1,18 +1,4 @@
-import { action } from 'typesafe-actions'
-import { WebrtcActionTypes } from './types'
-import { IHostCommandU } from '../../helpers/webrtc/hostproto'
+import { createAction } from 'redux-act'
 
-export const connectionReady = () =>
-  action(WebrtcActionTypes.CONNECTION_OPEN)
-
-export const connectionClosing = () =>
-  action(WebrtcActionTypes.CONNECTION_CLOSE)
-
-export const setConnectionSid = () =>
-  action(WebrtcActionTypes.SET_CONNECTION_SID)
-
-export const setStatus = (status: string) =>
-  action(WebrtcActionTypes.SET_STATUS, status)
-
-export const sendCommand = (command: IHostCommandU) =>
-  action(WebrtcActionTypes.SEND_COMMAND, command)
+export const setWebRtcQrRequest = createAction<string>('set webrtc qr request')
+export const setWebRtcQrAnswer = createAction<string>('set webrtc qr answer')

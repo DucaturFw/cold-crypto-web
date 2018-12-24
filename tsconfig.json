@@ -4,14 +4,11 @@
     "target": "es5",
     "lib": [
       "es5",
-      "es6",
-      "es7",
-      "es2017",
       "dom"
     ],
     "sourceMap": true,
     "allowJs": false,
-    "jsx": "preserve",
+    "jsx": "react",
     "moduleResolution": "node",
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,

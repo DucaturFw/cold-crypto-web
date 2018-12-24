@@ -1,40 +1,10 @@
-import { ActionType } from 'typesafe-actions'
-import * as webrtc from './actions'
-import { Reducer } from 'redux'
-import { IWebrtcState, WebrtcActionTypes } from './types'
-import { getSingleton } from '../../helpers/webrtc/webrtcsingleton'
+import { createReducer } from 'redux-act'
+import { setWebRtcQrRequest } from './actions'
 
-const initialState: IWebrtcState = {
-  rtc: getSingleton().rtc,
-  connected: getSingleton().connected,
-  status: '',
-  pushedMessages: [],
-}
+const initialState = { qrRequest: null as string | null }
+const reducer = createReducer({}, initialState)
 
-const reducer: Reducer<IWebrtcState, ActionType<typeof webrtc>> = (
-  state = initialState,
-  action
-) => {
-  switch (action.type) {
-    case WebrtcActionTypes.CONNECTION_OPEN: {
-      return { ...state, connected: true }
-    }
-    case WebrtcActionTypes.CONNECTION_CLOSE: {
-      return { ...state, connected: false }
-    }
-    case WebrtcActionTypes.SET_STATUS: {
-      return { ...state, status: action.payload }
-    }
-    case WebrtcActionTypes.SEND_COMMAND: {
-      return {
-        ...state,
-        pushedMessages: [...state.pushedMessages, action.payload],
-      }
-    }
-    default: {
-      return state
-    }
-  }
-}
+reducer.on(setWebRtcQrRequest, (state, qrRequest) => ({ ...state, qrRequest }))
 
-export { reducer as webrtcReducer }
+export default reducer
+export type IState = typeof initialState

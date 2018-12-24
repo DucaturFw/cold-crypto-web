@@ -14,8 +14,7 @@ import { transportReducer } from './transport/reducer'
 import { ITransportState } from './transport/types'
 
 import webrtcSaga from './webrtc/sagas'
-import { webrtcReducer } from './webrtc/reducer'
-import { IWebrtcState } from './webrtc/types'
+import webrtcReducer, { IState as IWebrtcState } from './webrtc/reducer'
 
 // top-level state
 export interface IApplicationState {
