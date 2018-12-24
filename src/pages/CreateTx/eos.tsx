@@ -41,10 +41,14 @@ class CreateTxPage extends React.Component<AllProps, {}> {
     const { name, value } = e.target
 
     form.setFieldValue(name, value)
+    
+    if (!this.props.price) // don't do magic if price is 0 or NaN
+      return
+    
     if (name === 'amount') {
-      form.setFieldValue('price', parseFloat(value) * this.props.price)
+      form.setFieldValue('price', parseFloat(value || "0") * this.props.price)
     } else {
-      form.setFieldValue('amount', parseFloat(value) / this.props.price)
+      form.setFieldValue('amount', parseFloat(value || "0") / this.props.price)
     }
   }
 
