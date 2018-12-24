@@ -6,6 +6,7 @@ import QRCode from 'qrcode.react'
 interface IPropsFromDispatch {
   title: string
   value: string
+  subtitle?: string
   onScan: (data: string) => void
   onError?: (e: Error) => void
   readonly?: boolean
@@ -15,6 +16,7 @@ type AllProps = IPropsFromDispatch
 
 export const QrLogin: React.SFC<AllProps> = ({
   title,
+  subtitle,
   value,
   onScan,
   onError,
@@ -28,7 +30,7 @@ export const QrLogin: React.SFC<AllProps> = ({
         <Column>
           <H2>{title}</H2>
           <H3>
-            Follow these steps to sign your transaction using your mobile device
+            { subtitle || "Follow these steps to sign your transaction using your mobile device" }
           </H3>
         </Column>
         <ButtonClose />
