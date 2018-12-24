@@ -16,7 +16,10 @@ function* handleLogin(action: ReturnType<typeof login>) {
   try {
     // TODO: check correct message id
     const { result: wallets } = parseMessage(action.payload)
+    // console.log(`logging in with wallets`, wallets)
     const wallet = wallets[0]
+    wallet.chainId = "" + wallet.chainId
+    // console.log(`logging in with wallet ${JSON.stringify(wallet)}`)
 
     // call addWallet and authSuccess after success read and parse qrcode from login page
     yield put(authSuccess())

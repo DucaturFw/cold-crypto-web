@@ -13,5 +13,5 @@ export const getBcInfo = async (wallet: IWallet) => {
       .then(result => ({ txs: result.actions }))
   }
 
-  return null
+  throw new Error(`blockchain ${wallet.blockchain} is not supported!`)
 }
