@@ -86,6 +86,7 @@ class CreateTxPage extends React.Component<AllProps, {}> {
                               type="number"
                               min="0"
                               name="amount"
+                              step={(1e-18).toFixed(20)}
                               value={field.value}
                               onChange={e => this.updatePrice(e, form)}
                             />
@@ -103,6 +104,7 @@ class CreateTxPage extends React.Component<AllProps, {}> {
                             <TextInput
                               type="number"
                               name="price"
+                              step={(1e-18).toFixed(20)}
                               value={field.value}
                               onChange={e => this.updatePrice(e, form)}
                             />

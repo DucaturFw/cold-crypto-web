@@ -30,7 +30,7 @@ const SignPage: React.SFC<AllProps> = ({ command, sendTx }) => {
   return (
     <React.Fragment>
       <QrLogin
-        title={'Sign Transaction By Mobile'}
+        title={'Scan QR code with Cold Crypto mobile app to sign transaction'}
         value={value || ''}
         onScan={handleScan}
       />

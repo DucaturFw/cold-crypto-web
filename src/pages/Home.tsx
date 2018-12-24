@@ -12,7 +12,7 @@ import {
 
 export const Home: React.SFC<{}> = () => (
   <div style={{ width: '38rem' }}>
-    <H2>Welcome Back!</H2>
+    <H2>Welcome!</H2>
     <H3>Sign in to your wallet below</H3>
     <Hr />
 
@@ -26,7 +26,7 @@ export const Home: React.SFC<{}> = () => (
         }}
       >
         <Link to="/login">
-          <ButtonBase>Login with QR code</ButtonBase>
+          <ButtonBase>Airgapped login</ButtonBase>
         </Link>
       </Column>
       <Column
@@ -38,7 +38,7 @@ export const Home: React.SFC<{}> = () => (
         }}
       >
         <Link to="/login?rtc=true">
-          <ButtonSecondary>Webrtc login</ButtonSecondary>
+          <ButtonSecondary>Online login</ButtonSecondary>
         </Link>
       </Column>
     </Row>

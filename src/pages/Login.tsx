@@ -38,6 +38,7 @@ class LoginPage extends React.Component<AllProps> {
       <React.Fragment>
         <QrLogin
           title={'Mobile Login'}
+          subtitle={'Scan QR code with Cold Crypto mobile app to login'}
           value={value}
           onScan={scanLoginData}
           readonly={isRtc}
