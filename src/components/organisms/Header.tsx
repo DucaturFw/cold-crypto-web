@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'react-emotion'
-import { Link } from '../atoms'
+import { A } from '../atoms'
 import Logo from '../moleculas/Logo'
 
 const Root = styled('header')({
@@ -27,10 +27,10 @@ export const Header = ({ to, logoColorReverse }: { to?: string, logoColorReverse
   <Root>
     <Logo reverseColor={false} to={to} />
     <MainMenu>
-      <Link to="#">About</Link>
-      <Link to="#">Blog</Link>
-      <Link to="#">Support</Link>
-      <Link to="#">Sign up</Link>
+      {/* <Link to="#">About</Link> */}
+      {/* <Link to="#">Blog</Link> */}
+      <A href="https://github.com/DucaturFw/cold-crypto-web/issues" target="blank">Support</A>
+      {/* <Link to="#">Sign up</Link> */}
     </MainMenu>
   </Root>
 )
