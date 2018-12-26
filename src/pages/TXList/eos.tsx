@@ -17,7 +17,7 @@ export const EosTX = (txs: IEosTx[]) => {
       <tbody>
         {txs.map((item: IEosTx, index: number) => (
           <tr key={index}>
-            <td>{new Date(item.createdAt).toLocaleString()}</td>
+            <td>{new Date(item.block_time).toLocaleString()}</td>
             <td>{item.act.name}</td>
             <td>
               {item.act.name === 'transfer' &&
