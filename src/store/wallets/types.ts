@@ -37,7 +37,7 @@ export interface IEthTx {
 
 export interface IEosTx {
   act: any
-  createdAt: string
+  block_time: string
 }
 
 export interface IWalletEos extends IWalletBase {}
