@@ -48,9 +48,9 @@ const networks = {
         name: 'Mainnet',
         sign: 'mainnet',
         chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
-        url: 'http://mainnet.eoscalgary.io:80',
+        url: 'https://eos.greymass.com:443',
         explorerUrl: 'https://eospark.com/MainNet',
-        apiExplorerUrl: 'https://junglehistory.cryptolions.io:4433'
+        apiExplorerUrl: 'https://eos.greymass.com:443'
       },
       {
         name: 'Jungle Testnet',

@@ -10,7 +10,6 @@ export const getBcInfo = async (wallet: IWallet) => {
 
   if (wallet.blockchain === 'eos') {
     return eosInfo(wallet)
-      .then(result => ({ txs: result.actions }))
   }
 
   throw new Error(`blockchain ${wallet.blockchain} is not supported!`)
