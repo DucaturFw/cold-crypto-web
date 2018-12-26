@@ -30,6 +30,8 @@ export const Header = ({ to, logoColorReverse }: { to?: string, logoColorReverse
       {/* <Link to="#">About</Link> */}
       {/* <Link to="#">Blog</Link> */}
       <A href="https://github.com/DucaturFw/cold-crypto-web/issues" target="blank">Support</A>
+      <A href="https://github.com/DucaturFw/cold-crypto-web/blob/master/COLDCRYPTO_PRIVACY_POLICY.pdf" target="blank">Privacy policy</A>
+      <A href="https://github.com/DucaturFw/cold-crypto-web/blob/master/COLDCRYPTO_TERMS_OF_USE.pdf" target="blank">Terms of use</A>
       {/* <Link to="#">Sign up</Link> */}
     </MainMenu>
   </Root>
